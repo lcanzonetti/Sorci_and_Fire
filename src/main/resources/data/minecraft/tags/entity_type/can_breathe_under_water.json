@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "iceandfire:hippocampus",
+    "iceandfire:sea_serpent",
+    "iceandfire:siren",
+    "iceandfire:ice_dragon",
+    "iceandfire:dragon_skull",
+    "iceandfire:mob_skull",
+    "iceandfire:stone_statue",
+    "iceandfire:dragon_multipart",
+    "iceandfire:multipart",
+    "iceandfire:hydra_multipart",
+    "iceandfire:cylcops_multipart"
+  ]
+}

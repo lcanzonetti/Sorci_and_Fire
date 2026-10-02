@@ -102,7 +102,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         setPathfindingMalus(PathType.WATER_BORDER, 4.0f);
         this.lookHelper = new IAFLookHelper(this);
         this.noCulling = true;
-        this.maxUpStep = 1;
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1);
         if (worldIn.isClientSide) {
             tail_buffer = new ChainBuffer();
         }
@@ -411,7 +411,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
 
     @Override
     @Nullable
-    public Entity getControllingPassenger() {
+    public LivingEntity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
             if (passenger instanceof Player) {
                 Player player = (Player) passenger;

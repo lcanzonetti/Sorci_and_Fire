@@ -64,6 +64,15 @@ import java.util.EnumSet;
 
 public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnimatedEntity, IDragonFlute, IVillagerFear, IAnimalFear, IDropArmor, IFlyingMount, ICustomMoveController {
 
+    // LivingEntity#flyingSpeed was replaced by getFlyingSpeed() in 1.19.4
+    protected float flyingSpeed = 0.02F;
+
+    @Override
+    protected float getFlyingSpeed() {
+        return this.flyingSpeed;
+    }
+
+
     private static final int FLIGHT_CHANCE_PER_TICK = 1200;
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(EntityHippogryph.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> SADDLE = SynchedEntityData.defineId(EntityHippogryph.class, EntityDataSerializers.BOOLEAN);
@@ -107,7 +116,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         ANIMATION_SCRATCH = Animation.create(25);
         ANIMATION_BITE = Animation.create(20);
         initHippogryphInv();
-        this.maxUpStep = 1;
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1);
     }
 
     public static int getIntFromArmor(ItemStack stack) {
@@ -263,7 +272,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
 
     @Override
     @Nullable
-    public Entity getControllingPassenger() {
+    public LivingEntity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
             if (passenger instanceof Player && this.getTarget() != passenger) {
                 Player player = (Player) passenger;
@@ -282,7 +291,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
     @Override
     public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        String s = ChatFormatting.stripFormatting(player.getName().getContents());
+        String s = ChatFormatting.stripFormatting(player.getName().getString());
         boolean isDev = s.equals("Alexthe666") || s.equals("Raptorfarian") || s.equals("tweakbsd");
         if (this.isTame() && this.isOwnedBy(player)) {
             if (itemstack != null && itemstack.getItem() == Items.RED_DYE && this.getEnumVariant() != EnumHippogryphTypes.ALEX && isDev) {
@@ -478,8 +487,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                 if (!itemstack.isEmpty()) {
                     CompoundTag CompoundNBT = new CompoundTag();
                     CompoundNBT.putByte("Slot", (byte) i);
-                    itemstack.save(CompoundNBT);
-                    nbttaglist.add(CompoundNBT);
+                    nbttaglist.add(itemstack.save(this.registryAccess(), CompoundNBT));
                 }
             }
             compound.put("Items", nbttaglist);
@@ -509,7 +517,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
             for (int i = 0; i < nbttaglist.size(); ++i) {
                 CompoundTag CompoundNBT = nbttaglist.getCompound(i);
                 int j = CompoundNBT.getByte("Slot") & 255;
-                this.hippogryphInventory.setItem(j, ItemStack.of(CompoundNBT));
+                this.hippogryphInventory.setItem(j, ItemStack.parseOptional(this.registryAccess(), CompoundNBT));
             }
         } else {
             ListTag nbttaglist = compound.getList("Items", 10);
@@ -518,7 +526,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                 CompoundTag CompoundNBT = nbttaglist.getCompound(i);
                 int j = CompoundNBT.getByte("Slot") & 255;
                 this.initHippogryphInv();
-                this.hippogryphInventory.setItem(j, ItemStack.of(CompoundNBT));
+                this.hippogryphInventory.setItem(j, ItemStack.parseOptional(this.registryAccess(), CompoundNBT));
                 //this.setArmorInSlot(j, this.getIntFromArmor(ItemStack.loadItemStackFromNBT(CompoundNBT)));
                 ItemStack saddle = hippogryphInventory.getItem(0);
                 ItemStack chest = hippogryphInventory.getItem(1);

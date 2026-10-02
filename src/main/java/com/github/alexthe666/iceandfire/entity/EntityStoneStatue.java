@@ -158,11 +158,11 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
 
     @Override
     public boolean hurt(@NotNull DamageSource source, float amount) {
-        return source.is(DamageTypes.OUT_OF_WORLD);
+        return source.is(DamageTypes.FELL_OUT_OF_WORLD);
     }
 
     @Override
-    public @NotNull EntityDimensions getDimensions(@NotNull Pose poseIn) {
+    protected @NotNull EntityDimensions getDefaultDimensions(@NotNull Pose poseIn) {
         return stoneStatueSize;
     }
 
@@ -211,12 +211,6 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
 
     public void setCrackAmount(int crackAmount) {
         this.entityData.set(CRACK_AMOUNT, crackAmount);
-    }
-
-
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
     }
 
     @Override

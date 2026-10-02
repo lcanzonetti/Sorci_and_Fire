@@ -1,5 +1,9 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+
+import net.minecraft.server.level.ServerLevel;
+
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.util.IDragonProjectile;
 import net.minecraft.core.BlockPos;
@@ -22,6 +26,11 @@ import javax.annotation.Nullable;
 
 public abstract class EntityDragonCharge extends Fireball implements IDragonProjectile {
 
+    // AbstractHurtingProjectile only keeps a single acceleration power since 1.20.5
+    public double xPower;
+    public double yPower;
+    public double zPower;
+
 
     public EntityDragonCharge(EntityType<? extends Fireball> type, Level worldIn) {
         super(type, worldIn);
@@ -29,7 +38,7 @@ public abstract class EntityDragonCharge extends Fireball implements IDragonProj
 
     public EntityDragonCharge(EntityType<? extends Fireball> type, Level worldIn, double posX,
                               double posY, double posZ, double accelX, double accelY, double accelZ) {
-        super(type, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
+        super(type, posX, posY, posZ, new Vec3(accelX, accelY, accelZ), worldIn);
         double d0 = Math.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.xPower = accelX / d0 * 0.07D;
         this.yPower = accelY / d0 * 0.07D;
@@ -38,7 +47,7 @@ public abstract class EntityDragonCharge extends Fireball implements IDragonProj
 
     public EntityDragonCharge(EntityType<? extends Fireball> type, Level worldIn,
                               EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
-        super(type, shooter, accelX, accelY, accelZ, worldIn);
+        super(type, shooter, new Vec3(accelX, accelY, accelZ), worldIn);
         double d0 = Math.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.xPower = accelX / d0 * 0.07D;
         this.yPower = accelY / d0 * 0.07D;
@@ -51,7 +60,7 @@ public abstract class EntityDragonCharge extends Fireball implements IDragonProj
         if (this.level().isClientSide || (shootingEntity == null || shootingEntity.isAlive()) && this.level().hasChunkAt(this.blockPosition())) {
             super.baseTick();
 
-            HitResult raytraceresult = ProjectileUtil.getHitResult(this, this::canHitMob);
+            HitResult raytraceresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitMob);
 
             if (raytraceresult.getType() != HitResult.Type.MISS && !net.neoforged.neoforge.event.EventHooks.onProjectileImpact(this, raytraceresult)) {
                 this.onHit(raytraceresult);
@@ -120,8 +129,8 @@ public abstract class EntityDragonCharge extends Fireball implements IDragonProj
                             ((EntityDragonBase) shootingEntity).randomizeAttacks();
                         }
                     }
-                    if (shootingEntity instanceof LivingEntity) {
-                        this.doEnchantDamageEffects((LivingEntity) shootingEntity, entity);
+                    if (shootingEntity instanceof LivingEntity && this.level() instanceof ServerLevel serverLevel) {
+                        EnchantmentHelper.doPostAttackEffects(serverLevel, entity, this.damageSources().mobProjectile(this, (LivingEntity) shootingEntity));
                     }
                     this.remove(RemovalReason.DISCARDED);
                 }

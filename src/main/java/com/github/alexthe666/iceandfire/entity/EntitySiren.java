@@ -88,7 +88,7 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
         super(t, worldIn);
         IHasCustomizableAttributes.applyAttributesForEntity(t, this);
         this.switchNavigator(true);
-        this.maxUpStep = 2;
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(2);
         this.goalSelector.addGoal(0, new SirenAIFindWaterTarget(this));
         this.goalSelector.addGoal(1, new AquaticAIGetInWater(this, 1.0D));
         this.goalSelector.addGoal(1, new AquaticAIGetOutOfWater(this, 1.0D));
@@ -174,11 +174,6 @@ public class EntitySiren extends Monster implements IAnimatedEntity, IVillagerFe
             return level().isEmptyBlock(siren.above()) && level().isEmptyBlock(target.above()) && target.getY() >= siren.getY();
         }
         return false;
-    }
-
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
     }
 
     @Override

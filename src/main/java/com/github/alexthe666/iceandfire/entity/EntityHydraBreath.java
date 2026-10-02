@@ -22,18 +22,23 @@ import org.jetbrains.annotations.NotNull;
 
 public class EntityHydraBreath extends Fireball implements IDragonProjectile {
 
+    // AbstractHurtingProjectile only keeps a single acceleration power since 1.20.5
+    public double xPower;
+    public double yPower;
+    public double zPower;
+
     public EntityHydraBreath(EntityType<? extends Fireball> t, Level worldIn) {
         super(t, worldIn);
     }
 
     public EntityHydraBreath(EntityType<? extends Fireball> t, Level worldIn, double posX, double posY,
                              double posZ, double accelX, double accelY, double accelZ) {
-        super(t, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
+        super(t, posX, posY, posZ, new Vec3(accelX, accelY, accelZ), worldIn);
     }
 
     public EntityHydraBreath(EntityType<? extends Fireball> t, Level worldIn, EntityHydra shooter,
                              double accelX, double accelY, double accelZ) {
-        super(t, shooter, accelX, accelY, accelZ, worldIn);
+        super(t, shooter, new Vec3(accelX, accelY, accelZ), worldIn);
         double d0 = Math.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
         this.xPower = accelX / d0 * 0.02D;
         this.yPower = accelY / d0 * 0.02D;
@@ -74,7 +79,7 @@ public class EntityHydraBreath extends Fireball implements IDragonProjectile {
                 this.igniteForSeconds(1);
             }
 
-            HitResult raytraceresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
+            HitResult raytraceresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
             if (raytraceresult.getType() != HitResult.Type.MISS && !net.neoforged.neoforge.event.EventHooks.onProjectileImpact(this, raytraceresult)) {
                 this.onHit(raytraceresult);
             }

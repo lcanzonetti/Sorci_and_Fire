@@ -70,7 +70,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
     public EntityCyclops(EntityType<EntityCyclops> type, Level worldIn) {
         super(type, worldIn);
         IHasCustomizableAttributes.applyAttributesForEntity(type, this);
-        this.maxUpStep = 2.5F;
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(2.5F);
         this.setPathfindingMalus(PathType.WATER, -1.0F);
         this.setPathfindingMalus(PathType.FENCE, 0.0F);
         ANIMATION_STOMP = Animation.create(27);

@@ -242,7 +242,7 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
     }
 
     @Override
-    public @NotNull EntityDimensions getDimensions(@NotNull Pose poseIn) {
+    protected @NotNull EntityDimensions getDefaultDimensions(@NotNull Pose poseIn) {
         return this.getType().getDimensions().scale(this.getScale());
     }
 
@@ -626,11 +626,6 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
             }
         }
         return false;
-    }
-
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
     }
 
     public void breakBlock() {

@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
@@ -55,6 +57,15 @@ import java.util.function.Predicate;
 
 public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAnimatedEntity, IHasCustomizableAttributes, ICustomMoveController, ContainerListener, Saddleable {
 
+    // LivingEntity#flyingSpeed was replaced by getFlyingSpeed() in 1.19.4
+    protected float flyingSpeed = 0.02F;
+
+    @Override
+    protected float getFlyingSpeed() {
+        return this.flyingSpeed;
+    }
+
+
     public static final int INV_SLOT_SADDLE = 0;
     public static final int INV_SLOT_CHEST = 1;
     public static final int INV_SLOT_ARMOR = 2;
@@ -94,7 +105,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     public EntityHippocampus(EntityType<EntityHippocampus> t, Level worldIn) {
         super(t, worldIn);
         IHasCustomizableAttributes.applyAttributesForEntity(t, this);
-        this.maxUpStep = 1;
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1);
         ANIMATION_SPEAK = Animation.create(15);
         this.switchNavigator(true);
         if (worldIn.isClientSide) {
@@ -195,7 +206,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
 
     @Override
     @Nullable
-    public Entity getControllingPassenger() {
+    public LivingEntity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
             if (passenger instanceof Player && this.getTarget() != passenger) {
                 Player player = (Player) passenger;
@@ -206,14 +217,14 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     }
 
     @Override
-    public boolean equipItemIfPossible(@Nullable ItemStack itemStackIn) {
+    public @NotNull ItemStack equipItemIfPossible(@NotNull ItemStack itemStackIn) {
         EquipmentSlot equipmentSlot = getEquipmentSlotForItem(itemStackIn);
         int j = equipmentSlot.getIndex() - 500 + 2;
         if (j >= 0 && j < this.inventory.getContainerSize()) {
             this.inventory.setItem(j, itemStackIn);
-            return true;
+            return itemStackIn;
         } else {
-            return false;
+            return ItemStack.EMPTY;
         }
     }
 
@@ -223,7 +234,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
         if (inventory != null && !this.level().isClientSide) {
             for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
                 ItemStack itemstack = this.inventory.getItem(i);
-                if (!itemstack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemstack)) {
+                if (!itemstack.isEmpty() && !EnchantmentHelper.has(itemstack, EnchantmentEffectComponents.PREVENT_EQUIPMENT_DROP)) {
                     this.spawnAtLocation(itemstack);
                 }
             }
@@ -367,8 +378,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
             if (!itemstack.isEmpty()) {
                 CompoundTag CompoundNBT = new CompoundTag();
                 CompoundNBT.putByte("Slot", (byte) i);
-                itemstack.save(CompoundNBT);
-                nbttaglist.add(CompoundNBT);
+                nbttaglist.add(itemstack.save(this.registryAccess(), CompoundNBT));
             }
         }
         compound.put("Items", nbttaglist);
@@ -387,7 +397,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
             for (int i = 0; i < nbttaglist.size(); ++i) {
                 CompoundTag CompoundNBT = nbttaglist.getCompound(i);
                 int j = CompoundNBT.getByte("Slot") & 255;
-                this.inventory.setItem(j, ItemStack.of(CompoundNBT));
+                this.inventory.setItem(j, ItemStack.parseOptional(this.registryAccess(), CompoundNBT));
             }
         }
     }
@@ -455,7 +465,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     }
 
     @Override
-    public void equipSaddle(@Nullable SoundSource pSource) {
+    public void equipSaddle(@NotNull ItemStack saddleStack, @Nullable SoundSource pSource) {
 
     }
 
@@ -548,11 +558,6 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
             return hippo;
         }
         return null;
-    }
-
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
     }
 
     // a dirty solution for move wrongly console msg and step up blocks
@@ -662,7 +667,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
                     if (this.isInWater()) {
                         this.moveRelative(0.1F, pTravelVector);
                         baseSpeed = 0.6F;
-                        float speedBonus = EnchantmentHelper.getDepthStrider(this);
+                        float speedBonus = (float) this.getAttributeValue(Attributes.WATER_MOVEMENT_EFFICIENCY) * 3.0F;
                         if (speedBonus > 3.0F) {
                             speedBonus = 3.0F;
                         }
@@ -684,7 +689,6 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
                 }
             }
         }
-        this.animationSpeedOld = this.walkAnimation.speed();
         double deltaX = this.getX() - this.xo;
         double deltaZ = this.getZ() - this.zo;
         double deltaY = this.getY() - this.yo;
@@ -692,8 +696,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
         if (delta > 1.0F) {
             delta = 1.0F;
         }
-        this.walkAnimation.speed() += (delta - this.walkAnimation.speed()) * 0.4F;
-        this.animationPosition += this.walkAnimation.speed();
+        this.walkAnimation.update(delta, 0.4F);
 
     }
 

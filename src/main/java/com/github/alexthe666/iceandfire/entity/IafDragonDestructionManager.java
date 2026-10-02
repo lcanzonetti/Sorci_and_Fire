@@ -417,7 +417,7 @@ public class IafDragonDestructionManager {
     }
 
     private static void causeExplosion(Level world, BlockPos center, EntityDragonBase destroyer, DamageSource source, int stage) {
-        Explosion.BlockInteraction mode = EventHooks.getMobGriefingEvent(world, destroyer) ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.NONE;
+        Explosion.BlockInteraction mode = EventHooks.canEntityGrief(world, destroyer) ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.NONE;
         BlockLaunchExplosion explosion = new BlockLaunchExplosion(world, destroyer, source, center.getX(), center.getY(), center.getZ(), Math.min(2, stage - 2), mode);
         explosion.explode();
         explosion.finalizeExplosion(true);

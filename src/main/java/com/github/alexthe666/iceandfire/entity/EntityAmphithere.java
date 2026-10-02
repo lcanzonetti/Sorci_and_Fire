@@ -55,6 +55,15 @@ import net.minecraft.util.RandomSource;
 
 public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnimatedEntity, IPhasesThroughBlock, IFlapable, IDragonFlute, IFlyingMount, IHasCustomizableAttributes, ICustomMoveController {
 
+    // LivingEntity#flyingSpeed was replaced by getFlyingSpeed() in 1.19.4
+    protected float flyingSpeed = 0.02F;
+
+    @Override
+    protected float getFlyingSpeed() {
+        return this.flyingSpeed;
+    }
+
+
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(EntityAmphithere.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> FLYING = SynchedEntityData.defineId(EntityAmphithere.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> FLAP_TICKS = SynchedEntityData.defineId(EntityAmphithere.class, EntityDataSerializers.INT);
@@ -101,7 +110,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     public EntityAmphithere(EntityType<EntityAmphithere> type, Level worldIn) {
         super(type, worldIn);
         IHasCustomizableAttributes.applyAttributesForEntity(type, this);
-        this.maxUpStep = 1;
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1);
         if (worldIn.isClientSide) {
             roll_buffer = new IFChainBuffer();
             pitch_buffer = new IFChainBuffer();
@@ -538,7 +547,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
 
     @Override
     @Nullable
-    public Entity getControllingPassenger() {
+    public LivingEntity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
             if (passenger instanceof Player && this.getTarget() != passenger) {
                 Player player = (Player) passenger;

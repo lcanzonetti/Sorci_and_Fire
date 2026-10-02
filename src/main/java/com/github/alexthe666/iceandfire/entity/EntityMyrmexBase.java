@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageTypes;
 import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.citadel.animation.Animation;
@@ -63,6 +64,15 @@ import java.util.UUID;
 
 public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity, Merchant, ICustomSizeNavigator, IPassabilityNavigator, IHasCustomizableAttributes {
 
+    // LivingEntity#flyingSpeed was replaced by getFlyingSpeed() in 1.19.4
+    protected float flyingSpeed = 0.02F;
+
+    @Override
+    protected float getFlyingSpeed() {
+        return this.flyingSpeed;
+    }
+
+
     public static final Animation ANIMATION_PUPA_WIGGLE = Animation.create(20);
     private static final EntityDataAccessor<Byte> CLIMBING = SynchedEntityData.defineId(EntityMyrmexBase.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Integer> GROWTH_STAGE = SynchedEntityData.defineId(EntityMyrmexBase.class, EntityDataSerializers.INT);
@@ -90,7 +100,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
     public EntityMyrmexBase(EntityType<? extends EntityMyrmexBase> t, Level worldIn) {
         super(t, worldIn);
         IHasCustomizableAttributes.applyAttributesForEntity(t, this);
-        this.maxUpStep = 1;
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1);
         this.flyingSpeed = 0.2f;
         this.navigation = createNavigator(worldIn, AdvancedPathNavigate.MovementType.CLIMBING);
         //this.moveController = new GroundMoveHelper(this);
@@ -229,7 +239,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
     @Override
     public void tick() {
         super.tick();
-        this.maxUpStep = 1;
+        this.getAttribute(Attributes.STEP_HEIGHT).setBaseValue(1);
         if (level().getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof Player) {
             this.setTarget(null);
         }
@@ -801,17 +811,17 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
 
 
     @Override
-    public boolean equipItemIfPossible(@NotNull ItemStack stack) {
+    public @NotNull ItemStack equipItemIfPossible(@NotNull ItemStack stack) {
         if (super.equipItemIfPossible(stack)) {
-            return true;
+            return stack;
         } else {
             EquipmentSlot inventorySlot = stack.getEquipmentSlot();
             int i = inventorySlot.getIndex() - 300;
             if (i >= 0 && i < this.villagerInventory.getContainerSize()) {
                 this.villagerInventory.setItem(i, stack);
-                return true;
+                return stack;
             } else {
-                return false;
+                return ItemStack.EMPTY;
             }
         }
     }

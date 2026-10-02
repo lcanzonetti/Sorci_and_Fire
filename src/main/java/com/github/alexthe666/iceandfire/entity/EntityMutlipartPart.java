@@ -81,7 +81,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     @Override
-    public @NotNull EntityDimensions getDimensions(@NotNull Pose poseIn) {
+    protected @NotNull EntityDimensions getDefaultDimensions(@NotNull Pose poseIn) {
         return new EntityDimensions(getScaleX(), getScaleY(), false);
     }
 
@@ -216,10 +216,6 @@ public abstract class EntityMutlipartPart extends Entity {
 
     @Override
     public boolean isPickable() {
-        return true;
-    }
-
-    public boolean canBreatheUnderwater() {
         return true;
     }
 
