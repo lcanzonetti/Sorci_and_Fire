@@ -37,7 +37,7 @@ public class BlockLaunchExplosion extends Explosion {
     }
 
     public BlockLaunchExplosion(Level world, Mob entity, DamageSource source, double x, double y, double z, float size, BlockInteraction mode) {
-        super(world, entity, source, null, x, y, z, size, false, mode);
+        super(world, entity, source, null, x, y, z, size, false, mode, ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, SoundEvents.GENERIC_EXPLODE);
         this.world = world;
         this.size = size;
         this.x = x;
@@ -70,10 +70,10 @@ public class BlockLaunchExplosion extends Explosion {
     @Override
     public void finalizeExplosion(boolean spawnParticles) {
         if (world.isClientSide) {
-            this.world.playLocalSound(this.x, this.y, this.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F, false);
+            this.world.playLocalSound(this.x, this.y, this.z, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F, false);
         }
 
-        boolean flag = this.mode != Explosion.BlockInteraction.NONE;
+        boolean flag = this.mode != Explosion.BlockInteraction.KEEP;
         if (spawnParticles) {
             if (!(this.size < 2.0F) && flag) {
                 this.world.addParticle(ParticleTypes.EXPLOSION_EMITTER, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
@@ -84,7 +84,7 @@ public class BlockLaunchExplosion extends Explosion {
 
         if (flag) {
             ObjectArrayList<Pair<ItemStack, BlockPos>> objectarraylist = new ObjectArrayList<>();
-            Collections.shuffle(this.getToBlow(), this.world.random);
+            net.minecraft.Util.shuffle(this.getToBlow(), this.world.random);
 
             for (BlockPos blockpos : this.getToBlow()) {
                 BlockState blockstate = this.world.getBlockState(blockpos);

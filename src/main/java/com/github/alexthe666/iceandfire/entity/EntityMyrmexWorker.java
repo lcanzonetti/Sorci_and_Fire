@@ -305,7 +305,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
             Player owner = null;
             try {
                 if (itemEntity.getOwner() != null) {
-                    owner = this.level().getPlayerByUUID(itemEntity.getOwner());
+                    owner = (itemEntity.getOwner() instanceof Player ? (Player) itemEntity.getOwner() : null);
                 }
             } catch (Exception e) {
                 IceAndFire.LOGGER.warn("Myrmex picked up resin that wasn't thrown!");

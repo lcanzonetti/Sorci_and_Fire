@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.util;
 
+import net.minecraft.core.UUIDUtil;
+
+import net.minecraft.util.RandomSource;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
@@ -227,9 +230,9 @@ public class MyrmexHive {
 
     private UUID findUUID(String name) {
         if (this.world == null || this.world.getServer() == null)
-            return Player.createPlayerUUID(name);
+            return UUIDUtil.createOfflinePlayerUUID(name);
         Optional<GameProfile> profile = this.world.getServer().getProfileCache().get(name);
-        return profile.isPresent() ? Player.createPlayerUUID(name) : profile.get().getId();
+        return profile.map(GameProfile::getId).orElseGet(() -> UUIDUtil.createOfflinePlayerUUID(name));
     }
 
     public int modifyPlayerReputation(UUID playerName, int reputation) {
@@ -530,17 +533,17 @@ public class MyrmexHive {
         return allRooms;
     }
 
-    public BlockPos getRandomRoom(Random random, BlockPos returnPos) {
+    public BlockPos getRandomRoom(RandomSource random, BlockPos returnPos) {
         List<BlockPos> rooms = getAllRooms();
         return rooms.isEmpty() ? returnPos : rooms.get(random.nextInt(Math.max(rooms.size() - 1, 1)));
     }
 
-    public BlockPos getRandomRoom(WorldGenMyrmexHive.RoomType roomType, Random random, BlockPos returnPos) {
+    public BlockPos getRandomRoom(WorldGenMyrmexHive.RoomType roomType, RandomSource random, BlockPos returnPos) {
         List<BlockPos> rooms = getRooms(roomType);
         return rooms.isEmpty() ? returnPos : rooms.get(random.nextInt(Math.max(rooms.size() - 1, 1)));
     }
 
-    public BlockPos getClosestEntranceToEntity(Entity entity, Random random, boolean randomize) {
+    public BlockPos getClosestEntranceToEntity(Entity entity, RandomSource random, boolean randomize) {
         Map.Entry<BlockPos, Direction> closest = getClosestEntrance(entity);
         if (closest != null) {
             if (randomize) {
@@ -553,10 +556,10 @@ public class MyrmexHive {
         return entity.blockPosition();
     }
 
-    public BlockPos getClosestEntranceBottomToEntity(Entity entity, Random random) {
+    public BlockPos getClosestEntranceBottomToEntity(Entity entity, RandomSource random) {
         Map.Entry<BlockPos, Direction> closest = null;
         for (Map.Entry<BlockPos, Direction> entry : this.entranceBottoms.entrySet()) {
-            Vec3i vec = new Vec3i(entity.getX(), entity.getY(), entity.getZ());
+            Vec3i vec = new Vec3i(Mth.floor(entity.getX()), Mth.floor(entity.getY()), Mth.floor(entity.getZ()));
             if (closest == null || closest.getKey().distSqr(vec) > entry.getKey().distSqr(vec)) {
                 closest = entry;
             }
@@ -582,7 +585,7 @@ public class MyrmexHive {
     private Map.Entry<BlockPos, Direction> getClosestEntrance(Entity entity) {
         Map.Entry<BlockPos, Direction> closest = null;
         for (Map.Entry<BlockPos, Direction> entry : this.entrances.entrySet()) {
-            Vec3i vec = new Vec3i(entity.getX(), entity.getY(), entity.getZ());
+            Vec3i vec = new Vec3i(Mth.floor(entity.getX()), Mth.floor(entity.getY()), Mth.floor(entity.getZ()));
             if (closest == null || closest.getKey().distSqr(vec) > entry.getKey().distSqr(vec)) {
                 closest = entry;
             }

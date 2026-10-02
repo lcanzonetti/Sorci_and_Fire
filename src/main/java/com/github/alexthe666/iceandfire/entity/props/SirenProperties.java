@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.props;
 
+import net.neoforged.neoforge.network.PacketDistributor;
 import com.github.alexthe666.citadel.Citadel;
 import com.github.alexthe666.citadel.server.entity.CitadelEntityData;
 import com.github.alexthe666.citadel.server.message.PropertiesMessage;
@@ -57,7 +58,7 @@ public class SirenProperties {
     private static void updateData(LivingEntity entity, CompoundTag nbt) {
         CitadelEntityData.setCitadelTag(entity, nbt);
         if (!entity.level().isClientSide()) {
-            Citadel.sendMSGToAll(new PropertiesMessage("CitadelPatreonConfig", nbt, entity.getId()));
+            PacketDistributor.sendToAllPlayers(new PropertiesMessage("CitadelPatreonConfig", nbt, entity.getId()));
         }
     }
 
@@ -66,7 +67,7 @@ public class SirenProperties {
         entityData.put(SIREN_DATA, nbt);
         CitadelEntityData.setCitadelTag(entity, entityData);
         if (!entity.level().isClientSide()) {
-            Citadel.sendMSGToAll(new PropertiesMessage("CitadelPatreonConfig", entityData, entity.getId()));
+            PacketDistributor.sendToAllPlayers(new PropertiesMessage("CitadelPatreonConfig", entityData, entity.getId()));
         }
     }
 

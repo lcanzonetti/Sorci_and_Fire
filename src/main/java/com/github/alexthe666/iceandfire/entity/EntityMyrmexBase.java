@@ -64,6 +64,13 @@ import java.util.UUID;
 
 public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity, Merchant, ICustomSizeNavigator, IPassabilityNavigator, IHasCustomizableAttributes {
 
+    @Override
+    public boolean isFood(@NotNull ItemStack stack) {
+        // Animal#isFood was abstract-ified in 1.20.5; this is the old default
+        return stack.is(net.minecraft.world.item.Items.WHEAT);
+    }
+
+
     // LivingEntity#flyingSpeed was replaced by getFlyingSpeed() in 1.19.4
     protected float flyingSpeed = 0.02F;
 

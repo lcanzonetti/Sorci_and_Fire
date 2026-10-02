@@ -81,10 +81,10 @@ public class EntityDragonSkull extends Animal implements IBlacklistedFromStatues
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        this.getEntityData().define(DRAGON_TYPE, 0);
-        this.getEntityData().define(DRAGON_AGE, 0);
-        this.getEntityData().define(DRAGON_STAGE, 0);
-        this.getEntityData().define(DRAGON_DIRECTION, 0F);
+        builder.define(DRAGON_TYPE, 0);
+        builder.define(DRAGON_AGE, 0);
+        builder.define(DRAGON_STAGE, 0);
+        builder.define(DRAGON_DIRECTION, 0F);
     }
 
     public float getYaw() {

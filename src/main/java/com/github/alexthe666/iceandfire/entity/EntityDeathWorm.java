@@ -65,6 +65,13 @@ import javax.annotation.Nullable;
 
 public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICustomCollisions, IBlacklistedFromStatues, IAnimatedEntity, IVillagerFear, IAnimalFear, IGroundMount, IHasCustomizableAttributes, ICustomMoveController {
 
+    @Override
+    public boolean isFood(@NotNull ItemStack stack) {
+        // Animal#isFood was abstract-ified in 1.20.5; this is the old default
+        return stack.is(net.minecraft.world.item.Items.WHEAT);
+    }
+
+
     public static final ResourceKey<LootTable> TAN_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_tan"));
     public static final ResourceKey<LootTable> WHITE_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_white"));
     public static final ResourceKey<LootTable> RED_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_red"));
@@ -570,7 +577,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
             if (this.ticksTillExplosion == 0) {
                 boolean b = !NeoForge.EVENT_BUS.post(new GenericGriefEvent(this, this.getX(), this.getY(), this.getZ())).isCanceled();
                 if (b) {
-                    level().explode(this.thrower, this.getX(), this.getY(), this.getZ(), 2.5F * this.getScale(), false, Explosion.BlockInteraction.DESTROY);
+                    level().explode(this.thrower, this.getX(), this.getY(), this.getZ(), 2.5F * this.getScale(), false, Level.ExplosionInteraction.MOB);
                 }
                 this.thrower = null;
             } else {

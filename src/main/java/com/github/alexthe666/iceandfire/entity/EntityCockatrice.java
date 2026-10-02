@@ -59,6 +59,13 @@ import java.util.List;
 
 public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, IBlacklistedFromStatues, IVillagerFear, IHasCustomizableAttributes {
 
+    @Override
+    public boolean isFood(@NotNull ItemStack stack) {
+        // Animal#isFood was abstract-ified in 1.20.5; this is the old default
+        return stack.is(net.minecraft.world.item.Items.WHEAT);
+    }
+
+
     public static final Animation ANIMATION_JUMPAT = Animation.create(30);
     public static final Animation ANIMATION_WATTLESHAKE = Animation.create(20);
     public static final Animation ANIMATION_BITE = Animation.create(15);

@@ -52,6 +52,13 @@ import javax.annotation.Nullable;
 
 public class EntityMyrmexQueen extends EntityMyrmexBase {
 
+    @Override
+    public boolean isFood(@NotNull ItemStack stack) {
+        // Animal#isFood was abstract-ified in 1.20.5; this is the old default
+        return stack.is(net.minecraft.world.item.Items.WHEAT);
+    }
+
+
     public static final Animation ANIMATION_BITE = Animation.create(15);
     public static final Animation ANIMATION_STING = Animation.create(15);
     public static final Animation ANIMATION_EGG = Animation.create(20);

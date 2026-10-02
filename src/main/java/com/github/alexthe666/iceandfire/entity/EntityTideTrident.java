@@ -79,7 +79,7 @@ public class EntityTideTrident extends ThrownTrident {
                 lightningboltentity.moveTo(Vec3.atCenterOf(blockpos));
                 lightningboltentity.setCause(entity1 instanceof ServerPlayer ? (ServerPlayer) entity1 : null);
                 this.level().addFreshEntity(lightningboltentity);
-                soundevent = SoundEvents.TRIDENT_THUNDER;
+                soundevent = SoundEvents.TRIDENT_THUNDER.value();
                 f1 = 5.0F;
             }
         }

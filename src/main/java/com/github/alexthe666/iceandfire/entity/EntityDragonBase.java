@@ -1,5 +1,11 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.resources.ResourceKey;
+
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+
+import net.minecraft.world.level.storage.loot.LootParams;
+
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 import net.minecraft.world.damagesource.DamageTypes;
@@ -1336,7 +1342,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         if (stack.getItem() == IafItemRegistry.DRAGON_BONE.get()) {
             this.playSound(SoundEvents.SKELETON_AMBIENT, 1, 1);
         } else {
-            this.playSound(SoundEvents.ARMOR_EQUIP_LEATHER, 1, 1);
+            this.playSound(SoundEvents.ARMOR_EQUIP_LEATHER.value(), 1, 1);
         }
         return stack;
     }
@@ -1347,12 +1353,19 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return dist <= 1.0D || result.getType() == HitResult.Type.MISS;
     }
 
-    public abstract ResourceLocation getDeadLootTable();
+    public abstract ResourceKey<LootTable> getDeadLootTable();
 
     public ItemStack getItemFromLootTable() {
-        LootTable loottable = this.level().getServer().getLootTables().get(getDeadLootTable());
-        LootContext.Builder lootcontext$builder = this.createLootContext(false, this.damageSources().generic());
-        for (ItemStack itemstack : loottable.getRandomItems(lootcontext$builder.create(LootContextParamSets.ENTITY))) {
+        if (!(this.level() instanceof ServerLevel serverLevel)) {
+            return ItemStack.EMPTY;
+        }
+        LootTable loottable = serverLevel.getServer().reloadableRegistries().getLootTable(getDeadLootTable());
+        LootParams params = new LootParams.Builder(serverLevel)
+            .withParameter(LootContextParams.THIS_ENTITY, this)
+            .withParameter(LootContextParams.ORIGIN, this.position())
+            .withParameter(LootContextParams.DAMAGE_SOURCE, this.damageSources().generic())
+            .create(LootContextParamSets.ENTITY);
+        for (ItemStack itemstack : loottable.getRandomItems(params)) {
             return itemstack;
         }
         return ItemStack.EMPTY;

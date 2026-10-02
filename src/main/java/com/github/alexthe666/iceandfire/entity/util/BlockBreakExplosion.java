@@ -17,14 +17,14 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.ProtectionEnchantment;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -48,7 +48,7 @@ public class BlockBreakExplosion extends Explosion {
     private BlockInteraction mode;
 
     public BlockBreakExplosion(Level world, Mob entity, double x, double y, double z, float size) {
-        super(world, entity, null, null, x, y, z, size, false, BlockInteraction.DESTROY);
+        super(world, entity, null, null, x, y, z, size, false, BlockInteraction.DESTROY, ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, SoundEvents.GENERIC_EXPLODE);
         this.affectedBlockPositions = Lists.newArrayList();
         this.playerKnockbackMap = Maps.newHashMap();
         this.world = world;
@@ -139,7 +139,7 @@ public class BlockBreakExplosion extends Explosion {
 
         for (int k2 = 0; k2 < list.size(); ++k2) {
             Entity entity = list.get(k2);
-            if (!entity.ignoreExplosion() && !(entity instanceof ItemEntity)) {
+            if (!entity.ignoreExplosion(this) && !(entity instanceof ItemEntity)) {
                 double d12 = Math.sqrt(entity.distanceToSqr(Vector3d)) / f3;
                 if (d12 <= 1.0D) {
                     double d5 = entity.getX() - this.x;
@@ -152,10 +152,10 @@ public class BlockBreakExplosion extends Explosion {
                         d9 = d9 / d13;
                         double d14 = getSeenPercent(Vector3d, entity);
                         double d10 = (1.0D - d12) * d14;
-                        entity.hurt(this.getDamageSource(), (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)));
+                        entity.hurt(this.world.damageSources().explosion(this), (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)));
                         double d11 = d10;
                         if (entity instanceof LivingEntity) {
-                            d11 = ProtectionEnchantment.getExplosionKnockbackAfterDampener((LivingEntity) entity, d10);
+                            d11 = d10 * (1.0D - ((LivingEntity) entity).getAttributeValue(Attributes.EXPLOSION_KNOCKBACK_RESISTANCE));
                         }
 
                         entity.setDeltaMovement(entity.getDeltaMovement().add(d5 * d11, d7 * d11, d9 * d11));
@@ -178,10 +178,10 @@ public class BlockBreakExplosion extends Explosion {
     @Override
     public void finalizeExplosion(boolean spawnParticles) {
         if (this.world.isClientSide) {
-            this.world.playLocalSound(this.x, this.y, this.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F, false);
+            this.world.playLocalSound(this.x, this.y, this.z, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 4.0F, (1.0F + (this.world.random.nextFloat() - this.world.random.nextFloat()) * 0.2F) * 0.7F, false);
         }
 
-        boolean flag = this.mode != Explosion.BlockInteraction.NONE;
+        boolean flag = this.mode != Explosion.BlockInteraction.KEEP;
         if (spawnParticles) {
             if (!(this.size < 2.0F) && flag) {
                 this.world.addParticle(ParticleTypes.EXPLOSION_EMITTER, this.x, this.y, this.z, 1.0D, 0.0D, 0.0D);
@@ -192,7 +192,7 @@ public class BlockBreakExplosion extends Explosion {
 
         if (flag) {
             ObjectArrayList<Pair<ItemStack, BlockPos>> objectarraylist = new ObjectArrayList<>();
-            Collections.shuffle(this.affectedBlockPositions, this.world.random);
+            net.minecraft.Util.shuffle(this.affectedBlockPositions, this.world.random);
 
             for (BlockPos blockpos : this.affectedBlockPositions) {
                 BlockState blockstate = this.world.getBlockState(blockpos);
@@ -202,7 +202,7 @@ public class BlockBreakExplosion extends Explosion {
                     this.world.getProfiler().push("explosion_blocks");
                     if (blockstate.canDropFromExplosion(this.world, blockpos, this) && this.world instanceof ServerLevel) {
                         BlockEntity tileentity = blockstate.hasBlockEntity() ? this.world.getBlockEntity(blockpos) : null;
-                        LootContext.Builder lootcontext$builder = (new LootContext.Builder((ServerLevel) this.world)).withRandom(this.world.random).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(blockpos)).withParameter(LootContextParams.TOOL, ItemStack.EMPTY).withOptionalParameter(LootContextParams.BLOCK_ENTITY, tileentity).withOptionalParameter(LootContextParams.THIS_ENTITY, this.exploder);
+                        LootParams.Builder lootcontext$builder = (new LootParams.Builder((ServerLevel) this.world)).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(blockpos)).withParameter(LootContextParams.TOOL, ItemStack.EMPTY).withOptionalParameter(LootContextParams.BLOCK_ENTITY, tileentity).withOptionalParameter(LootContextParams.THIS_ENTITY, this.exploder);
                         if (this.mode == Explosion.BlockInteraction.DESTROY) {
                             lootcontext$builder.withParameter(LootContextParams.EXPLOSION_RADIUS, this.size);
                         }
@@ -229,7 +229,7 @@ public class BlockBreakExplosion extends Explosion {
     }
 
     @Override
-    public LivingEntity getSourceMob() {
+    public LivingEntity getIndirectSourceEntity() {
         return exploder;
     }
 
@@ -244,7 +244,7 @@ public class BlockBreakExplosion extends Explosion {
     }
 
     @Override
-    public @NotNull Vec3 getPosition() {
+    public @NotNull Vec3 center() {
         return this.position;
     }
 }

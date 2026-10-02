@@ -60,6 +60,13 @@ import net.minecraft.util.RandomSource;
 
 public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultipartEntity, IVillagerFear, IAnimalFear, IHasCustomizableAttributes {
 
+    @Override
+    public boolean isFood(@NotNull ItemStack stack) {
+        // Animal#isFood was abstract-ified in 1.20.5; this is the old default
+        return stack.is(net.minecraft.world.item.Items.WHEAT);
+    }
+
+
     public static final Animation ANIMATION_BITE = Animation.create(15);
     public static final Animation ANIMATION_SPEAK = Animation.create(15);
     public static final Animation ANIMATION_ROAR = Animation.create(40);

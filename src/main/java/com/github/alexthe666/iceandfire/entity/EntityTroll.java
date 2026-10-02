@@ -327,7 +327,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
         }
         setAvoidSun(this.level().isDay());
         if (this.level().isDay() && !this.level().isClientSide) {
-            float f = this.getBrightness();
+            float f = this.getLightLevelDependentMagicValue();
             BlockPos blockpos = this.getVehicle() instanceof Boat ? (BlockPos.containing(this.getX(), Math.round(this.getY()), this.getZ())).above() : BlockPos.containing(this.getX(), Math.round(this.getY()), this.getZ());
             if (f > 0.5F && this.level().canSeeSky(blockpos)) {
                 this.setDeltaMovement(0, 0, 0);
@@ -401,7 +401,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
                     explosion.finalizeExplosion(true);
                 }
 
-                this.playSound(SoundEvents.GENERIC_EXPLODE, 1, 1);
+                this.playSound(SoundEvents.GENERIC_EXPLODE.value(), 1, 1);
 
             }
         }

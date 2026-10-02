@@ -155,7 +155,7 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
             if (bestiary.getItem() == IafItemRegistry.BESTIARY.get()) {
                 List<EnumBestiaryPages> possibleList = getPossiblePages();
                 localRand.setSeed(this.level.getGameTime());
-                Collections.shuffle(possibleList, localRand);
+                net.minecraft.Util.shuffle(possibleList, localRand);
                 if (!possibleList.isEmpty()) {
                     selectedPages[0] = possibleList.get(0);
                 } else {

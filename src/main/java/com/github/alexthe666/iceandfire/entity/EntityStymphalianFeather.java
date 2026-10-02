@@ -15,7 +15,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
-import net.neoforged.neoforge.common.ToolActions;
+import net.neoforged.neoforge.common.ItemAbilities;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityStymphalianFeather extends AbstractArrow {
@@ -25,7 +25,7 @@ public class EntityStymphalianFeather extends AbstractArrow {
     }
 
     public EntityStymphalianFeather(EntityType<? extends AbstractArrow> t, Level worldIn, LivingEntity shooter) {
-        super(t, shooter, worldIn);
+        super(t, shooter, worldIn, new ItemStack(IafItemRegistry.STYMPHALIAN_BIRD_FEATHER.get()), null);
         this.setBaseDamage(IafConfig.stymphalianBirdFeatherAttackStength);
     }
 
@@ -59,7 +59,7 @@ public class EntityStymphalianFeather extends AbstractArrow {
                 LivingEntity LivingEntity = (LivingEntity) entityHit.getEntity();
                 LivingEntity.setArrowCount(LivingEntity.getArrowCount() - 1);
                 ItemStack itemstack1 = LivingEntity.isUsingItem() ? LivingEntity.getUseItem() : ItemStack.EMPTY;
-                if (itemstack1.getItem().canPerformAction(itemstack1, ToolActions.SHIELD_BLOCK)) {
+                if (itemstack1.canPerformAction(ItemAbilities.SHIELD_BLOCK)) {
                     damageShield(LivingEntity, 1.0F);
                 }
             }
@@ -68,7 +68,7 @@ public class EntityStymphalianFeather extends AbstractArrow {
     }
 
     protected void damageShield(LivingEntity entity, float damage) {
-        if (damage >= 3.0F && entity.getUseItem().getItem().canPerformAction(entity.getUseItem(), ToolActions.SHIELD_BLOCK)) {
+        if (damage >= 3.0F && entity.getUseItem().getItem().canPerformAction(entity.getUseItem(), ItemAbilities.SHIELD_BLOCK)) {
             ItemStack copyBeforeUse = entity.getUseItem().copy();
             int i = 1 + Mth.floor(damage);
             InteractionHand Hand = entity.getUsedItemHand();
@@ -79,9 +79,9 @@ public class EntityStymphalianFeather extends AbstractArrow {
                 }
 
                 if (Hand == net.minecraft.world.InteractionHand.MAIN_HAND) {
-                    this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+                    entity.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
                 } else {
-                    this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
+                    entity.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
                 }
                 this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level().random.nextFloat() * 0.4F);
             }
@@ -89,7 +89,7 @@ public class EntityStymphalianFeather extends AbstractArrow {
     }
 
     @Override
-    protected @NotNull ItemStack getPickupItem() {
+    protected @NotNull ItemStack getDefaultPickupItem() {
         return new ItemStack(IafItemRegistry.STYMPHALIAN_BIRD_FEATHER.get());
     }
 }

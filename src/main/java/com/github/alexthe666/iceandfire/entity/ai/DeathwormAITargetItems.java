@@ -110,7 +110,7 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
             deathWorm.setAnimation(EntityDeathWorm.ANIMATION_BITE);
             Player thrower = null;
             if (this.targetEntity.getOwner() != null)
-                thrower = this.targetEntity.level().getPlayerByUUID(this.targetEntity.getOwner());
+                thrower = (this.targetEntity.getOwner() instanceof Player ? (Player) this.targetEntity.getOwner() : null);
             deathWorm.setExplosive(true, thrower);
             stop();
         }

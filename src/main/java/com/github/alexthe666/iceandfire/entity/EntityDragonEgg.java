@@ -81,9 +81,9 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        this.getEntityData().define(DRAGON_TYPE, 0);
-        this.getEntityData().define(DRAGON_AGE, 0);
-        this.getEntityData().define(OWNER_UNIQUE_ID, Optional.empty());
+        builder.define(DRAGON_TYPE, 0);
+        builder.define(DRAGON_AGE, 0);
+        builder.define(OWNER_UNIQUE_ID, Optional.empty());
     }
 
     @Nullable
