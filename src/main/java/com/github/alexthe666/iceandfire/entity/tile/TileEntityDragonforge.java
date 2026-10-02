@@ -188,8 +188,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     @Override
     public void setItem(int index, ItemStack stack) {
         ItemStack itemstack = this.forgeItemStacks.get(index);
-        boolean flag = !stack.isEmpty() && ItemStack.isSameItem(stack, itemstack)
-                && ItemStack.tagMatches(stack, itemstack);
+        boolean flag = !stack.isEmpty() && ItemStack.isSameItemSameComponents(stack, itemstack);
         this.forgeItemStacks.set(index, stack);
 
         if (stack.getCount() > this.getMaxStackSize()) {
@@ -265,16 +264,16 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     private ItemStack getCurrentResult() {
         Optional<DragonForgeRecipe> recipe = getCurrentRecipe();
         if (recipe.isPresent())
-            return recipe.get().getResultItem();
+            return recipe.get().getResult();
         return new ItemStack(getDefaultOutput());
     }
 
     public Optional<DragonForgeRecipe> getCurrentRecipe() {
-        return level.getRecipeManager().getRecipeFor(IafRecipeRegistry.DRAGON_FORGE_TYPE.get(), this, level);
+        return level.getRecipeManager().getRecipeFor(IafRecipeRegistry.DRAGON_FORGE_TYPE.get(), new DragonForgeRecipe.Input(this.getItem(0), this.getItem(1), this.getTypeID()), level).map(net.minecraft.world.item.crafting.RecipeHolder::value);
     }
 
     public List<DragonForgeRecipe> getRecipes() {
-        return level.getRecipeManager().getAllRecipesFor(IafRecipeRegistry.DRAGON_FORGE_TYPE.get());
+        return level.getRecipeManager().getAllRecipesFor(IafRecipeRegistry.DRAGON_FORGE_TYPE.get()).stream().map(net.minecraft.world.item.crafting.RecipeHolder::value).toList();
     }
 
     public boolean canSmelt() {
@@ -465,5 +464,15 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     @Override
     protected @NotNull AbstractContainerMenu createMenu(int id, @NotNull Inventory player) {
         return new ContainerDragonForge(id, this, player, new SimpleContainerData(0));
+    }
+
+    @Override
+    protected @NotNull NonNullList<ItemStack> getItems() {
+        return this.forgeItemStacks;
+    }
+
+    @Override
+    protected void setItems(@NotNull NonNullList<ItemStack> items) {
+        this.forgeItemStacks = items;
     }
 }

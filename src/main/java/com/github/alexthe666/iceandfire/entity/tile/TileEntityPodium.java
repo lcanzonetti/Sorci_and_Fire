@@ -49,10 +49,6 @@ public class TileEntityPodium extends BaseContainerBlockEntity implements Worldl
         entityPodium.ticksExisted++;
     }
 
-    @Override
-    public net.minecraft.world.phys.AABB getRenderBoundingBox() {
-        return new net.minecraft.world.phys.AABB(worldPosition, worldPosition.offset(1, 3, 1));
-    }
 
     @Override
     public int getContainerSize() {
@@ -104,7 +100,6 @@ public class TileEntityPodium extends BaseContainerBlockEntity implements Worldl
         if (!stack.isEmpty() && stack.getCount() > this.getMaxStackSize()) {
             stack.setCount(this.getMaxStackSize());
         }
-        this.saveAdditional(this.getUpdateTag());
         if (!level.isClientSide) {
             IceAndFire.sendMSGToAll(new MessageUpdatePodium(this.getBlockPos().asLong(), stacks.get(0)));
         }
@@ -219,5 +214,15 @@ public class TileEntityPodium extends BaseContainerBlockEntity implements Worldl
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
         return new ContainerPodium(id, this, playerInventory, new SimpleContainerData(0));
+    }
+
+    @Override
+    protected @NotNull NonNullList<ItemStack> getItems() {
+        return this.stacks;
+    }
+
+    @Override
+    protected void setItems(@NotNull NonNullList<ItemStack> items) {
+        this.stacks = items;
     }
 }

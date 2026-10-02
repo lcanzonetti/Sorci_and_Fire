@@ -266,7 +266,7 @@ public class EntityFireDragon extends EntityDragonBase {
     @Override
     protected float getBlockSpeedFactor() {
         // Disable soul sand slow down
-        if (this.onSoulSpeedBlock()) {
+        if (this.level().getBlockState(this.getBlockPosBelowThatAffectsMyMovement()).is(net.minecraft.tags.BlockTags.SOUL_SPEED_BLOCKS)) {
             return this.getDragonStage() >= 2 ? 1.0f : 0.8f;
         }
         return super.getBlockSpeedFactor();

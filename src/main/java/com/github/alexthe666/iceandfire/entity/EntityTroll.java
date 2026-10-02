@@ -251,7 +251,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
             if (IafConfig.trollsDropWeapon) {
                 if (this.getRandom().nextInt(3) == 0) {
                     ItemStack weaponStack = new ItemStack(this.getWeaponType().item.get(), 1);
-                    weaponStack.hurt(this.getRandom().nextInt(250), this.getRandom(), null);
+                    weaponStack.setDamageValue(Math.min(this.getRandom().nextInt(250), weaponStack.getMaxDamage() - 1));
                     dropItemAt(weaponStack, this.getX(), this.getY(), this.getZ());
                 } else {
                     ItemStack brokenDrop = new ItemStack(Blocks.STONE_BRICKS, this.getRandom().nextInt(2) + 1);
@@ -352,7 +352,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
             float weaponX = (float) (getX() + 1.9F * Mth.cos((float) ((yBodyRot + 90) * Math.PI / 180)));
             float weaponZ = (float) (getZ() + 1.9F * Mth.sin((float) ((yBodyRot + 90) * Math.PI / 180)));
             float weaponY = (float) (getY() + (0.2F));
-            BlockState state = level().getBlockState(new BlockPos(weaponX, weaponY - 1, weaponZ));
+            BlockState state = level().getBlockState(BlockPos.containing(weaponX, weaponY - 1, weaponZ));
             for (int i = 0; i < 20; i++) {
                 double motionX = getRandom().nextGaussian() * 0.07D;
                 double motionY = getRandom().nextGaussian() * 0.07D;

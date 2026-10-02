@@ -815,8 +815,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         return false;
     }
 
-    @Override
-    public boolean canBeControlledByRider() {
+        public boolean canBeControlledByRider() {
         return true;
     }
 

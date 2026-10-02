@@ -414,7 +414,7 @@ public class ServerEvents {
             if (attacker instanceof Player && event.getEntity().getRandom().nextInt(3) == 0) {
                 CombatTracker combat = event.getEntity().getCombatTracker();
                 CombatEntry entry = combat.getMostSignificantFall();
-                boolean flag = entry != null && (entry.getSource().is(DamageTypes.FALL) || entry.getSource().is(DamageTypes.DROWN) || entry.getSource().is(DamageTypes.LAVA));
+                boolean flag = entry != null && (entry.source().is(DamageTypes.FALL) || entry.source().is(DamageTypes.DROWN) || entry.source().is(DamageTypes.LAVA));
                 if (event.getEntity().hasEffect(MobEffects.POISON)) {
                     flag = true;
                 }
@@ -563,18 +563,18 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void onBreakBlock(BlockEvent.BreakEvent event) {
-        if (event.getEntity() != null && (event.getState().getBlock() instanceof AbstractChestBlock || event.getState().getBlock() == IafBlockRegistry.GOLD_PILE.get() || event.getState().getBlock() == IafBlockRegistry.SILVER_PILE.get() || event.getState().getBlock() == IafBlockRegistry.COPPER_PILE.get())) {
+        if (event.getPlayer() != null && (event.getState().getBlock() instanceof AbstractChestBlock || event.getState().getBlock() == IafBlockRegistry.GOLD_PILE.get() || event.getState().getBlock() == IafBlockRegistry.SILVER_PILE.get() || event.getState().getBlock() == IafBlockRegistry.COPPER_PILE.get())) {
             final float dist = IafConfig.dragonGoldSearchLength;
-            List<Entity> list = event.getLevel().getEntities(event.getEntity(), event.getEntity().getBoundingBox().inflate(dist, dist, dist));
+            List<Entity> list = event.getLevel().getEntities(event.getPlayer(), event.getPlayer().getBoundingBox().inflate(dist, dist, dist));
             if (list.isEmpty()) return;
 
             for (Entity entity : list) {
                 if (entity instanceof EntityDragonBase) {
                     EntityDragonBase dragon = (EntityDragonBase) entity;
-                    if (!dragon.isTame() && !dragon.isModelDead() && !dragon.isOwnedBy(event.getEntity()) && !event.getEntity().isCreative()) {
+                    if (!dragon.isTame() && !dragon.isModelDead() && !dragon.isOwnedBy(event.getPlayer()) && !event.getPlayer().isCreative()) {
                         dragon.setInSittingPose(false);
                         dragon.setOrderedToSit(false);
-                        dragon.setTarget(event.getEntity());
+                        dragon.setTarget(event.getPlayer());
                     }
                 }
             }

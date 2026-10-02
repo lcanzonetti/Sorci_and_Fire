@@ -94,21 +94,19 @@ public class TileEntityEggInIce extends BlockEntity {
 
     @Override
     public void handleUpdateTag(@NotNull CompoundTag parentNBTTagCompound, @NotNull HolderLookup.Provider registries) {
-        this.load(parentNBTTagCompound);
+        this.loadAdditional(parentNBTTagCompound, registries);
     }
 
     @Override
     public @NotNull CompoundTag getUpdateTag(@NotNull HolderLookup.Provider registries) {
         CompoundTag nbtTagCompound = new CompoundTag();
-        saveAdditional(nbtTagCompound);
+        saveAdditional(nbtTagCompound, registries);
         return nbtTagCompound;
     }
 
     @Override
     @Nullable
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
-        CompoundTag nbtTagCompound = new CompoundTag();
-        saveAdditional(nbtTagCompound);
         return ClientboundBlockEntityDataPacket.create(this);
     }
 

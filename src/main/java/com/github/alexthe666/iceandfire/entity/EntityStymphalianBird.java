@@ -331,7 +331,7 @@ public class EntityStymphalianBird extends Monster implements IAnimatedEntity, E
             this.setFlying(false);
             this.airTarget = null;
         }
-        if (!level().isClientSide && (this.flock == null || this.flock != null && this.flock.isLeader(this)) && this.getRandom().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isBaby() && this.onGround) {
+        if (!level().isClientSide && (this.flock == null || this.flock != null && this.flock.isLeader(this)) && this.getRandom().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isBaby() && this.onGround()) {
             this.setFlying(true);
             this.launchTicks = 0;
             this.flyTicks = 0;

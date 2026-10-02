@@ -179,6 +179,11 @@ public class ChunkCache implements LevelReader {
     }
 
     @Override
+    public net.minecraft.core.@NotNull RegistryAccess registryAccess() {
+        return world.registryAccess();
+    }
+
+    @Override
     public @NotNull FeatureFlagSet enabledFeatures() {
         return world.enabledFeatures();
     }

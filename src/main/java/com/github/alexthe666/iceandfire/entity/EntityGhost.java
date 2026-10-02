@@ -122,7 +122,7 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
     @Override
     public boolean isInvulnerableTo(@NotNull DamageSource source) {
         return super.isInvulnerableTo(source) || source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypes.IN_WALL) || source.is(DamageTypes.CACTUS)
-            || source.is(DamageTypes.DROWN) || source.is(DamageTypes.FALLING_BLOCK) || source.is(DamageTypes.ANVIL) || source.is(DamageTypes.SWEET_BERRY_BUSH);
+            || source.is(DamageTypes.DROWN) || source.is(DamageTypes.FALLING_BLOCK) || source.is(DamageTypes.FALLING_ANVIL) || source.is(DamageTypes.SWEET_BERRY_BUSH);
     }
 
     @Override

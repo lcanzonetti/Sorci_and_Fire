@@ -587,7 +587,7 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
             boat.remove(RemovalReason.KILLED);
             if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                 for (int i = 0; i < 3; ++i) {
-                    boat.spawnAtLocation(new ItemStack(boat.getBoatType().getPlanks().asItem()), 0.0F);
+                    boat.spawnAtLocation(new ItemStack(boat.getVariant().getPlanks().asItem()), 0.0F);
                 }
                 for (int j = 0; j < 2; ++j) {
                     boat.spawnAtLocation(new ItemStack(Items.STICK));

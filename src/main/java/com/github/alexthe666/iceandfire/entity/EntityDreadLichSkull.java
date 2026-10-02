@@ -180,10 +180,6 @@ public class EntityDreadLichSkull extends AbstractArrow {
         return 15728880;
     }
 
-    @Override
-    public float getBrightness() {
-        return 1.0F;
-    }
 
     @Override
     public boolean isNoGravity() {

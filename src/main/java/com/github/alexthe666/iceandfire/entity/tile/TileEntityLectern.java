@@ -138,7 +138,7 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
 
     @Override
     public void setItem(int index, ItemStack stack) {
-        boolean flag = !stack.isEmpty() && stack.sameItem(this.stacks.get(index)) && ItemStack.tagMatches(stack, this.stacks.get(index));
+        boolean flag = !stack.isEmpty() && ItemStack.isSameItemSameComponents(stack, this.stacks.get(index));
         this.stacks.set(index, stack);
 
         if (!stack.isEmpty() && stack.getCount() > this.getMaxStackSize()) {
@@ -300,4 +300,14 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
     }
 
 
+
+    @Override
+    protected @NotNull NonNullList<ItemStack> getItems() {
+        return this.stacks;
+    }
+
+    @Override
+    protected void setItems(@NotNull NonNullList<ItemStack> items) {
+        this.stacks = items;
+    }
 }

@@ -283,7 +283,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     }
 
     @Override
-    public boolean canBeRiddenInWater(Entity rider) {
+    public boolean canBeRiddenUnderFluidType(@NotNull net.neoforged.neoforge.fluids.FluidType type, @NotNull Entity rider) {
         return true;
     }
 
@@ -867,8 +867,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
         return super.isControlledByLocalInstance();
     }
 
-    @Override
-    public boolean canBeControlledByRider() {
+        public boolean canBeControlledByRider() {
         return true;
     }
 

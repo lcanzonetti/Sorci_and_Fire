@@ -35,9 +35,8 @@ public class TileEntityDreadSpawner extends SpawnerBlockEntity {
         }
 
         @Override
-        @javax.annotation.Nullable
-        public net.minecraft.world.level.block.entity.BlockEntity getSpawnerBlockEntity() {
-            return TileEntityDreadSpawner.this;
+        public com.mojang.datafixers.util.Either<net.minecraft.world.level.block.entity.BlockEntity, net.minecraft.world.entity.Entity> getOwner() {
+            return com.mojang.datafixers.util.Either.left(TileEntityDreadSpawner.this);
         }
     };
 
@@ -52,10 +51,10 @@ public class TileEntityDreadSpawner extends SpawnerBlockEntity {
         this.spawner.load(this.level, this.worldPosition, p_155760_);
     }
 
-    public CompoundTag save(CompoundTag p_59795_) {
+    @Override
+    protected void saveAdditional(@NotNull CompoundTag p_59795_, @NotNull HolderLookup.Provider registries) {
         super.saveAdditional(p_59795_, registries);
-        this.spawner.save(registries, p_59795_);
-        return p_59795_;
+        this.spawner.save(p_59795_);
     }
 
     public static void clientTick(Level p_155755_, BlockPos p_155756_, BlockState p_155757_, TileEntityDreadSpawner p_155758_) {
@@ -74,7 +73,7 @@ public class TileEntityDreadSpawner extends SpawnerBlockEntity {
 
     @Override
     public @NotNull CompoundTag getUpdateTag(@NotNull HolderLookup.Provider registries) {
-        CompoundTag compoundtag = this.save(new CompoundTag());
+        CompoundTag compoundtag = this.saveCustomOnly(registries);
         compoundtag.remove("SpawnPotentials");
         return compoundtag;
     }

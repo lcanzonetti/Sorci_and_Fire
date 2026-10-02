@@ -1,5 +1,9 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.world.entity.Entity;
+
+import net.minecraft.world.phys.Vec3;
+
 import net.minecraft.util.RandomSource;
 import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.citadel.animation.Animation;
@@ -48,7 +52,6 @@ import javax.annotation.Nullable;
 
 public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity, IVillagerFear, IAnimalFear {
 
-    public static final ItemStack SHIELD = generateShield();
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(EntityDreadKnight.class, EntityDataSerializers.INT);
     public static Animation ANIMATION_SPAWN = Animation.create(40);
     private int animationTick;
@@ -58,13 +61,14 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         super(type, worldIn);
     }
 
-    private static ItemStack generateShield() {
-        ItemStack itemstack = new ItemStack(Items.CYAN_BANNER);
-        CompoundTag compoundnbt = itemstack.getOrCreateTagElement("BlockEntityTag");
-        ListTag listnbt = (new BannerPattern.Builder()).addPattern(BannerPattern.BASE, DyeColor.CYAN).addPattern(IafItemRegistry.PATTERN_DREAD.get().getBannerPattern(), DyeColor.WHITE).toListTag();
-        compoundnbt.put("Patterns", listnbt);
+    private static ItemStack generateShield(net.minecraft.core.RegistryAccess registries) {
+        // Banner patterns are a datapack registry since 1.20.5, so the shield can only be built once a level exists.
         ItemStack shield = new ItemStack(Items.SHIELD, 1);
-        IafNbt.setTag(shield, IafNbt.getTag(itemstack));
+        net.minecraft.core.Registry<BannerPattern> patterns = registries.registryOrThrow(net.minecraft.core.registries.Registries.BANNER_PATTERN);
+        net.minecraft.world.level.block.entity.BannerPatternLayers.Builder layers = new net.minecraft.world.level.block.entity.BannerPatternLayers.Builder();
+        patterns.getHolder(com.github.alexthe666.iceandfire.recipe.IafRecipeRegistry.patternKey("dread")).ifPresent(pattern -> layers.add(pattern, DyeColor.WHITE));
+        shield.set(net.minecraft.core.component.DataComponents.BANNER_PATTERNS, layers.build());
+        shield.set(net.minecraft.core.component.DataComponents.BASE_COLOR, DyeColor.CYAN);
         return shield;
     }
 
@@ -131,7 +135,7 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         super.populateDefaultEquipmentSlots(this.getRandom(), difficulty);
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(IafItemRegistry.DREAD_KNIGHT_SWORD.get()));
         if (random.nextBoolean()) {
-            this.setItemSlot(EquipmentSlot.OFFHAND, SHIELD.copy());
+            this.setItemSlot(EquipmentSlot.OFFHAND, generateShield(this.registryAccess()));
         }
         setArmorVariant(random.nextInt(3));
     }
@@ -201,8 +205,9 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
     }
 
     @Override
-    public double getMyRidingOffset() {
-        return -0.6D;
+    public @NotNull Vec3 getVehicleAttachmentPoint(@NotNull Entity vehicle) {
+        // Was getMyRidingOffset() = -0.6 before 1.20.5
+        return super.getVehicleAttachmentPoint(vehicle).add(0.0D, 0.6D, 0.0D);
     }
 
     @Override

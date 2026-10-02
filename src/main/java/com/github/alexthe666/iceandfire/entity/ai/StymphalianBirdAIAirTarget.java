@@ -23,7 +23,7 @@ public class StymphalianBirdAIAirTarget extends Goal {
                 bird.flock.setTarget(bird.airTarget);
             }
         } else {
-            return new BlockPos((int) bird.getTarget().getX(), (int) bird.getTarget().getY() + bird.getTarget().getEyeHeight(), (int) bird.getTarget().getZ());
+            return BlockPos.containing(bird.getTarget().getX(), bird.getTarget().getY() + bird.getTarget().getEyeHeight(), bird.getTarget().getZ());
         }
         return bird.blockPosition();
     }

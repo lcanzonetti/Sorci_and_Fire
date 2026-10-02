@@ -60,8 +60,10 @@ public class EntityPixie extends TamableAnimal {
 
     public static final int STEAL_COOLDOWN = 3000;
 
-    public MobEffect[] positivePotions = new MobEffect[]{MobEffects.DAMAGE_BOOST, MobEffects.JUMP, MobEffects.MOVEMENT_SPEED, MobEffects.LUCK, MobEffects.DIG_SPEED};
-    public MobEffect[] negativePotions = new MobEffect[]{MobEffects.WEAKNESS, MobEffects.CONFUSION, MobEffects.MOVEMENT_SLOWDOWN, MobEffects.UNLUCK, MobEffects.DIG_SLOWDOWN};
+    @SuppressWarnings("unchecked")
+    public net.minecraft.core.Holder<MobEffect>[] positivePotions = new net.minecraft.core.Holder[]{MobEffects.DAMAGE_BOOST, MobEffects.JUMP, MobEffects.MOVEMENT_SPEED, MobEffects.LUCK, MobEffects.DIG_SPEED};
+    @SuppressWarnings("unchecked")
+    public net.minecraft.core.Holder<MobEffect>[] negativePotions = new net.minecraft.core.Holder[]{MobEffects.WEAKNESS, MobEffects.CONFUSION, MobEffects.MOVEMENT_SLOWDOWN, MobEffects.UNLUCK, MobEffects.DIG_SLOWDOWN};
     public boolean slowSpeed = false;
     public int ticksUntilHouseAI;
     public int ticksHeldItemFor;
@@ -285,10 +287,6 @@ public class EntityPixie extends TamableAnimal {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
         this.setColor(this.random.nextInt(5));
         this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
-
-        if (dataTag != null) {
-            System.out.println("EntityPixie spawned with dataTag: " + dataTag);
-        }
 
         return spawnDataIn;
     }

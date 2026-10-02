@@ -1,5 +1,9 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
+
+import net.minecraft.world.level.portal.DimensionTransition;
+
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageTypes;
 import com.github.alexthe666.iceandfire.util.IafNbt;
@@ -300,7 +304,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         }
         MerchantOffers merchantoffers = this.getOffers();
         if (!merchantoffers.isEmpty()) {
-            tag.put("Offers", merchantoffers.createTag());
+            tag.put("Offers", MerchantOffers.CODEC.encodeStart(this.registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), merchantoffers).getOrThrow());
         }
 
         ListTag listnbt = new ListTag();
@@ -308,7 +312,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         for (int i = 0; i < this.villagerInventory.getContainerSize(); ++i) {
             ItemStack itemstack = this.villagerInventory.getItem(i);
             if (!itemstack.isEmpty()) {
-                listnbt.add(itemstack.save(new CompoundTag()));
+                listnbt.add(itemstack.save(this.registryAccess()));
             }
         }
         tag.put("Inventory", listnbt);
@@ -324,13 +328,13 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
             this.setHive(MyrmexWorldData.get(level()).getHiveFromUUID(tag.getUUID("HiveUUID")));
         }
         if (tag.contains("Offers", 10)) {
-            this.offers = new MerchantOffers(tag.getCompound("Offers"));
+            MerchantOffers.CODEC.parse(this.registryAccess().createSerializationContext(net.minecraft.nbt.NbtOps.INSTANCE), tag.get("Offers")).resultOrPartial(IceAndFire.LOGGER::warn).ifPresent(offers -> this.offers = offers);
         }
 
         ListTag listnbt = tag.getList("Inventory", 10);
 
         for (int i = 0; i < listnbt.size(); ++i) {
-            ItemStack itemstack = ItemStack.of(listnbt.getCompound(i));
+            ItemStack itemstack = ItemStack.parseOptional(this.registryAccess(), listnbt.getCompound(i));
             if (!itemstack.isEmpty()) {
                 this.villagerInventory.addItem(itemstack);
             }
@@ -346,8 +350,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
         return true;
     }
 
-    @Override
-    public @NotNull Level getLevel() {
+        public @NotNull Level getLevel() {
         return this.level();
     }
 
@@ -807,9 +810,9 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
 
     @Override
     @Nullable
-    public Entity changeDimension(@NotNull ServerLevel server, net.neoforged.neoforge.common.util.@NotNull ITeleporter teleporter) {
+    public Entity changeDimension(@NotNull DimensionTransition transition) {
         this.resetCustomer();
-        return super.changeDimension(server, teleporter);
+        return super.changeDimension(transition);
     }
 
     public SimpleContainer getVillagerInventory() {
@@ -819,7 +822,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
 
     @Override
     public @NotNull ItemStack equipItemIfPossible(@NotNull ItemStack stack) {
-        if (super.equipItemIfPossible(stack)) {
+        if (!super.equipItemIfPossible(stack).isEmpty()) {
             return stack;
         } else {
             EquipmentSlot inventorySlot = stack.getEquipmentSlot();

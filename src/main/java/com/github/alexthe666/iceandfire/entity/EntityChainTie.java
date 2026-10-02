@@ -11,7 +11,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.decoration.HangingEntity;
+import net.minecraft.world.entity.decoration.BlockAttachedEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -23,13 +23,13 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class EntityChainTie extends HangingEntity {
+public class EntityChainTie extends BlockAttachedEntity {
 
-    public EntityChainTie(EntityType<? extends HangingEntity> type, Level worldIn) {
+    public EntityChainTie(EntityType<? extends BlockAttachedEntity> type, Level worldIn) {
         super(type, worldIn);
     }
 
-    public EntityChainTie(EntityType<? extends HangingEntity> type, Level worldIn, BlockPos hangingPositionIn) {
+    public EntityChainTie(EntityType<? extends BlockAttachedEntity> type, Level worldIn, BlockPos hangingPositionIn) {
         super(type, worldIn, hangingPositionIn);
         this.setPos(hangingPositionIn.getX() + 0.5D, hangingPositionIn.getY(), hangingPositionIn.getZ() + 0.5D);
     }
@@ -81,13 +81,7 @@ public class EntityChainTie extends HangingEntity {
     }
 
     @Override
-    public int getWidth() {
-        return 9;
-    }
-
-    @Override
-    public int getHeight() {
-        return 9;
+    protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.@NotNull Builder builder) {
     }
 
     @Override
@@ -101,11 +95,6 @@ public class EntityChainTie extends HangingEntity {
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         this.pos = new BlockPos(compound.getInt("TileX"), compound.getInt("TileY"), compound.getInt("TileZ"));
-    }
-
-    @Override
-    protected float getEyeHeight(@NotNull Pose poseIn, @NotNull EntityDimensions sizeIn) {
-        return -0.0625F;
     }
 
     @Override
@@ -165,7 +154,6 @@ public class EntityChainTie extends HangingEntity {
         return this.level().getBlockState(this.pos).getBlock() instanceof WallBlock;
     }
 
-    @Override
     public void playPlacementSound() {
         this.playSound(SoundEvents.ARMOR_EQUIP_CHAIN.value(), 1.0F, 1.0F);
     }

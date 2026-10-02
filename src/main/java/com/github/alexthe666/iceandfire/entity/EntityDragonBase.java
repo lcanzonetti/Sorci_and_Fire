@@ -541,7 +541,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public boolean canBeRiddenInWater(Entity rider) {
+    public boolean canBeRiddenUnderFluidType(@NotNull net.neoforged.neoforge.fluids.FluidType type, @NotNull Entity rider) {
         return true;
     }
 
@@ -1721,8 +1721,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         lastScale = scale;
     }
 
-    @Override
-    public float getStepHeight() {
+        public float getStepHeight() {
         return Math.max(1.2F, 1.2F + (Math.min(this.getAgeInDays(), 125) - 25) * 1.8F / 100F);
     }
 
@@ -2012,8 +2011,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         return super.isControlledByLocalInstance();
     }
 
-    @Override
-    public boolean canBeControlledByRider() {
+        public boolean canBeControlledByRider() {
         return true;
     }
 

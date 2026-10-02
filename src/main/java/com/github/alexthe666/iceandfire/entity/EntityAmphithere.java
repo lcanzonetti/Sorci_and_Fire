@@ -1202,8 +1202,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         return super.isControlledByLocalInstance();
     }
 
-    @Override
-    public boolean canBeControlledByRider() {
+        public boolean canBeControlledByRider() {
         return true;
     }
 

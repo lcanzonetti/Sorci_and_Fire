@@ -239,8 +239,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
         return super.isControlledByLocalInstance();
     }
 
-    @Override
-    public boolean canBeControlledByRider() {
+        public boolean canBeControlledByRider() {
         return true;
     }
 
@@ -365,7 +364,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
                 }
                 return InteractionResult.SUCCESS;
             }
-            if (itemstack != null && itemstack.getItem().isEdible() && itemstack.getItem().getFoodProperties() != null && itemstack.getItem().getFoodProperties().isMeat() && this.getHealth() < this.getMaxHealth()) {
+            if (itemstack != null && itemstack.is(net.minecraft.tags.ItemTags.MEAT) && this.getHealth() < this.getMaxHealth()) {
                 this.heal(5);
                 this.playSound(SoundEvents.GENERIC_EAT, 1, 1);
                 for (int i = 0; i < 3; i++) {

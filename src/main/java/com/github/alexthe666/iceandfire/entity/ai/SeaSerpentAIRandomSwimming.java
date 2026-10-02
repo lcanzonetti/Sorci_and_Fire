@@ -49,7 +49,7 @@ public class SeaSerpentAIRandomSwimming extends RandomStrollGoal {
             }
         } else {
             BlockPos blockpos = null;
-            final RandomSource random = ThreadLocalRandom.current();
+            final RandomSource random = this.mob.getRandom();
             final int range = 16;
             for (int i = 0; i < 15; i++) {
                 BlockPos blockpos1 = this.mob.blockPosition().offset(random.nextInt(range) - range / 2, random.nextInt(range) - range / 2, random.nextInt(range) - range / 2);
