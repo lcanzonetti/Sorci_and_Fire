@@ -149,16 +149,6 @@ public class IafClientSetup {
     }
 
     @SubscribeEvent
-    public static void registerClientExtensions(net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent event) {
-        // Replacement for Item#initializeClient, which NeoForge 21 removed
-        for (net.minecraft.world.item.Item item : net.minecraft.core.registries.BuiltInRegistries.ITEM) {
-            if (item instanceof com.github.alexthe666.iceandfire.item.IafClientItem clientItem) {
-                clientItem.initializeClient(extensions -> event.registerItem(extensions, item));
-            }
-        }
-    }
-
-    @SubscribeEvent
     public static void registerMenuScreens(RegisterMenuScreensEvent event) {
         IafGuiRegistry.register(event);
     }

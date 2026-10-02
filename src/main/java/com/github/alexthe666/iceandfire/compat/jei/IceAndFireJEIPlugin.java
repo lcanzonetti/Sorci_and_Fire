@@ -9,6 +9,11 @@ import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
+import mezz.jei.api.ingredients.subtypes.UidContext;
+import mezz.jei.api.registration.ISubtypeRegistration;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
@@ -90,6 +95,27 @@ public class IceAndFireJEIPlugin implements IModPlugin {
         registry.addIngredientInfo(IafItemRegistry.PATTERN_TROLL.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, Component.translatable("item.iceandfire.custom_banner.jei_desc"));
         registry.addIngredientInfo(IafItemRegistry.PATTERN_WEEZER.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, Component.translatable("item.iceandfire.custom_banner.jei_desc"));
         registry.addIngredientInfo(IafItemRegistry.PATTERN_DREAD.get().getDefaultInstance(), VanillaTypes.ITEM_STACK, Component.translatable("item.iceandfire.custom_banner.jei_desc"));
+    }
+
+    @Override
+    public void registerItemSubtypes(ISubtypeRegistration registration) {
+        // Egg and bestiary variants only differ by their custom data
+        ISubtypeInterpreter<ItemStack> byCustomData = new ISubtypeInterpreter<>() {
+            @Override
+            public Object getSubtypeData(ItemStack stack, UidContext context) {
+                return stack.get(DataComponents.CUSTOM_DATA);
+            }
+
+            @Override
+            public String getLegacyStringSubtypeInfo(ItemStack stack, UidContext context) {
+                CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+                return data == null ? "" : data.toString();
+            }
+        };
+        registration.registerSubtypeInterpreter(IafItemRegistry.HIPPOGRYPH_EGG.get(), byCustomData);
+        registration.registerSubtypeInterpreter(IafItemRegistry.MYRMEX_DESERT_EGG.get(), byCustomData);
+        registration.registerSubtypeInterpreter(IafItemRegistry.MYRMEX_JUNGLE_EGG.get(), byCustomData);
+        registration.registerSubtypeInterpreter(IafItemRegistry.BESTIARY.get(), byCustomData);
     }
 
     @Override

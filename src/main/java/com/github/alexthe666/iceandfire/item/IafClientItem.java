@@ -5,8 +5,8 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import java.util.function.Consumer;
 
 /**
- * Items that provide client extensions (custom armor models, BEWLRs). NeoForge 21 removed
- * Item#initializeClient, so these are collected in {@code RegisterClientExtensionsEvent} instead.
+ * Marker for items that provide client extensions (custom armor models, BEWLRs). The method matches
+ * Item#initializeClient, which NeoForge still calls for every registered item.
  */
 public interface IafClientItem {
 
