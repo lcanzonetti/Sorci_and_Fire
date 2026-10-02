@@ -27,3 +27,4 @@ server
 forge*changelog.txt
 
 !src/generated/resources/data/*
+src/generated/resources/.cache/

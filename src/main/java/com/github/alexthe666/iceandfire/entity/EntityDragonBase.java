@@ -643,6 +643,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(HUNGER, 0);
+        builder.define(SWIMMING, false);
         builder.define(AGE_TICKS, 0);
         builder.define(GENDER, false);
         builder.define(VARIANT, 0);

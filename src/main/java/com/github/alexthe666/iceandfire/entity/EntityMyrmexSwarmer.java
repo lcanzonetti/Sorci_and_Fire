@@ -227,7 +227,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     @Override
     @Nullable
     protected ResourceKey<LootTable> getDefaultLootTable() {
-        return null;
+        return net.minecraft.world.level.storage.loot.BuiltInLootTables.EMPTY;
     }
 
     @Override

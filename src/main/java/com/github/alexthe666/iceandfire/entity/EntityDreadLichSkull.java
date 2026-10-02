@@ -39,13 +39,17 @@ public class EntityDreadLichSkull extends AbstractArrow {
 
     public EntityDreadLichSkull(EntityType<? extends AbstractArrow> type, Level worldIn, LivingEntity shooter,
                                 double x, double y, double z) {
-        super(type, shooter, worldIn, ItemStack.EMPTY, null);
+        super(type, shooter, worldIn, new ItemStack(net.minecraft.world.item.Items.SKELETON_SKULL), null);
+        // Never pick-up-able; 1.21 can't save an empty pickup stack
+        this.pickup = Pickup.DISALLOWED;
         this.setBaseDamage(6);
     }
 
     public EntityDreadLichSkull(EntityType<? extends AbstractArrow> type, Level worldIn, LivingEntity shooter,
                                 double dmg) {
-        super(type, shooter, worldIn, ItemStack.EMPTY, null);
+        super(type, shooter, worldIn, new ItemStack(net.minecraft.world.item.Items.SKELETON_SKULL), null);
+        // Never pick-up-able; 1.21 can't save an empty pickup stack
+        this.pickup = Pickup.DISALLOWED;
         this.setBaseDamage(dmg);
     }
 
@@ -188,7 +192,7 @@ public class EntityDreadLichSkull extends AbstractArrow {
 
     @Override
     protected @NotNull ItemStack getDefaultPickupItem() {
-        return ItemStack.EMPTY;
+        return new ItemStack(net.minecraft.world.item.Items.SKELETON_SKULL);
     }
 
 }

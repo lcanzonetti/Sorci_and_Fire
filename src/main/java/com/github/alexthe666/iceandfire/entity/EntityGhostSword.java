@@ -42,7 +42,9 @@ public class EntityGhostSword extends AbstractArrow {
 
     public EntityGhostSword(EntityType<? extends AbstractArrow> type, Level worldIn, LivingEntity shooter,
                             double dmg) {
-        super(type, shooter, worldIn, ItemStack.EMPTY, null);
+        super(type, shooter, worldIn, new ItemStack(com.github.alexthe666.iceandfire.item.IafItemRegistry.GHOST_SWORD.get()), null);
+        // Never pick-up-able; 1.21 can't save an empty pickup stack
+        this.pickup = Pickup.DISALLOWED;
         this.setBaseDamage(dmg);
     }
 
@@ -144,7 +146,7 @@ public class EntityGhostSword extends AbstractArrow {
 
     @Override
     protected @NotNull ItemStack getDefaultPickupItem() {
-        return ItemStack.EMPTY;
+        return new ItemStack(com.github.alexthe666.iceandfire.item.IafItemRegistry.GHOST_SWORD.get());
     }
 
     private IntOpenHashSet piercedEntities;

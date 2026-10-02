@@ -236,7 +236,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
             case FOREST:
                 return FOREST_LOOT;
         }
-        return null;
+        return net.minecraft.world.level.storage.loot.BuiltInLootTables.EMPTY;
     }
 
     @Override

@@ -279,7 +279,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
             case 2:
                 return this.getAgeScale() > 3 ? WHITE_GIANT_LOOT : WHITE_LOOT;
         }
-        return null;
+        return net.minecraft.world.level.storage.loot.BuiltInLootTables.EMPTY;
     }
 
     @Nullable
