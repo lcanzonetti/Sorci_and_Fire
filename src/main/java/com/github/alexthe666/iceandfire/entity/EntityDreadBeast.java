@@ -96,7 +96,7 @@ public class EntityDreadBeast extends EntityDreadMob implements IAnimatedEntity,
     }
 
     @Override
-    public float getScale() {
+    public float getAgeScale() {
         return getSize();
     }
 

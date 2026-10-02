@@ -4,13 +4,12 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.MNode;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.ByteBufferBuilder;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import org.joml.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
@@ -19,8 +18,8 @@ import java.util.ConcurrentModificationException;
 import java.util.function.Supplier;
 
 public class RenderPath {
-    public static final RenderBuffers renderBuffers = new RenderBuffers();
-    private static final MultiBufferSource.BufferSource renderBuffer = renderBuffers.bufferSource();
+    private static final MultiBufferSource.BufferSource renderBuffer = MultiBufferSource.immediate(new ByteBufferBuilder(1536));
+    private static final MultiBufferSource.BufferSource textBuffer = MultiBufferSource.immediate(new ByteBufferBuilder(1536));
     public static final Supplier<VertexConsumer> BORDER_LINE_RENDERER = () -> renderBuffer.getBuffer(MRenderTypes.customLineRenderer());
     public static final Supplier<VertexConsumer> PATH_RENDERER = () -> renderBuffer.getBuffer(MRenderTypes.customPathRenderer());
     public static final Supplier<VertexConsumer> PATH_TEXT_RENDERER = () -> renderBuffer.getBuffer(MRenderTypes.customPathTextRenderer());
@@ -166,17 +165,17 @@ public class RenderPath {
         matrixStack.pushPose();
 
         final Matrix4f textMatrix4f = matrixStack.last().pose();
-        final MultiBufferSource.BufferSource buffer = MultiBufferSource.immediate(Tesselator.getInstance().getBuilder());
+        final MultiBufferSource.BufferSource buffer = textBuffer;
 
         matrixStack.translate(0.0F, -5F, -0.1F);
-        fontrenderer.drawInBatch(s1, -fontrenderer.width(s1) / 2.0f, 0, 0xFFFFFFFF, false, textMatrix4f, buffer, false, 0, 15728880);
+        fontrenderer.drawInBatch(s1, -fontrenderer.width(s1) / 2.0f, 0, 0xFFFFFFFF, false, textMatrix4f, buffer, Font.DisplayMode.NORMAL, 0, 15728880);
         matrixStack.translate(0.0F, 8F, -0.1F);
-        fontrenderer.drawInBatch(s2, -fontrenderer.width(s2) / 2.0f, 0, 0xFFFFFFFF, false, textMatrix4f, buffer, false, 0, 15728880);
+        fontrenderer.drawInBatch(s2, -fontrenderer.width(s2) / 2.0f, 0, 0xFFFFFFFF, false, textMatrix4f, buffer, Font.DisplayMode.NORMAL, 0, 15728880);
 
         matrixStack.translate(0.0F, -8F, -0.1F);
-        fontrenderer.drawInBatch(s1, -fontrenderer.width(s1) / 2.0f, 0, 0xFFFFFFFF, false, textMatrix4f, buffer, false, 0, 15728880);
+        fontrenderer.drawInBatch(s1, -fontrenderer.width(s1) / 2.0f, 0, 0xFFFFFFFF, false, textMatrix4f, buffer, Font.DisplayMode.NORMAL, 0, 15728880);
         matrixStack.translate(0.0F, 8F, -0.1F);
-        fontrenderer.drawInBatch(s2, -fontrenderer.width(s2) / 2.0f, 0, 0xFFFFFFFF, false, textMatrix4f, buffer, false, 0, 15728880);
+        fontrenderer.drawInBatch(s2, -fontrenderer.width(s2) / 2.0f, 0, 0xFFFFFFFF, false, textMatrix4f, buffer, Font.DisplayMode.NORMAL, 0, 15728880);
         buffer.endBatch();
 
         matrixStack.popPose();

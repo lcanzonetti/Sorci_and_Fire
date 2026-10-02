@@ -37,8 +37,8 @@ public class RenderLectern<T extends TileEntityLectern> implements BlockEntityRe
         matrixStackIn.mulPose(Axis.YP.rotationDegrees(90));
         float f4 = lectern.pageFlipPrev + (lectern.pageFlip - lectern.pageFlipPrev) * partialTicks + 0.25F;
         float f5 = lectern.pageFlipPrev + (lectern.pageFlip - lectern.pageFlipPrev) * partialTicks + 0.75F;
-        f4 = (f4 - Mth.fastFloor(f4)) * 1.6F - 0.3F;
-        f5 = (f5 - Mth.fastFloor(f5)) * 1.6F - 0.3F;
+        f4 = (f4 - Mth.floor(f4)) * 1.6F - 0.3F;
+        f5 = (f5 - Mth.floor(f5)) * 1.6F - 0.3F;
 
         if (f4 < 0.0F) {
             f4 = 0.0F;

@@ -41,7 +41,7 @@ public class LayerDragonBanner extends RenderLayer<EntityDragonBase, AdvancedEnt
             matrixStackIn.mulPose(Axis.XP.rotationDegrees(180));
             matrixStackIn.pushPose();
             matrixStackIn.scale(f2, f2, f2);
-            Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemDisplayContext.NONE, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);
+            Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemDisplayContext.NONE, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, null, 0);
             matrixStackIn.popPose();
             matrixStackIn.popPose();
         }

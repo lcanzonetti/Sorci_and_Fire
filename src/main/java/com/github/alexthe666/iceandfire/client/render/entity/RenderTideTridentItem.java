@@ -32,10 +32,9 @@ public class RenderTideTridentItem extends BlockEntityWithoutLevelRenderer {
         if (type == ItemDisplayContext.GUI || type == ItemDisplayContext.FIXED || type == ItemDisplayContext.NONE || type == ItemDisplayContext.GROUND) {
             ItemStack tridentInventory = new ItemStack(IafItemRegistry.TIDE_TRIDENT_INVENTORY.get());
             if (stack.isEnchanted()) {
-                ListTag enchantments = IafNbt.getTag(stack).getList("Enchantments", 10);
-                tridentInventory.addTagElement("Enchantments", enchantments);
+                tridentInventory.set(net.minecraft.core.component.DataComponents.ENCHANTMENTS, stack.get(net.minecraft.core.component.DataComponents.ENCHANTMENTS));
             }
-            Minecraft.getInstance().getItemRenderer().renderStatic(tridentInventory, type, type == ItemDisplayContext.GROUND ? combinedLightIn : 240, combinedOverlayIn, stackIn, bufferIn, 0);
+            Minecraft.getInstance().getItemRenderer().renderStatic(tridentInventory, type, type == ItemDisplayContext.GROUND ? combinedLightIn : 240, combinedOverlayIn, stackIn, bufferIn, null, 0);
         } else {
             stackIn.pushPose();
             stackIn.translate(0, 0.2F, -0.15F);

@@ -1796,11 +1796,11 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     protected @NotNull EntityDimensions getDefaultDimensions(@NotNull Pose poseIn) {
-        return this.getType().getDimensions().scale(this.getScale());
+        return this.getType().getDimensions().scale(this.getAgeScale());
     }
 
     @Override
-    public float getScale() {
+    public float getAgeScale() {
         return Math.min(this.getRenderSize() * 0.35F, 7F);
     }
 
@@ -2670,7 +2670,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 //        final float xzMod = (0.15F + pitchXZ) * getRenderSize() + extraAgeScale;
         final float yMod = getRideHeightBase() + extraY;
         final float headPosX = (float) (getX() + xzMod * Mth.cos((float) ((getYRot() + 90) * Math.PI / 180)));
-//        final float headPosY = (float) (getY() + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg + pitchY) * getRenderSize() * 0.3F + this.getScale() * 0.2F);
+//        final float headPosY = (float) (getY() + (0.7F + sitProg + hoverProg + deadProg + sleepProg + flyProg + pitchY) * getRenderSize() * 0.3F + this.getAgeScale() * 0.2F);
         final float headPosY = (float) (getY() + yMod);
         final float headPosZ = (float) (getZ() + xzMod * Mth.sin((float) ((getYRot() + 90) * Math.PI / 180)));
         return new Vec3(headPosX, headPosY, headPosZ);

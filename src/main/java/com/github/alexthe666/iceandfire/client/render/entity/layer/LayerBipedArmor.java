@@ -53,7 +53,7 @@ public class LayerBipedArmor<T extends LivingEntity & IAnimatedEntity,
         ItemStack itemstack = entityIn.getItemBySlot(slotType);
         if (itemstack.getItem() instanceof ArmorItem) {
             ArmorItem armoritem = (ArmorItem) itemstack.getItem();
-            if (armoritem.getSlot() == slotType) {
+            if (armoritem.getEquipmentSlot() == slotType) {
                 this.getParentModel().setModelAttributes(modelIn);
                 this.setModelSlotVisible(modelIn, slotType);
                 boolean flag1 = itemstack.hasFoil();
@@ -86,7 +86,7 @@ public class LayerBipedArmor<T extends LivingEntity & IAnimatedEntity,
     }
 
     private void renderArmorItem(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, boolean p_241738_5_, A modelIn, float red, float green, float blue, ResourceLocation armorResource) {
-        VertexConsumer ivertexbuilder = ItemRenderer.getArmorFoilBuffer(bufferIn, RenderType.armorCutoutNoCull(armorResource), false, p_241738_5_);
+        VertexConsumer ivertexbuilder = ItemRenderer.getArmorFoilBuffer(bufferIn, RenderType.armorCutoutNoCull(armorResource), p_241738_5_);
         modelIn.renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(1.0F, red, green, blue));
     }
 

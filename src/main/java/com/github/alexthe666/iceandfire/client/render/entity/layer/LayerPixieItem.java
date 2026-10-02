@@ -43,7 +43,7 @@ public class LayerPixieItem extends RenderLayer<EntityPixie, ModelPixie> {
             matrixStackIn.translate(0.05F, 0.55F, -0.4F);
             matrixStackIn.mulPose(Axis.XP.rotationDegrees(200));
             matrixStackIn.mulPose(Axis.YP.rotationDegrees(180));
-            Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemDisplayContext.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);
+            Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemDisplayContext.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, null, 0);
             matrixStackIn.popPose();
         }
     }

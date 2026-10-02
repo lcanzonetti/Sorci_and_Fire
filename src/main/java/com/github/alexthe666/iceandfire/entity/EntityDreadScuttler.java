@@ -273,7 +273,7 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
     }
 
     @Override
-    public float getScale() {
+    public float getAgeScale() {
         return getSize();
     }
 

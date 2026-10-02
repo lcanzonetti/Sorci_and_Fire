@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.client.render.pathfinding;
 
-import com.google.common.collect.ImmutableMap;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
@@ -16,7 +15,7 @@ import static com.mojang.blaze3d.vertex.DefaultVertexFormat.*;
  * Holding all kind of render types of minecolonies
  */
 public final class MRenderTypes extends RenderType {
-    public static final VertexFormat format = new VertexFormat(ImmutableMap.<String, VertexFormatElement>builder().put("Position", ELEMENT_POSITION).put("UV0", ELEMENT_UV0).put("UV2", ELEMENT_UV2).build());
+    public static final VertexFormat format = VertexFormat.builder().add("Position", VertexFormatElement.POSITION).add("UV0", VertexFormatElement.UV0).add("UV2", VertexFormatElement.UV2).build();
 
     public MRenderTypes(final String nameIn,
                         final VertexFormat formatIn,

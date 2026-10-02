@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.gui;
 
+import net.minecraft.client.gui.GuiGraphics;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityHippocampus;
 import com.github.alexthe666.iceandfire.inventory.HippocampusContainerMenu;
@@ -25,21 +26,20 @@ public class GuiHippocampus extends AbstractContainerScreen<HippocampusContainer
     }
 
     @Override
-    protected void renderLabels(@NotNull PoseStack matrixStack, int mouseX, int mouseY) {
+    protected void renderLabels(@NotNull GuiGraphics matrixStack, int mouseX, int mouseY) {
         int k = 0;
         int l = 0;
         Entity entity = IceAndFire.PROXY.getReferencedMob();
         Font font = this.getMinecraft().font;
         if (entity instanceof EntityHippocampus) {
             EntityHippocampus hippo = (EntityHippocampus) entity;
-            font.draw(matrixStack, hippo.getDisplayName().getString(), l + 8, 6, 4210752);
+            matrixStack.drawString(font, hippo.getDisplayName().getString(), l + 8, 6, 4210752, false);
         }
-        font.draw(matrixStack, this.playerInventoryTitle, k + 8, l + this.imageHeight - 96 + 2, 4210752);
+        matrixStack.drawString(font, this.playerInventoryTitle, k + 8, l + this.imageHeight - 96 + 2, 4210752, false);
     }
 
     @Override
-    public void render(@NotNull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(matrixStack);
+    public void render(@NotNull GuiGraphics matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.mousePosx = mouseX;
         this.mousePosY = mouseY;
         super.render(matrixStack, mouseX, mouseY, partialTicks);
@@ -47,20 +47,20 @@ public class GuiHippocampus extends AbstractContainerScreen<HippocampusContainer
     }
 
     @Override
-    protected void renderBg(@NotNull PoseStack matrixStack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderBg(@NotNull GuiGraphics matrixStack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
-        this.blit(matrixStack, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        matrixStack.blit(TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
         Entity entity = IceAndFire.PROXY.getReferencedMob();
         if (entity instanceof EntityHippocampus) {
             EntityHippocampus hippo = (EntityHippocampus) entity;
             if (hippo.isChested()) {
-                this.blit(matrixStack, i + 79, j + 17, 0, this.imageHeight, 5 * 18, 54);
+                matrixStack.blit(TEXTURE, i + 79, j + 17, 0, this.imageHeight, 5 * 18, 54);
             }
-            InventoryScreen.renderEntityInInventory(i + 51, j + 60, 17, i + 51 - this.mousePosx, j + 75 - 50 - this.mousePosY,
+            IafGuiUtil.renderEntityInInventory(matrixStack, i + 51, j + 60, 17, i + 51 - this.mousePosx, j + 75 - 50 - this.mousePosY,
                 hippo);
         }
     }

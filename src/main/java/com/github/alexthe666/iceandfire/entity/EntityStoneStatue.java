@@ -56,7 +56,7 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
         statue.setTrappedEntityTypeString(BuiltInRegistries.ENTITY_TYPE.getKey(parent.getType()).toString());
         statue.setTrappedEntityWidth(parent.getBbWidth());
         statue.setTrappedHeight(parent.getBbHeight());
-        statue.setTrappedScale(parent.getScale());
+        statue.setTrappedScale(parent.getAgeScale());
 
         return statue;
     }
@@ -138,7 +138,7 @@ public class EntityStoneStatue extends LivingEntity implements IBlacklistedFromS
     }
 
     @Override
-    public float getScale() {
+    public float getAgeScale() {
         return this.getTrappedScale();
     }
 

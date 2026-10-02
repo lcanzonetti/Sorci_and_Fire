@@ -5,13 +5,14 @@ import com.mojang.blaze3d.platform.TextureUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.util.FastColor;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -28,14 +29,14 @@ public class ArrayLayeredTexture extends AbstractTexture {
         Iterator<String> iterator = this.layeredTextureNames.iterator();
         String s = iterator.next();
 
-        try (Resource iresource = manager.getResource(ResourceLocation.parse(s))) {
-            NativeImage nativeimage = net.neoforged.neoforge.client.MinecraftForgeClient.getImageLayer(ResourceLocation.parse(s), manager);
+        try (InputStream baseStream = manager.getResourceOrThrow(ResourceLocation.parse(s)).open()) {
+            NativeImage nativeimage = NativeImage.read(baseStream);
             while (iterator.hasNext()) {
                 String s1 = iterator.next();
                 if (s1 != null) {
                     try (
-                        Resource iresource1 = manager.getResource(ResourceLocation.parse(s1));
-                        NativeImage nativeimage1 = NativeImage.read(iresource1.getInputStream())
+                        InputStream layerStream = manager.getResourceOrThrow(ResourceLocation.parse(s1)).open();
+                        NativeImage nativeimage1 = NativeImage.read(layerStream)
                     ) {
                         for (int i = 0; i < Math.min(nativeimage1.getHeight(), nativeimage.getHeight()); i++) {
                             for (int j = 0; j < Math.min(nativeimage1.getWidth(), nativeimage.getWidth()); j++) {
@@ -61,14 +62,14 @@ public class ArrayLayeredTexture extends AbstractTexture {
 
     public static void blendPixel(NativeImage nativeimage, NativeImage nativeimage1, int xIn, int yIn, int colIn) {
         int i = nativeimage.getPixelRGBA(xIn, yIn);
-        float f = NativeImage.getA(colIn) / 255.0F;
-        float f1 = NativeImage.getB(colIn) / 255.0F;
-        float f2 = NativeImage.getG(colIn) / 255.0F;
-        float f3 = NativeImage.getR(colIn) / 255.0F;
-        float f4 = NativeImage.getA(i) / 255.0F;
-        float f5 = NativeImage.getB(i) / 255.0F;
-        float f6 = NativeImage.getG(i) / 255.0F;
-        float f7 = NativeImage.getR(i) / 255.0F;
+        float f = FastColor.ABGR32.alpha(colIn) / 255.0F;
+        float f1 = FastColor.ABGR32.blue(colIn) / 255.0F;
+        float f2 = FastColor.ABGR32.green(colIn) / 255.0F;
+        float f3 = FastColor.ABGR32.red(colIn) / 255.0F;
+        float f4 = FastColor.ABGR32.alpha(i) / 255.0F;
+        float f5 = FastColor.ABGR32.blue(i) / 255.0F;
+        float f6 = FastColor.ABGR32.green(i) / 255.0F;
+        float f7 = FastColor.ABGR32.red(i) / 255.0F;
         float f8 = 1.0F - f;
         float f9 = f * f + f4 * f8;
         float f10 = f1 * f + f5 * f8;
@@ -94,7 +95,7 @@ public class ArrayLayeredTexture extends AbstractTexture {
         int k = (int) (f10 * 255.0F);
         int l = (int) (f11 * 255.0F);
         int i1 = (int) (f12 * 255.0F);
-        nativeimage.setPixelRGBA(xIn, yIn, NativeImage.combine(j, k, l, i1));
+        nativeimage.setPixelRGBA(xIn, yIn, FastColor.ABGR32.color(j, k, l, i1));
 
     }
 

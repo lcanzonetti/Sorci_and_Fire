@@ -560,7 +560,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
     public abstract boolean shouldEnterHive();
 
     @Override
-    public float getScale() {
+    public float getAgeScale() {
         return this.getGrowthStage() == 0 ? 0.5F : this.getGrowthStage() == 1 ? 0.75F : 1F;
     }
 
@@ -728,7 +728,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
     }
 
     public AABB getAttackBounds() {
-        float size = this.getScale() * 0.65F;
+        float size = this.getAgeScale() * 0.65F;
         return this.getBoundingBox().inflate(1.0F + size, 1.0F + size, 1.0F + size);
     }
 

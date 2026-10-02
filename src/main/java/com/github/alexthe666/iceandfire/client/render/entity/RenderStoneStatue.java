@@ -53,7 +53,7 @@ public class RenderStoneStatue extends EntityRenderer<EntityStoneStatue> {
     }
 
     protected void preRenderCallback(EntityStoneStatue entity, PoseStack matrixStackIn, float partialTickTime) {
-        float scale = entity.getScale() < 0.01F ? 1F : entity.getScale();
+        float scale = entity.getAgeScale() < 0.01F ? 1F : entity.getAgeScale();
         matrixStackIn.scale(scale, scale, scale);
     }
 

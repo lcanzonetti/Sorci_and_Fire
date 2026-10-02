@@ -50,7 +50,7 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
     @Override
     public void render(@NotNull EntityGhost entityIn, float entityYaw, float partialTicks, @NotNull PoseStack matrixStackIn, @NotNull MultiBufferSource bufferIn, int packedLightIn) {
         shadowRadius = 0;
-        if (net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.client.event.RenderLivingEvent.Pre<EntityGhost, ModelGhost>(entityIn, this, partialTicks, matrixStackIn, bufferIn, packedLightIn)))
+        if (net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.client.event.RenderLivingEvent.Pre<EntityGhost, ModelGhost>(entityIn, this, partialTicks, matrixStackIn, bufferIn, packedLightIn)).isCanceled())
             return;
         matrixStackIn.pushPose();
         this.model.attackTime = this.getAttackAnim(entityIn, partialTicks);
@@ -92,15 +92,15 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
         }
 
         float f7 = this.getBob(entityIn, partialTicks);
-        this.setupRotations(entityIn, matrixStackIn, f7, f, partialTicks);
+        this.setupRotations(entityIn, matrixStackIn, f7, f, partialTicks, entityIn.getScale());
         matrixStackIn.scale(-1.0F, -1.0F, 1.0F);
         this.scale(entityIn, matrixStackIn, partialTicks);
         matrixStackIn.translate(0.0D, -1.501F, 0.0D);
         float f8 = 0.0F;
         float f5 = 0.0F;
         if (!shouldSit && entityIn.isAlive()) {
-            f8 = Mth.lerp(partialTicks, entityIn.animationSpeedOld, entityIn.walkAnimation.speed());
-            f5 = entityIn.animationPosition - entityIn.walkAnimation.speed() * (1.0F - partialTicks);
+            f8 = entityIn.walkAnimation.speed(partialTicks);
+            f5 = entityIn.walkAnimation.position(partialTicks);
             if (entityIn.isBaby()) {
                 f5 *= 3.0F;
             }
@@ -126,7 +126,7 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
                     matrixStackIn.pushPose();
                     PoseStack.Pose matrixstack$entry = matrixStackIn.last();
                     Matrix4f matrix4f = matrixstack$entry.pose();
-                    Matrix3f matrix3f = matrixstack$entry.normal();
+                    PoseStack.Pose matrix3f = matrixstack$entry;
                     this.drawVertex(matrix4f, matrix3f, ivertexbuilder, i, (int) (alphaForRender * 255), -1, -2, 0, 1F, 0.0F, 0, 1, 0, 240);
                     this.drawVertex(matrix4f, matrix3f, ivertexbuilder, i, (int) (alphaForRender * 255), 1, -2, 0, 0.5F, 0.0F, 0, 1, 0, 240);
                     this.drawVertex(matrix4f, matrix3f, ivertexbuilder, i, (int) (alphaForRender * 255), 1, 2, 0, 0.5F, 1, 0, 1, 0, 240);
@@ -138,7 +138,7 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
                     matrixStackIn.pushPose();
                     PoseStack.Pose matrixstack$entry = matrixStackIn.last();
                     Matrix4f matrix4f = matrixstack$entry.pose();
-                    Matrix3f matrix3f = matrixstack$entry.normal();
+                    PoseStack.Pose matrix3f = matrixstack$entry;
                     this.drawVertex(matrix4f, matrix3f, ivertexbuilder, i, (int) (alphaForRender * 255), -1, -2, 0, 0.0F, 0.0F, 0, 1, 0, 240);
                     this.drawVertex(matrix4f, matrix3f, ivertexbuilder, i, (int) (alphaForRender * 255), 1, -2, 0, 0.5F, 0.0F, 0, 1, 0, 240);
                     this.drawVertex(matrix4f, matrix3f, ivertexbuilder, i, (int) (alphaForRender * 255), 1, 2, 0, 0.5F, 1, 0, 1, 0, 240);
@@ -159,10 +159,10 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
         }
 
         matrixStackIn.popPose();
-        net.neoforged.neoforge.client.event.RenderNameplateEvent renderNameplateEvent = new net.neoforged.neoforge.client.event.RenderNameplateEvent(entityIn, entityIn.getDisplayName(), this, matrixStackIn, bufferIn, packedLightIn, partialTicks);
-        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(renderNameplateEvent);
-        if (renderNameplateEvent.getResult() != net.neoforged.bus.api.Event.Result.DENY && (renderNameplateEvent.getResult() == net.neoforged.bus.api.Event.Result.ALLOW || this.shouldShowName(entityIn))) {
-            this.renderNameTag(entityIn, renderNameplateEvent.getContent(), matrixStackIn, bufferIn, packedLightIn);
+        var nameTagEvent = new net.neoforged.neoforge.client.event.RenderNameTagEvent(entityIn, entityIn.getDisplayName(), this, matrixStackIn, bufferIn, packedLightIn, partialTicks);
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(nameTagEvent);
+        if (nameTagEvent.canRender().isTrue() || nameTagEvent.canRender().isDefault() && this.shouldShowName(entityIn)) {
+            this.renderNameTag(entityIn, nameTagEvent.getContent(), matrixStackIn, bufferIn, packedLightIn, partialTicks);
         }
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.post(new net.neoforged.neoforge.client.event.RenderLivingEvent.Post<EntityGhost, ModelGhost>(entityIn, this, partialTicks, matrixStackIn, bufferIn, packedLightIn));
     }
@@ -197,7 +197,7 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
         }
     }
 
-    public void drawVertex(Matrix4f stack, Matrix3f normal, VertexConsumer builder, int packedRed, int alphaInt, int x, int y, int z, float u, float v, int lightmap, int lightmap3, int lightmap2, int lightmap4) {
+    public void drawVertex(Matrix4f stack, PoseStack.Pose normal, VertexConsumer builder, int packedRed, int alphaInt, int x, int y, int z, float u, float v, int lightmap, int lightmap3, int lightmap2, int lightmap4) {
         builder.addVertex(stack, (float) x, (float) y, (float) z).setColor(255, 255, 255, alphaInt).setUv(u, v).setOverlay(packedRed).setLight(lightmap4).setNormal(normal, (float) lightmap, (float) lightmap2, (float) lightmap3);
     }
 }

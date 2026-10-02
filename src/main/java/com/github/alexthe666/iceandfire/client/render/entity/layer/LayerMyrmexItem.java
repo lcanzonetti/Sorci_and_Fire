@@ -62,7 +62,7 @@ public class LayerMyrmexItem extends RenderLayer<EntityMyrmexBase, AdvancedEntit
                     }
                     matrixStackIn.mulPose(Axis.XP.rotationDegrees(160));
                     matrixStackIn.mulPose(Axis.YP.rotationDegrees(180));
-                    Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemDisplayContext.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);
+                    Minecraft.getInstance().getItemRenderer().renderStatic(itemstack, ItemDisplayContext.FIXED, packedLightIn, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, null, 0);
                     matrixStackIn.popPose();
                 }
                 matrixStackIn.popPose();

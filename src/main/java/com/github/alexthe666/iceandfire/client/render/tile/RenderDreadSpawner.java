@@ -24,7 +24,7 @@ public class RenderDreadSpawner<T extends TileEntityDreadSpawner> implements Blo
         matrixStackIn.pushPose();
         matrixStackIn.translate(0.5D, 0.0D, 0.5D);
         BaseSpawner abstractspawner = tileEntityIn.getSpawner();
-        Entity entity = abstractspawner.getOrCreateDisplayEntity(tileEntityIn.getLevel());
+        Entity entity = abstractspawner.getOrCreateDisplayEntity(tileEntityIn.getLevel(), tileEntityIn.getBlockPos());
         if (entity != null) {
             float f = 0.53125F;
             float f1 = Math.max(entity.getBbWidth(), entity.getBbHeight());

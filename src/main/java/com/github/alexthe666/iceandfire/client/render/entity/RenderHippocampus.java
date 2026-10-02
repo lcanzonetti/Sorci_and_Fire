@@ -131,9 +131,8 @@ public class RenderHippocampus extends MobRenderer<EntityHippocampus, ModelHippo
                 int k = i % j;
                 int l = (i + 1) % j;
                 float f = ((float) (hippo.tickCount % 25) + partialTicks) / 25.0F;
-                float[] afloat1 = Sheep.getColorArray(DyeColor.byId(k));
-                float[] afloat2 = Sheep.getColorArray(DyeColor.byId(l));
-                this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, LivingEntityRenderer.getOverlayCoords(hippo, 0.0F), FastColor.ARGB32.colorFromFloat(1.0F, afloat1[0] * (1.0F - f) + afloat2[0] * f, afloat1[1] * (1.0F - f) + afloat2[1] * f, afloat1[2] * (1.0F - f) + afloat2[2] * f));
+                int color = FastColor.ARGB32.lerp(f, Sheep.getColor(DyeColor.byId(k)), Sheep.getColor(DyeColor.byId(l)));
+                this.getParentModel().renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, LivingEntityRenderer.getOverlayCoords(hippo, 0.0F), color);
             }
         }
     }

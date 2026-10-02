@@ -40,7 +40,7 @@ public class RenderGhostSword extends EntityRenderer<EntityGhostSword> {
         matrixStackIn.mulPose(Axis.YP.rotationDegrees(0F));
         matrixStackIn.mulPose(Axis.ZN.rotationDegrees((entityIn.tickCount + partialTicks) * 30F));
         matrixStackIn.translate(0, -0.15F, 0);
-        Minecraft.getInstance().getItemRenderer().renderStatic(new ItemStack(IafItemRegistry.GHOST_SWORD.get()), ItemDisplayContext.GROUND, 240, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, 0);
+        Minecraft.getInstance().getItemRenderer().renderStatic(new ItemStack(IafItemRegistry.GHOST_SWORD.get()), ItemDisplayContext.GROUND, 240, OverlayTexture.NO_OVERLAY, matrixStackIn, bufferIn, null, 0);
         matrixStackIn.popPose();
 
 

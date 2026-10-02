@@ -250,11 +250,11 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
 
     @Override
     protected @NotNull EntityDimensions getDefaultDimensions(@NotNull Pose poseIn) {
-        return this.getType().getDimensions().scale(this.getScale());
+        return this.getType().getDimensions().scale(this.getAgeScale());
     }
 
     @Override
-    public float getScale() {
+    public float getAgeScale() {
         return this.getSeaSerpentScale();
     }
 

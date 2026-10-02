@@ -95,7 +95,7 @@ public class RenderPodium<T extends TileEntityPodium> implements BlockEntityRend
                 matrixStackIn.pushPose();
                 matrixStackIn.translate(0, 0.2F, 0);
                 matrixStackIn.scale(0.65F, 0.65F, 0.65F);
-                Minecraft.getInstance().getItemRenderer().renderStatic(podium.getItem(0), ItemDisplayContext.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn, 0);
+                Minecraft.getInstance().getItemRenderer().renderStatic(podium.getItem(0), ItemDisplayContext.FIXED, combinedLightIn, combinedOverlayIn, matrixStackIn, bufferIn, null, 0);
                 matrixStackIn.popPose();
                 matrixStackIn.popPose();
                 //}
