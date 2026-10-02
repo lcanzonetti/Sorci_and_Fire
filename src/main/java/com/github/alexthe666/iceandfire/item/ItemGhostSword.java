@@ -35,11 +35,13 @@ public class ItemGhostSword extends SwordItem {
             return;
         if (playerEntity.getItemInHand(InteractionHand.MAIN_HAND) != stack)
             return;
-        final Multimap<Attribute, AttributeModifier> dmg = stack.getAttributeModifiers(EquipmentSlot.MAINHAND);
-        double totalDmg = 0D;
-        for (AttributeModifier modifier : dmg.get(Attributes.ATTACK_DAMAGE)) {
-            totalDmg += modifier.getAmount();
-        }
+        double[] dmg = {0D};
+        stack.getAttributeModifiers().forEach(EquipmentSlot.MAINHAND, (attribute, modifier) -> {
+            if (attribute.is(Attributes.ATTACK_DAMAGE)) {
+                dmg[0] += modifier.amount();
+            }
+        });
+        double totalDmg = dmg[0];
         playerEntity.playSound(SoundEvents.ZOMBIE_INFECT, 1, 1);
         EntityGhostSword shot = new EntityGhostSword(IafEntityRegistry.GHOST_SWORD.get(), playerEntity.level(), playerEntity, totalDmg * 0.5F);
         shot.shootFromRotation(playerEntity, playerEntity.getXRot(), playerEntity.getYRot(), 0.0F, 1, 0.5f);

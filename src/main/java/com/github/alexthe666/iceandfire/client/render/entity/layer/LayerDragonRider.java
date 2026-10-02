@@ -154,7 +154,7 @@ public class LayerDragonRider extends RenderLayer<EntityDragonBase, AdvancedEnti
             entityIn.fillCrashReportCategory(crashreportcategory);
             CrashReportCategory crashreportcategory1 = crashreport.addCategory("Renderer details");
             crashreportcategory1.setDetail("Assigned renderer", render);
-            crashreportcategory1.setDetail("Location", new BlockPos(x, y, z));
+            crashreportcategory1.setDetail("Location", BlockPos.containing(x, y, z));
             crashreportcategory1.setDetail("Rotation", yaw);
             crashreportcategory1.setDetail("Delta", partialTicks);
             throw new ReportedException(crashreport);

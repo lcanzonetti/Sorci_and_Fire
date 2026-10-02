@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageTypes;
 import com.github.alexthe666.iceandfire.misc.IafBlockTags;
 import com.github.alexthe666.citadel.animation.Animation;
@@ -63,12 +66,12 @@ import javax.annotation.Nullable;
 
 public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICustomCollisions, IBlacklistedFromStatues, IAnimatedEntity, IVillagerFear, IAnimalFear, IGroundMount, IHasCustomizableAttributes, ICustomMoveController {
 
-    public static final ResourceLocation TAN_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_tan");
-    public static final ResourceLocation WHITE_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_white");
-    public static final ResourceLocation RED_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_red");
-    public static final ResourceLocation TAN_GIANT_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_tan_giant");
-    public static final ResourceLocation WHITE_GIANT_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_white_giant");
-    public static final ResourceLocation RED_GIANT_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_red_giant");
+    public static final ResourceKey<LootTable> TAN_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_tan"));
+    public static final ResourceKey<LootTable> WHITE_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_white"));
+    public static final ResourceKey<LootTable> RED_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_red"));
+    public static final ResourceKey<LootTable> TAN_GIANT_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_tan_giant"));
+    public static final ResourceKey<LootTable> WHITE_GIANT_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_white_giant"));
+    public static final ResourceKey<LootTable> RED_GIANT_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_red_giant"));
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(EntityDeathWorm.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> SCALE = SynchedEntityData.defineId(EntityDeathWorm.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Integer> JUMP_TICKS = SynchedEntityData.defineId(EntityDeathWorm.class, EntityDataSerializers.INT);
@@ -261,7 +264,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
 
     @Override
     @Nullable
-    protected ResourceLocation getDefaultLootTable() {
+    protected ResourceKey<LootTable> getDefaultLootTable() {
         switch (this.getVariant()) {
             case 0:
                 return this.getScale() > 3 ? TAN_GIANT_LOOT : TAN_LOOT;
@@ -474,7 +477,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
 
     @Override
     protected void moveTowardsClosestSpace(double x, double y, double z) {
-        BlockPos blockpos = new BlockPos(x, y, z);
+        BlockPos blockpos = BlockPos.containing(x, y, z);
         Vec3 vector3d = new Vec3(x - (double) blockpos.getX(), y - (double) blockpos.getY(), z - (double) blockpos.getZ());
         BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
         Direction direction = Direction.UP;
@@ -625,7 +628,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
     }
 
     public int getWormBrightness(boolean sky) {
-        BlockPos eyePos = new BlockPos(this.getEyePosition(1.0F));
+        BlockPos eyePos = BlockPos.containing(this.getEyePosition(1.0F));
         while (eyePos.getY() < 256 && !level().isEmptyBlock(eyePos)) {
             eyePos = eyePos.above();
         }
@@ -685,7 +688,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
             }
         }
         if (this.isInSand()) {
-            BlockPos pos = new BlockPos(this.getX(), this.getSurface((int) Math.floor(this.getX()), (int) Math.floor(this.getY()), (int) Math.floor(this.getZ())), this.getZ()).below();
+            BlockPos pos = BlockPos.containing(this.getX(), this.getSurface((int) Math.floor(this.getX()), (int) Math.floor(this.getY()), (int) Math.floor(this.getZ())), this.getZ()).below();
             BlockState state = level().getBlockState(pos);
             if (state.isSolidRender(level(), pos)) {
                 if (level().isClientSide) {

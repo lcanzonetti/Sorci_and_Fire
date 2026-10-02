@@ -128,7 +128,7 @@ public class ItemDragonHorn extends Item {
                     tooltip.add((Component.translatable(type.getDescriptionId())).withStyle(getTextColorForEntityType(type)));
                     String name = (Component.translatable("dragon.unnamed")).getString();
                     if (!entityTag.getString("CustomName").isEmpty()) {
-                        MutableComponent component = Component.Serializer.fromJson(entityTag.getString("CustomName"));
+                        MutableComponent component = worldIn.registries() == null ? null : Component.Serializer.fromJson(entityTag.getString("CustomName"), worldIn.registries());
                         if (component != null)
                             name = component.getString();
                     }

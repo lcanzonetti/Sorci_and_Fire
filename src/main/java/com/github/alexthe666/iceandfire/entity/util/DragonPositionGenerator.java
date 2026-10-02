@@ -60,7 +60,7 @@ public class DragonPositionGenerator {
                     }
                 }
 
-                BlockPos blockpos1 = new BlockPos((double) l + mob.getX(), (double) i1 + mob.getY(), (double) j1 + mob.getZ());
+                BlockPos blockpos1 = BlockPos.containing((double) l + mob.getX(), (double) i1 + mob.getY(), (double) j1 + mob.getZ());
 
                 if ((!flag || mob.isWithinRestriction(blockpos1)) && pathnavigate.isStableDestination(blockpos1)) {
                     if (skipWater) {

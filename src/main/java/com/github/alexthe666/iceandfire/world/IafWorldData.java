@@ -10,6 +10,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +40,7 @@ public class IafWorldData extends SavedData {
         if (world instanceof ServerLevel) {
             ServerLevel overworld = world.getServer().getLevel(world.dimension());
             DimensionDataStorage storage = overworld.getDataStorage();
-            IafWorldData data = storage.computeIfAbsent(IafWorldData::new, IafWorldData::new, IDENTIFIER);
+            IafWorldData data = storage.computeIfAbsent(new SavedData.Factory<>(IafWorldData::new, (tag, provider) -> new IafWorldData(tag)), IDENTIFIER);
             data.setDirty();
 
             return data;
@@ -84,7 +85,7 @@ public class IafWorldData extends SavedData {
             for (int i = 0; i < list.size(); i++) {
                 CompoundTag entry = list.getCompound(i);
                 String id = entry.getString("id");
-                BlockPos position = NbtUtils.readBlockPos(entry.getCompound("position"));
+                BlockPos position = NbtUtils.readBlockPos(entry, "position").orElse(BlockPos.ZERO);
                 LAST_GENERATED.computeIfAbsent(type, key -> new ArrayList<>()).add(Pair.of(id, position));
             }
         }
@@ -93,7 +94,7 @@ public class IafWorldData extends SavedData {
     }
 
     @Override
-    public @NotNull CompoundTag save(@NotNull final CompoundTag tag) {
+    public @NotNull CompoundTag save(@NotNull final CompoundTag tag, @NotNull HolderLookup.Provider provider) {
         LAST_GENERATED.forEach((key, value) -> {
             ListTag listTag = new ListTag();
 

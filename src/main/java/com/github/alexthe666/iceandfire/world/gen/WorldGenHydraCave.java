@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntityHydra;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
@@ -31,8 +34,7 @@ import java.util.stream.Collectors;
 
 public class WorldGenHydraCave extends Feature<NoneFeatureConfiguration> implements TypedFeature {
 
-    public static final ResourceLocation HYDRA_CHEST = ResourceLocation.fromNamespaceAndPath("iceandfire", "chest/hydra_cave");
-    protected static final ConfiguredFeature SWAMP_FEATURE = TreeFeatures.SWAMP_OAK.value();
+    public static final ResourceKey<LootTable> HYDRA_CHEST = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "chest/hydra_cave"));
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
     public WorldGenHydraCave(Codec<NoneFeatureConfiguration> configFactoryIn) {
@@ -76,10 +78,10 @@ public class WorldGenHydraCave extends Feature<NoneFeatureConfiguration> impleme
                             worldIn.setBlock(blockpos.below(), Blocks.DIRT.defaultBlockState(), 3);
                         }
                         if (rand.nextInt(4) == 0) {
-                            worldIn.setBlock(blockpos.above(), Blocks.GRASS.defaultBlockState(), 2);
+                            worldIn.setBlock(blockpos.above(), Blocks.SHORT_GRASS.defaultBlockState(), 2);
                         }
                         if (rand.nextInt(9) == 0) {
-                            SWAMP_FEATURE.place(worldIn, generator, rand, blockpos.above());
+                            worldIn.registryAccess().registryOrThrow(Registries.CONFIGURED_FEATURE).getHolder(TreeFeatures.SWAMP_OAK).ifPresent(feature -> feature.value().place(worldIn, generator, rand, blockpos.above()));
                         }
 
                     }

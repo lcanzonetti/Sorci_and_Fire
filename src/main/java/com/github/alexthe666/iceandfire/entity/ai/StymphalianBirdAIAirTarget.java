@@ -50,7 +50,7 @@ public class StymphalianBirdAIAirTarget extends Goal {
                 if (vec == null) {
                     return false;
                 } else {
-                    bird.airTarget = new BlockPos(vec.x, vec.y, vec.z);
+                    bird.airTarget = BlockPos.containing(vec.x, vec.y, vec.z);
                     return true;
                 }
             }

@@ -90,7 +90,7 @@ public class DragonUtils {
         float angle = (0.01745329251F * renderYawOffset) + 3.15F + (dragon.getRandom().nextFloat() * neg);
         double extraX = radius * Mth.sin((float) (Math.PI + angle));
         double extraZ = radius * Mth.cos(angle);
-        BlockPos radialPos = new BlockPos(dragon.getX() + extraX, 0, dragon.getZ() + extraZ);
+        BlockPos radialPos = BlockPos.containing(dragon.getX() + extraX, 0, dragon.getZ() + extraZ);
         BlockPos ground = dragon.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, radialPos);
         int distFromGround = (int) dragon.getY() - ground.getY();
         BlockPos newPos = radialPos.above(distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, dragon.getY() + dragon.getRandom().nextInt(16) - 8) : (int) dragon.getY() + dragon.getRandom().nextInt(16) + 1);
@@ -107,7 +107,7 @@ public class DragonUtils {
         float angle = (0.01745329251F * dragon.yBodyRot) + 3.15F + (dragon.getRandom().nextFloat() * neg);
         double extraX = radius * Mth.sin((float) (Math.PI + angle));
         double extraZ = radius * Mth.cos(angle);
-        BlockPos radialPos = new BlockPos(dragon.getX() + extraX, 0, dragon.getZ() + extraZ);
+        BlockPos radialPos = BlockPos.containing(dragon.getX() + extraX, 0, dragon.getZ() + extraZ);
         BlockPos ground = dragon.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, radialPos);
         int distFromGround = (int) dragon.getY() - ground.getY();
         BlockPos newPos = radialPos.above(distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, dragon.getY() + dragon.getRandom().nextInt(16) - 8) : (int) dragon.getY() + dragon.getRandom().nextInt(16) + 1);
@@ -180,7 +180,7 @@ public class DragonUtils {
                 }
             }
         }
-        BlockPos radialPos = new BlockPos(hippo.getX() + extraX, 0, hippo.getZ() + extraZ);
+        BlockPos radialPos = BlockPos.containing(hippo.getX() + extraX, 0, hippo.getZ() + extraZ);
         BlockPos ground = hippo.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, radialPos);
         int distFromGround = (int) hippo.getY() - ground.getY();
         BlockPos newPos = radialPos.above(distFromGround > 16 ? (int) Math.min(IafConfig.maxDragonFlight, hippo.getY() + hippo.getRandom().nextInt(16) - 8) : (int) hippo.getY() + hippo.getRandom().nextInt(16) + 1);
@@ -198,7 +198,7 @@ public class DragonUtils {
         float angle = (0.01745329251F * renderYawOffset) + 3.15F + (bird.getRandom().nextFloat() * neg);
         double extraX = radius * Mth.sin((float) (Math.PI + angle));
         double extraZ = radius * Mth.cos(angle);
-        BlockPos radialPos = getStymphalianFearPos(bird, new BlockPos(bird.getX() + extraX, 0, bird.getZ() + extraZ));
+        BlockPos radialPos = getStymphalianFearPos(bird, BlockPos.containing(bird.getX() + extraX, 0, bird.getZ() + extraZ));
         BlockPos ground = bird.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, radialPos);
         int distFromGround = (int) bird.getY() - ground.getY();
         int flightHeight = Math.min(IafConfig.stymphalianBirdFlightHeight, ground.getY() + bird.getRandom().nextInt(16));
@@ -214,7 +214,7 @@ public class DragonUtils {
         if (bird.getVictor() != null && bird.getVictor() instanceof PathfinderMob) {
             Vec3 Vector3d = DefaultRandomPos.getPosAway((PathfinderMob) bird.getVictor(), 16, IafConfig.stymphalianBirdFlightHeight, new Vec3(bird.getVictor().getX(), bird.getVictor().getY(), bird.getVictor().getZ()));
             if (Vector3d != null) {
-                BlockPos pos = new BlockPos(Vector3d);
+                BlockPos pos = BlockPos.containing(Vector3d);
                 return new BlockPos(pos.getX(), 0, pos.getZ());
             }
         }
@@ -240,7 +240,7 @@ public class DragonUtils {
         float angle = (0.01745329251F * target.yHeadRot);
         double extraX = radius * Mth.sin((float) (Math.PI + angle));
         double extraZ = radius * Mth.cos(angle);
-        BlockPos radialPos = new BlockPos(target.getX() + extraX, 0, target.getZ() + extraZ);
+        BlockPos radialPos = BlockPos.containing(target.getX() + extraX, 0, target.getZ() + extraZ);
         BlockPos ground = target.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, radialPos);
         if (cockatrice.distanceToSqr(Vec3.atCenterOf(ground)) > 30 && !cockatrice.isTargetBlocked(Vec3.atCenterOf(ground))) {
             return ground;
@@ -254,7 +254,7 @@ public class DragonUtils {
         float angle = (0.01745329251F * (target.yHeadRot + 90F + ghost.getRandom().nextInt(180)));
         double extraX = radius * Mth.sin((float) (Math.PI + angle));
         double extraZ = radius * Mth.cos(angle);
-        BlockPos radialPos = new BlockPos(target.getX() + extraX, target.getY(), target.getZ() + extraZ);
+        BlockPos radialPos = BlockPos.containing(target.getX() + extraX, target.getY(), target.getZ() + extraZ);
         BlockPos ground = radialPos;
         if (ghost.distanceToSqr(Vec3.atCenterOf(ground)) > 30) {
             return ground;
@@ -267,7 +267,7 @@ public class DragonUtils {
         float angle = (0.01745329251F * target.yHeadRot);
         double extraX = radius * Mth.sin((float) (Math.PI + angle));
         double extraZ = radius * Mth.cos(angle);
-        BlockPos radialPos = new BlockPos(target.getX() + extraX, target.getY(), target.getZ() + extraZ);
+        BlockPos radialPos = BlockPos.containing(target.getX() + extraX, target.getY(), target.getZ() + extraZ);
         if (cockatrice.distanceToSqr(Vec3.atCenterOf(radialPos)) < 300 && !cockatrice.isTargetBlocked(Vec3.atCenterOf(radialPos).add(0, 0.75, 0))) {
             return radialPos;
         }
@@ -280,7 +280,7 @@ public class DragonUtils {
         float angle = (0.01745329251F * target.yHeadRot);
         double extraX = radius * Mth.sin((float) (Math.PI + angle));
         double extraZ = radius * Mth.cos(angle);
-        BlockPos radialPos = new BlockPos(target.getX() + extraX, 0, target.getZ() + extraZ);
+        BlockPos radialPos = BlockPos.containing(target.getX() + extraX, 0, target.getZ() + extraZ);
         BlockPos ground = target.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, radialPos);
         if (serpent.distanceToSqr(Vec3.atCenterOf(ground)) > 30) {
             return ground;

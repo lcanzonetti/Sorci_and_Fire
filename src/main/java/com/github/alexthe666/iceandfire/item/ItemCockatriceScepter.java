@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import net.minecraft.core.particles.ColorParticleOption;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
@@ -61,7 +62,7 @@ public class ItemCockatriceScepter extends Item {
     }
 
     @Override
-    public int getUseDuration(@NotNull ItemStack stack) {
+    public int getUseDuration(@NotNull ItemStack stack, @NotNull LivingEntity useEntity) {
         return 1;
     }
 
@@ -78,7 +79,7 @@ public class ItemCockatriceScepter extends Item {
     }
 
     @Override
-    public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
+    public void onUseTick(@NotNull Level useLevel, @NotNull LivingEntity player, @NotNull ItemStack stack, int count) {
         if (player instanceof Player) {
             double dist = 32;
             Vec3 playerEyePosition = player.getEyePosition(1.0F);
@@ -160,7 +161,7 @@ public class ItemCockatriceScepter extends Item {
         double d4 = this.rand.nextDouble();
         while (d4 < d3) {
             d4 += 1.0D;
-            origin.level().addParticle(ParticleTypes.ENTITY_EFFECT, origin.getX() + d0 * d4, origin.getY() + d1 * d4 + (double) origin.getEyeHeight() * 0.5D, origin.getZ() + d2 * d4, 0.0D, 0.0D, 0.0D);
+            origin.level().addParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0.0F, 0.0F, 0.0F), origin.getX() + d0 * d4, origin.getY() + d1 * d4 + (double) origin.getEyeHeight() * 0.5D, origin.getZ() + d2 * d4, 0.0D, 0.0D, 0.0D);
         }
     }
 

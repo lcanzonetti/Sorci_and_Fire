@@ -65,7 +65,7 @@ public class DragonType {
     }
 
     public void updateEggCondition(EntityDragonEgg egg) {
-        BlockPos pos = new BlockPos(egg.position());
+        BlockPos pos = BlockPos.containing(egg.position());
         if (this == FIRE) {
             if (egg.level().getBlockState(pos).is(BlockTags.FIRE)) {
                 egg.setDragonAge(egg.getDragonAge() + 1);

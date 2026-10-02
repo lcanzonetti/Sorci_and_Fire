@@ -51,7 +51,7 @@ public class AquaticAIFindWaterTarget extends Goal {
     }
 
     public BlockPos findWaterTarget() {
-        BlockPos blockpos = new BlockPos(this.mob.getX(), this.mob.getBoundingBox().minY, mob.getZ());
+        BlockPos blockpos = BlockPos.containing(this.mob.getX(), this.mob.getBoundingBox().minY, mob.getZ());
         if (this.mob.getTarget() == null || !this.mob.getTarget().isAlive()) {
             for (int i = 0; i < 10; ++i) {
                 BlockPos blockpos1 = blockpos.offset(mob.getRandom().nextInt(20) - 10, mob.getRandom().nextInt(6) - 3, mob.getRandom().nextInt(20) - 10);

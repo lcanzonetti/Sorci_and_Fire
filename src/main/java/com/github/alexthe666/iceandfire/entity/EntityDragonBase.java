@@ -1417,7 +1417,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     private boolean isOverAirLogic() {
-        return level().isEmptyBlock(new BlockPos(this.getX(), this.getBoundingBox().minY - 1, this.getZ()));
+        return level().isEmptyBlock(BlockPos.containing(this.getX(), this.getBoundingBox().minY - 1, this.getZ()));
     }
 
     public boolean isDiving() {
@@ -1715,7 +1715,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         isOverAir = isOverAirLogic();
         logic.updateDragonCommon();
         if (this.isModelDead()) {
-            if (!level().isClientSide && level().isEmptyBlock(new BlockPos(this.getX(), this.getBoundingBox().minY, this.getZ())) && this.getY() > -1) {
+            if (!level().isClientSide && level().isEmptyBlock(BlockPos.containing(this.getX(), this.getBoundingBox().minY, this.getZ())) && this.getY() > -1) {
                 this.move(MoverType.SELF, new Vec3(0, -0.2F, 0));
             }
             this.setBreathingFire(false);
@@ -1934,7 +1934,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             final BlockPos sidePos = rayTrace.getBlockPos();
             if (!level().isEmptyBlock(sidePos)) {
                 return true;
-            } else if (!level().isEmptyBlock(new BlockPos(rayTrace.getLocation()))) {
+            } else if (!level().isEmptyBlock(BlockPos.containing(rayTrace.getLocation()))) {
                 return true;
             }
             return rayTrace.getType() == HitResult.Type.BLOCK;
@@ -2803,7 +2803,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public BlockPos getEscortPosition() {
-        return this.getOwner() != null ? new BlockPos(this.getOwner().position()) : this.blockPosition();
+        return this.getOwner() != null ? BlockPos.containing(this.getOwner().position()) : this.blockPosition();
     }
 
     public boolean shouldTPtoOwner() {
@@ -2841,7 +2841,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     public boolean hasFlightClearance() {
-        BlockPos topOfBB = new BlockPos(this.getX(), this.getBoundingBox().maxY, this.getZ());
+        BlockPos topOfBB = BlockPos.containing(this.getX(), this.getBoundingBox().maxY, this.getZ());
         for (int i = 1; i < 4; i++) {
             if (!level().isEmptyBlock(topOfBB.above(i))) {
                 return false;

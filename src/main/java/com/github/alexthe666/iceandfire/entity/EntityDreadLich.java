@@ -312,7 +312,7 @@ public class EntityDreadLich extends EntityDreadMob implements IAnimatedEntity, 
     }
 
     private double getHeightFromXZ(int x, int z) {
-        BlockPos thisPos = new BlockPos(x, this.getY() + 7, z);
+        BlockPos thisPos = BlockPos.containing(x, this.getY() + 7, z);
         while (level().isEmptyBlock(thisPos) && thisPos.getY() > 2) {
             thisPos = thisPos.below();
         }

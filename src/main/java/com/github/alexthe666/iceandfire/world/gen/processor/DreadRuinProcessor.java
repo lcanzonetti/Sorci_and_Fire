@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.world.gen.processor;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.registries.BuiltInRegistries;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
@@ -24,7 +25,7 @@ public class DreadRuinProcessor extends StructureProcessor {
 
     private final float integrity = 1.0F;
     public static final DreadRuinProcessor INSTANCE = new DreadRuinProcessor();
-    public static final Codec<DreadRuinProcessor> CODEC = Codec.unit(() -> INSTANCE);
+    public static final MapCodec<DreadRuinProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
     public DreadRuinProcessor() {
     }
@@ -42,13 +43,13 @@ public class DreadRuinProcessor extends StructureProcessor {
 
     @Override
     public StructureTemplate.StructureBlockInfo process(@NotNull LevelReader worldReader, @NotNull BlockPos pos, @NotNull BlockPos pos2, StructureTemplate.@NotNull StructureBlockInfo infoIn1, StructureTemplate.StructureBlockInfo infoIn2, StructurePlaceSettings settings, @Nullable StructureTemplate template) {
-        RandomSource random = settings.getRandom(infoIn2.pos);
+        RandomSource random = settings.getRandom(infoIn2.pos());
         if (random.nextFloat() <= integrity) {
-            if (infoIn2.state.getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS.get()) {
+            if (infoIn2.state().getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS.get()) {
                 BlockState state = getRandomCrackedBlock(null, random);
-                return new StructureTemplate.StructureBlockInfo(infoIn2.pos, state, null);
+                return new StructureTemplate.StructureBlockInfo(infoIn2.pos(), state, null);
             }
-            if (infoIn2.state.getBlock() == IafBlockRegistry.DREAD_SPAWNER.get()) {
+            if (infoIn2.state().getBlock() == IafBlockRegistry.DREAD_SPAWNER.get()) {
                 CompoundTag tag = new CompoundTag();
                 CompoundTag spawnData = new CompoundTag();
                 ResourceLocation spawnerMobId = BuiltInRegistries.ENTITY_TYPE.getKey(getRandomMobForMobSpawner(random));
@@ -59,7 +60,7 @@ public class DreadRuinProcessor extends StructureProcessor {
                     tag.remove("SpawnPotentials");
                     tag.put("SpawnData", spawnData.copy());
                 }
-                StructureTemplate.StructureBlockInfo newInfo = new StructureTemplate.StructureBlockInfo(infoIn2.pos, IafBlockRegistry.DREAD_SPAWNER.get().defaultBlockState(), tag);
+                StructureTemplate.StructureBlockInfo newInfo = new StructureTemplate.StructureBlockInfo(infoIn2.pos(), IafBlockRegistry.DREAD_SPAWNER.get().defaultBlockState(), tag);
                 return newInfo;
 
             }

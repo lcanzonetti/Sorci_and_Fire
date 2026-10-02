@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import org.jetbrains.annotations.NotNull;
@@ -41,7 +42,7 @@ public class MyrmexWorldData extends SavedData {
             ServerLevel overworld = world.getServer().getLevel(world.dimension());
 
             DimensionDataStorage storage = overworld.getDataStorage();
-            MyrmexWorldData data = storage.computeIfAbsent(MyrmexWorldData::new, MyrmexWorldData::new, IDENTIFIER);
+            MyrmexWorldData data = storage.computeIfAbsent(new SavedData.Factory<>(MyrmexWorldData::new, (tag, provider) -> new MyrmexWorldData(tag)), IDENTIFIER);
             if (data != null) {
                 data.world = world;
                 data.setDirty();
@@ -138,7 +139,7 @@ public class MyrmexWorldData extends SavedData {
     }
 
     @Override
-    public @NotNull CompoundTag save(CompoundTag compound) {
+    public @NotNull CompoundTag save(@NotNull final CompoundTag compound, @NotNull HolderLookup.Provider provider) {
         compound.putInt("Tick", this.tickCounter);
         ListTag nbttaglist = new ListTag();
 

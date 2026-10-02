@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.block.Blocks;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
@@ -19,10 +22,10 @@ import java.util.stream.Collectors;
 
 public class WorldGenMyrmexDecoration {
 
-    public static final ResourceLocation MYRMEX_GOLD_CHEST = ResourceLocation.fromNamespaceAndPath("iceandfire", "chest/myrmex_loot_chest");
-    public static final ResourceLocation DESERT_MYRMEX_FOOD_CHEST = ResourceLocation.fromNamespaceAndPath("iceandfire", "chest/myrmex_desert_food_chest");
-    public static final ResourceLocation JUNGLE_MYRMEX_FOOD_CHEST = ResourceLocation.fromNamespaceAndPath("iceandfire", "chest/myrmex_jungle_food_chest");
-    public static final ResourceLocation MYRMEX_TRASH_CHEST = ResourceLocation.fromNamespaceAndPath("iceandfire", "chest/myrmex_trash_chest");
+    public static final ResourceKey<LootTable> MYRMEX_GOLD_CHEST = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "chest/myrmex_loot_chest"));
+    public static final ResourceKey<LootTable> DESERT_MYRMEX_FOOD_CHEST = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "chest/myrmex_desert_food_chest"));
+    public static final ResourceKey<LootTable> JUNGLE_MYRMEX_FOOD_CHEST = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "chest/myrmex_jungle_food_chest"));
+    public static final ResourceKey<LootTable> MYRMEX_TRASH_CHEST = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "chest/myrmex_trash_chest"));
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
     public static void generateSkeleton(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, RandomSource rand) {

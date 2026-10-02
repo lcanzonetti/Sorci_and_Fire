@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
@@ -49,9 +52,9 @@ public class EntityIceDragon extends EntityDragonBase {
     public static final float[] growth_stage_3 = new float[]{7F, 12.5F};
     public static final float[] growth_stage_4 = new float[]{12.5F, 20F};
     public static final float[] growth_stage_5 = new float[]{20F, 30F};
-    public static final ResourceLocation FEMALE_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/dragon/ice_dragon_female");
-    public static final ResourceLocation MALE_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/dragon/ice_dragon_male");
-    public static final ResourceLocation SKELETON_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/dragon/ice_dragon_skeleton");
+    public static final ResourceKey<LootTable> FEMALE_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/dragon/ice_dragon_female"));
+    public static final ResourceKey<LootTable> MALE_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/dragon/ice_dragon_male"));
+    public static final ResourceKey<LootTable> SKELETON_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/dragon/ice_dragon_skeleton"));
 
     public EntityIceDragon(Level worldIn) {
         this(IafEntityRegistry.ICE_DRAGON.get(), worldIn);
@@ -571,7 +574,7 @@ public class EntityIceDragon extends EntityDragonBase {
             } else {
                 if (!level().isClientSide) {
                     HitResult result = this.level().clip(new ClipContext(new Vec3(this.getX(), this.getY() + this.getEyeHeight(), this.getZ()), new Vec3(progressX, progressY, progressZ), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-                    BlockPos pos = new BlockPos(result.getLocation());
+                    BlockPos pos = BlockPos.containing(result.getLocation());
                     if (!this.isInMaterialWater()) {
                         IafDragonDestructionManager.destroyAreaIce(level(), pos, this);
                     }
@@ -584,7 +587,7 @@ public class EntityIceDragon extends EntityDragonBase {
             double spawnZ = burnZ + (random.nextFloat() * 3.0) - 1.5;
             if (!level().isClientSide) {
                 if (!this.isInMaterialWater()) {
-                    IafDragonDestructionManager.destroyAreaIce(level(), new BlockPos(spawnX, spawnY, spawnZ), this);
+                    IafDragonDestructionManager.destroyAreaIce(level(), BlockPos.containing(spawnX, spawnY, spawnZ), this);
                 }
             }
         }

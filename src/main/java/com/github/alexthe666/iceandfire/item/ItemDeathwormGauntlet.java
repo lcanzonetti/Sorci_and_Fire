@@ -56,7 +56,7 @@ public class ItemDeathwormGauntlet extends Item {
     }
 
     @Override
-    public int getUseDuration(@NotNull ItemStack stack) {
+    public int getUseDuration(@NotNull ItemStack stack, @NotNull LivingEntity useEntity) {
         return 1;
     }
 
@@ -73,7 +73,7 @@ public class ItemDeathwormGauntlet extends Item {
     }
 
     @Override
-    public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
+    public void onUseTick(@NotNull Level useLevel, @NotNull LivingEntity player, @NotNull ItemStack stack, int count) {
         if (IafNbt.getTag(stack) != null) {
             if (deathwormReceded || deathwormLaunched) {
                 return;
@@ -150,7 +150,7 @@ public class ItemDeathwormGauntlet extends Item {
                         boolean canSee = d1 > 1.0D - 0.5D / d0 && player.hasLineOfSight(livingEntity);
                         if (canSee) {
                             specialDamage++;
-                            livingEntity.hurt((Player) entity.damageSources().playerAttack((Player) entity), 3F);
+                            livingEntity.hurt(entity.damageSources().playerAttack((Player) entity), 3F);
                             livingEntity.knockback(0.5F, livingEntity.getX() - player.getX(), livingEntity.getZ() - player.getZ());
                         }
                     }

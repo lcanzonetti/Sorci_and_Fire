@@ -46,7 +46,7 @@ public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> imple
             layer++;
             for (float i = 0; i < getRadius(layer, up); i += 0.5) {
                 for (float j = 0; j < 2 * Math.PI * i + rand.nextInt(2); j += 0.5) {
-                    BlockPos stonePos = new BlockPos(Math.floor(center.getX() + Mth.sin(j) * i + rand.nextInt(2)), center.getY(), Math.floor(center.getZ() + Mth.cos(j) * i + rand.nextInt(2)));
+                    BlockPos stonePos = BlockPos.containing(Math.floor(center.getX() + Mth.sin(j) * i + rand.nextInt(2)), center.getY(), Math.floor(center.getZ() + Mth.cos(j) * i + rand.nextInt(2)));
                     worldIn.setBlock(stonePos, getStone(rand), 3);
                     BlockPos upPos = stonePos.above();
                     if (worldIn.isEmptyBlock(upPos) && worldIn.isEmptyBlock(upPos.east()) && worldIn.isEmptyBlock(upPos.north()) && worldIn.isEmptyBlock(upPos.north().east()) && rand.nextInt(3) == 0 && sirens < sirensMax) {
@@ -60,7 +60,7 @@ public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> imple
         layer++;
         for (float i = 0; i < getRadius(layer, up); i += 0.5) {
             for (float j = 0; j < 2 * Math.PI * i + rand.nextInt(2); j += 0.5) {
-                BlockPos stonePos = new BlockPos(Math.floor(center.getX() + Mth.sin(j) * i + rand.nextInt(2)), center.getY(), Math.floor(center.getZ() + Mth.cos(j) * i + rand.nextInt(2)));
+                BlockPos stonePos = BlockPos.containing(Math.floor(center.getX() + Mth.sin(j) * i + rand.nextInt(2)), center.getY(), Math.floor(center.getZ() + Mth.cos(j) * i + rand.nextInt(2)));
                 while (!worldIn.getBlockState(stonePos).canOcclude() && stonePos.getY() >= 0) {
                     worldIn.setBlock(stonePos, getStone(rand), 3);
                     stonePos = stonePos.below();

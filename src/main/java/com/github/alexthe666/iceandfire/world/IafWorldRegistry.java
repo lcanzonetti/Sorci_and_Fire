@@ -145,7 +145,7 @@ public class IafWorldRegistry {
 
     public static boolean isFarEnoughFromSpawn(final LevelAccessor level, final BlockPos position) {
         LevelData spawnPoint = level.getLevelData();
-        BlockPos spawnRelative = new BlockPos(spawnPoint.getXSpawn(), position.getY(), spawnPoint.getYSpawn());
+        BlockPos spawnRelative = new BlockPos(spawnPoint.getSpawnPos().getX(), position.getY(), spawnPoint.getSpawnPos().getZ());
         return !spawnRelative.closerThan(position, IafConfig.dangerousWorldGenDistanceLimit);
     }
 

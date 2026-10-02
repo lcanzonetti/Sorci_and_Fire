@@ -218,7 +218,7 @@ public class MyrmexAIForage extends Goal {
         }
         Vec3 vec = DefaultRandomPos.getPos(this.myrmex, wanderRadius, 7);
         if (vec != null) {
-            this.targetBlock = new BlockPos(vec);
+            this.targetBlock = BlockPos.containing(vec);
         }
         if (this.targetBlock != null) {
             this.path = ((AdvancedPathNavigate) this.myrmex.getNavigation()).moveToXYZ(targetBlock.getX(),

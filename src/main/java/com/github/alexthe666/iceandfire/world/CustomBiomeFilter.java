@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.world;
 
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -18,7 +19,7 @@ import net.minecraft.util.RandomSource;
 */
 public class CustomBiomeFilter extends PlacementFilter {
     private static final CustomBiomeFilter INSTANCE = new CustomBiomeFilter();
-    public static Codec<CustomBiomeFilter> CODEC = Codec.unit(() -> INSTANCE);
+    public static MapCodec<CustomBiomeFilter> CODEC = MapCodec.unit(() -> INSTANCE);
 
     private CustomBiomeFilter() { /* Nothing to do */ }
 

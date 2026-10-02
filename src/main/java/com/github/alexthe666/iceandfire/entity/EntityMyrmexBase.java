@@ -588,7 +588,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
 
     public boolean isOnResin() {
         double d0 = this.getY() - 1;
-        BlockPos blockpos = new BlockPos(this.getX(), d0, this.getZ());
+        BlockPos blockpos = BlockPos.containing(this.getX(), d0, this.getZ());
         while (level().isEmptyBlock(blockpos) && blockpos.getY() > 1) {
             blockpos = blockpos.below();
         }

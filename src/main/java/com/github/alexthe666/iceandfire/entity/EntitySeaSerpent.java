@@ -114,8 +114,8 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
     }
 
     private static BlockPos clampBlockPosToWater(Entity entity, Level world, BlockPos pos) {
-        BlockPos topY = new BlockPos(pos.getX(), entity.getY(), pos.getZ());
-        BlockPos bottomY = new BlockPos(pos.getX(), entity.getY(), pos.getZ());
+        BlockPos topY = BlockPos.containing(pos.getX(), entity.getY(), pos.getZ());
+        BlockPos bottomY = BlockPos.containing(pos.getX(), entity.getY(), pos.getZ());
         while (isWaterBlock(world, topY) && topY.getY() < world.getMaxBuildHeight()) {
             topY = topY.above();
         }
@@ -332,7 +332,7 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
             double x = entity.getX() + this.random.nextFloat() * entity.getBbWidth() * 2.0F - entity.getBbWidth();
             double y = entity.getY() + 0.5D + this.random.nextFloat() * entity.getBbHeight();
             double z = entity.getZ() + this.random.nextFloat() * entity.getBbWidth() * 2.0F - entity.getBbWidth();
-            if (this.level().getBlockState(new BlockPos(x, y, z)).is(Blocks.WATER)) {
+            if (this.level().getBlockState(BlockPos.containing(x, y, z)).is(Blocks.WATER)) {
                 this.level().addParticle(type, x, y, z, 0, 0, 0);
             }
         }

@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.damagesource.DamageTypes;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
@@ -49,9 +52,9 @@ public class EntityLightningDragon extends EntityDragonBase {
     public static final float[] growth_stage_4 = new float[]{12.5F, 20F};
     public static final float[] growth_stage_5 = new float[]{20F, 30F};
 
-    public static final ResourceLocation FEMALE_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/dragon/lightning_dragon_female");
-    public static final ResourceLocation MALE_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/dragon/lightning_dragon_male");
-    public static final ResourceLocation SKELETON_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/dragon/lightning_dragon_skeleton");
+    public static final ResourceKey<LootTable> FEMALE_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/dragon/lightning_dragon_female"));
+    public static final ResourceKey<LootTable> MALE_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/dragon/lightning_dragon_male"));
+    public static final ResourceKey<LootTable> SKELETON_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/dragon/lightning_dragon_skeleton"));
     private static final EntityDataAccessor<Boolean> HAS_LIGHTNING_TARGET = SynchedEntityData.defineId(EntityLightningDragon.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> LIGHTNING_TARGET_X = SynchedEntityData.defineId(EntityLightningDragon.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> LIGHTNING_TARGET_Y = SynchedEntityData.defineId(EntityLightningDragon.class, EntityDataSerializers.FLOAT);
@@ -455,7 +458,7 @@ public class EntityLightningDragon extends EntityDragonBase {
                         new Vec3(this.getX(), this.getY() + this.getEyeHeight(), this.getZ()),
                         new Vec3(progressX, progressY, progressZ), ClipContext.Block.COLLIDER,
                         ClipContext.Fluid.NONE, this));
-                    BlockPos pos = new BlockPos(result.getLocation());
+                    BlockPos pos = BlockPos.containing(result.getLocation());
                     IafDragonDestructionManager.destroyAreaLightning(level(), pos, this);
                     setHasLightningTarget(true);
                     setLightningTargetVec((float) result.getLocation().x, (float) result.getLocation().y, (float) result.getLocation().z);
@@ -469,7 +472,7 @@ public class EntityLightningDragon extends EntityDragonBase {
             setHasLightningTarget(true);
             setLightningTargetVec((float) spawnX, (float) spawnY, (float) spawnZ);
             if (!level().isClientSide) {
-                IafDragonDestructionManager.destroyAreaLightning(level(), new BlockPos(spawnX, spawnY, spawnZ), this);
+                IafDragonDestructionManager.destroyAreaLightning(level(), BlockPos.containing(spawnX, spawnY, spawnZ), this);
             }
         }
     }

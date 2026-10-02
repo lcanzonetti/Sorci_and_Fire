@@ -12,5 +12,5 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 public class IafPlacementFilterRegistry {
     public static final DeferredRegister<PlacementModifierType<?>> PLACEMENT_MODIFIER_TYPES = DeferredRegister.create(Registries.PLACEMENT_MODIFIER_TYPE, IceAndFire.MODID);
 
-    public static DeferredHolder<PlacementModifierType<?>, PlacementModifierType<CustomBiomeFilter>> CUSTOM_BIOME_FILTER = PLACEMENT_MODIFIER_TYPES.register("biome_extended", () -> () -> CustomBiomeFilter.CODEC);
+    public static DeferredHolder<PlacementModifierType<?>, PlacementModifierType<CustomBiomeFilter>> CUSTOM_BIOME_FILTER = PLACEMENT_MODIFIER_TYPES.register("biome_extended", () -> (PlacementModifierType<CustomBiomeFilter>) () -> CustomBiomeFilter.CODEC);
 }

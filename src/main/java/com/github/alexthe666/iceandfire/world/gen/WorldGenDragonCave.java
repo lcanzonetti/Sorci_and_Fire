@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import com.github.alexthe666.iceandfire.misc.IafBlockTags;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
@@ -28,7 +31,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.material.Material;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +41,8 @@ import java.util.stream.Stream;
 
 public abstract class WorldGenDragonCave extends Feature<NoneFeatureConfiguration> implements TypedFeature {
 
-    public ResourceLocation DRAGON_CHEST;
-    public ResourceLocation DRAGON_MALE_CHEST;
+    public ResourceKey<LootTable> DRAGON_CHEST;
+    public ResourceKey<LootTable> DRAGON_MALE_CHEST;
     public WorldGenCaveStalactites CEILING_DECO;
     public BlockState PALETTE_BLOCK1;
     public BlockState PALETTE_BLOCK2;

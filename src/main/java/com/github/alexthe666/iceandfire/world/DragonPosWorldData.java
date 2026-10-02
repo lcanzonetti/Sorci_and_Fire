@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +39,7 @@ public class DragonPosWorldData extends SavedData {
             ServerLevel overworld = world.getServer().getLevel(world.dimension());
 
             DimensionDataStorage storage = overworld.getDataStorage();
-            DragonPosWorldData data = storage.computeIfAbsent(DragonPosWorldData::new, DragonPosWorldData::new, IDENTIFIER);
+            DragonPosWorldData data = storage.computeIfAbsent(new SavedData.Factory<>(DragonPosWorldData::new, (tag, provider) -> new DragonPosWorldData(tag)), IDENTIFIER);
             if (data != null) {
                 data.world = world;
                 data.setDirty();
@@ -85,7 +86,7 @@ public class DragonPosWorldData extends SavedData {
     }
 
     @Override
-    public @NotNull CompoundTag save(CompoundTag compound) {
+    public @NotNull CompoundTag save(@NotNull final CompoundTag compound, @NotNull HolderLookup.Provider provider) {
         compound.putInt("Tick", this.tickCounter);
         ListTag nbttaglist = new ListTag();
         for (Map.Entry<UUID, BlockPos> pair : lastDragonPositions.entrySet()) {

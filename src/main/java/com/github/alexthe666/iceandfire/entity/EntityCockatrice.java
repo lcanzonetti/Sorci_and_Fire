@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.core.particles.ColorParticleOption;
 import net.minecraft.world.damagesource.DamageTypes;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
@@ -639,7 +640,7 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
 
                     while (d4 < d3) {
                         d4 += 1.8D - d5 + this.random.nextDouble() * (1.7D - d5);
-                        this.level().addParticle(ParticleTypes.ENTITY_EFFECT, this.getX() + d0 * d4, this.getY() + d1 * d4 + (double) this.getEyeHeight(), this.getZ() + d2 * d4, 0.0D, 0.0D, 0.0D);
+                        this.level().addParticle(ColorParticleOption.create(ParticleTypes.ENTITY_EFFECT, 0.0F, 0.0F, 0.0F), this.getX() + d0 * d4, this.getY() + d1 * d4 + (double) this.getEyeHeight(), this.getZ() + d2 * d4, 0.0D, 0.0D, 0.0D);
                     }
                 }
             }

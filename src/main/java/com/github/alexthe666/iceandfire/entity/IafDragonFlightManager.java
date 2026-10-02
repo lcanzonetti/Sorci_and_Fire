@@ -80,7 +80,7 @@ public class IafDragonFlightManager {
                 }
             }
 
-        } else if (target == null || dragon.distanceToSqr(target.x, target.y, target.z) < 4 || !dragon.level().isEmptyBlock(new BlockPos(target)) && (dragon.isHovering() || dragon.isFlying()) || dragon.getCommand() == 2 && dragon.shouldTPtoOwner()) {
+        } else if (target == null || dragon.distanceToSqr(target.x, target.y, target.z) < 4 || !dragon.level().isEmptyBlock(BlockPos.containing(target)) && (dragon.isHovering() || dragon.isFlying()) || dragon.getCommand() == 2 && dragon.shouldTPtoOwner()) {
             BlockPos viewBlock = null;
 
             if (dragon instanceof EntityIceDragon && dragon.isInWater()) {

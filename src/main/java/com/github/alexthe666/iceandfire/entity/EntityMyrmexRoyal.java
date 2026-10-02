@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.ai.*;
@@ -50,8 +53,8 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
 
     public static final Animation ANIMATION_BITE = Animation.create(15);
     public static final Animation ANIMATION_STING = Animation.create(15);
-    public static final ResourceLocation DESERT_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/myrmex_royal_desert");
-    public static final ResourceLocation JUNGLE_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/myrmex_royal_jungle");
+    public static final ResourceKey<LootTable> DESERT_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/myrmex_royal_desert"));
+    public static final ResourceKey<LootTable> JUNGLE_LOOT = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/myrmex_royal_jungle"));
     private static final ResourceLocation TEXTURE_DESERT = ResourceLocation.parse("iceandfire:textures/models/myrmex/myrmex_desert_royal.png");
     private static final ResourceLocation TEXTURE_JUNGLE = ResourceLocation.parse("iceandfire:textures/models/myrmex/myrmex_jungle_royal.png");
     private static final EntityDataAccessor<Boolean> FLYING = SynchedEntityData.defineId(EntityMyrmexRoyal.class, EntityDataSerializers.BOOLEAN);
@@ -81,7 +84,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     public static BlockPos getPositionRelativetoGround(Entity entity, Level world, double x, double z, RandomSource rand) {
-        BlockPos pos = new BlockPos(x, entity.getY(), z);
+        BlockPos pos = BlockPos.containing(x, entity.getY(), z);
         for (int yDown = 0; yDown < 10; yDown++) {
             if (!world.isEmptyBlock(pos.below(yDown))) {
                 return pos.above(yDown);
@@ -92,7 +95,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
 
     @Override
     @Nullable
-    protected ResourceLocation getDefaultLootTable() {
+    protected ResourceKey<LootTable> getDefaultLootTable() {
         return isJungle() ? JUNGLE_LOOT : DESERT_LOOT;
     }
 

@@ -128,7 +128,7 @@ public abstract class EntityDragonCharge extends Fireball implements IDragonProj
             }
             if (movingObject.getType() != HitResult.Type.MISS) {
                 if (shootingEntity instanceof EntityDragonBase && IafConfig.dragonGriefing != 2) {
-                    destroyArea(level(), new BlockPos(this.getX(), this.getY(), this.getZ()), ((EntityDragonBase) shootingEntity));
+                    destroyArea(level(), BlockPos.containing(this.getX(), this.getY(), this.getZ()), ((EntityDragonBase) shootingEntity));
                 }
                 this.remove(RemovalReason.DISCARDED);
             }

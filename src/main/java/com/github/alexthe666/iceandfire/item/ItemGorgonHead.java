@@ -62,7 +62,7 @@ public class ItemGorgonHead extends Item {
     }
 
     @Override
-    public int getUseDuration(@NotNull ItemStack stack) {
+    public int getUseDuration(@NotNull ItemStack stack, @NotNull LivingEntity useEntity) {
         return 72000;
     }
 
@@ -144,7 +144,7 @@ public class ItemGorgonHead extends Item {
     }
 
     @Override
-    public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
+    public void onUseTick(@NotNull Level useLevel, @NotNull LivingEntity player, @NotNull ItemStack stack, int count) {
     }
 
     @Override

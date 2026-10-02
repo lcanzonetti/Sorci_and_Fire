@@ -111,7 +111,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
     }
 
     public static BlockPos getPositionRelativetoGround(Entity entity, Level world, double x, double z, RandomSource rand) {
-        BlockPos pos = new BlockPos(x, entity.getY(), z);
+        BlockPos pos = BlockPos.containing(x, entity.getY(), z);
         for (int yDown = 0; yDown < 6 + rand.nextInt(6); yDown++) {
             if (!world.isEmptyBlock(pos.below(yDown))) {
                 return pos.above(yDown);
@@ -159,7 +159,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         float angle = (0.01745329251F * possibleOrbitRadius);
         double extraX = radius * Mth.sin((float) (Math.PI + angle));
         double extraZ = radius * Mth.cos(angle);
-        BlockPos radialPos = new BlockPos(orbit.getX() + extraX, orbit.getY(), orbit.getZ() + extraZ);
+        BlockPos radialPos = BlockPos.containing(orbit.getX() + extraX, orbit.getY(), orbit.getZ() + extraZ);
         //world.setBlockState(radialPos.down(4), Blocks.QUARTZ_BLOCK.getDefaultState());
         // world.setBlockState(orbit.down(4), Blocks.GOLD_BLOCK.getDefaultState());
         entity.orbitRadius = possibleOrbitRadius;

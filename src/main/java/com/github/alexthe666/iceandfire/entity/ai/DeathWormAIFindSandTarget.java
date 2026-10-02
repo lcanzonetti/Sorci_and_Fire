@@ -87,7 +87,7 @@ public class DeathWormAIFindSandTarget extends Goal {
             }
         } else {
             BlockPos blockpos1 = this.mob.getTarget().blockPosition();
-            return new BlockPos(blockpos1.getX(), (double) blockpos1.getY() - 1, blockpos1.getZ());
+            return BlockPos.containing(blockpos1.getX(), (double) blockpos1.getY() - 1, blockpos1.getZ());
         }
         return null;
     }

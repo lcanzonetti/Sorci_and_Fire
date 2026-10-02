@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.world.gen.processor;
 
+import com.mojang.serialization.MapCodec;
 import com.github.alexthe666.iceandfire.world.IafProcessors;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
@@ -19,7 +20,7 @@ public class GraveyardProcessor extends StructureProcessor {
 
     private final float integrity = 1.0F;
     public static final GraveyardProcessor INSTANCE = new GraveyardProcessor();
-    public static final Codec<GraveyardProcessor> CODEC = Codec.unit(() -> INSTANCE);
+    public static final MapCodec<GraveyardProcessor> CODEC = MapCodec.unit(() -> INSTANCE);
 
     public GraveyardProcessor() {
     }
@@ -48,14 +49,14 @@ public class GraveyardProcessor extends StructureProcessor {
 
     @Override
     public StructureTemplate.StructureBlockInfo process(@NotNull LevelReader worldReader, @NotNull BlockPos pos, @NotNull BlockPos pos2, StructureTemplate.@NotNull StructureBlockInfo infoIn1, StructureTemplate.StructureBlockInfo infoIn2, StructurePlaceSettings settings, @Nullable StructureTemplate template) {
-        RandomSource random = settings.getRandom(infoIn2.pos);
-        if (infoIn2.state.getBlock() == Blocks.STONE_BRICKS) {
+        RandomSource random = settings.getRandom(infoIn2.pos());
+        if (infoIn2.state().getBlock() == Blocks.STONE_BRICKS) {
             BlockState state = getRandomCrackedBlock(null, random);
-            return new StructureTemplate.StructureBlockInfo(infoIn2.pos, state, null);
+            return new StructureTemplate.StructureBlockInfo(infoIn2.pos(), state, null);
         }
-        if (infoIn2.state.getBlock() == Blocks.COBBLESTONE) {
+        if (infoIn2.state().getBlock() == Blocks.COBBLESTONE) {
             BlockState state = getRandomCobblestone(null, random);
-            return new StructureTemplate.StructureBlockInfo(infoIn2.pos, state, null);
+            return new StructureTemplate.StructureBlockInfo(infoIn2.pos(), state, null);
         }
         return infoIn2;
     }

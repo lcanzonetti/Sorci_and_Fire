@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageTypes;
 import com.github.alexthe666.citadel.animation.Animation;
@@ -71,7 +73,7 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
 
 
     @Override
-    protected @NotNull ResourceLocation getDefaultLootTable() {
+    protected @NotNull ResourceKey<LootTable> getDefaultLootTable() {
         return this.wasFromChest() ? BuiltInLootTables.EMPTY : this.getType().getDefaultLootTable();
     }
 
@@ -266,7 +268,7 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
     protected boolean isSunBurnTick() {
         if (this.level().isDay() && !this.level().isClientSide) {
             float f = this.getBrightness();
-            BlockPos blockpos = this.getVehicle() instanceof Boat ? (new BlockPos(this.getX(), (double) Math.round(this.getY()), this.getZ())).above() : new BlockPos(this.getX(), (double) Math.round(this.getY() + 4), this.getZ());
+            BlockPos blockpos = this.getVehicle() instanceof Boat ? (BlockPos.containing(this.getX(), (double) Math.round(this.getY()), this.getZ())).above() : BlockPos.containing(this.getX(), (double) Math.round(this.getY() + 4), this.getZ());
             return f > 0.5F && this.level().canSeeSky(blockpos);
         }
 

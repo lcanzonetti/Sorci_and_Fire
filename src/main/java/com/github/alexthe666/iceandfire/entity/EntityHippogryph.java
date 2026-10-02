@@ -157,7 +157,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
     }
 
     private boolean isOverAirLogic() {
-        return level().isEmptyBlock(new BlockPos(this.getX(), this.getBoundingBox().minY - 1, this.getZ()));
+        return level().isEmptyBlock(BlockPos.containing(this.getX(), this.getBoundingBox().minY - 1, this.getZ()));
     }
 
     @Override
@@ -1099,7 +1099,7 @@ public class EntityHippogryph extends TamableAnimal implements ISyncMount, IAnim
             HitResult rayTrace = this.level().clip(new ClipContext(this.getEyePosition(1.0F), target, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
 
             if (rayTrace != null && rayTrace.getLocation() != null) {
-                BlockPos pos = new BlockPos(rayTrace.getLocation());
+                BlockPos pos = BlockPos.containing(rayTrace.getLocation());
                 return !level().isEmptyBlock(pos);
             }
         }

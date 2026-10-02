@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import com.github.alexthe666.iceandfire.misc.IafBlockTags;
 import com.github.alexthe666.iceandfire.IafConfig;
@@ -26,14 +29,13 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.material.Material;
 
 import net.minecraft.util.RandomSource;
 
 public class WorldGenFireDragonRoosts extends Feature<NoneFeatureConfiguration> implements TypedFeature {
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     private static boolean isMale;
-    public static ResourceLocation DRAGON_CHEST = ResourceLocation.fromNamespaceAndPath("iceandfire", "chest/fire_dragon_roost");
+    public static ResourceKey<LootTable> DRAGON_CHEST = ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.fromNamespaceAndPath("iceandfire", "chest/fire_dragon_roost"));
 
     public WorldGenFireDragonRoosts(Codec<NoneFeatureConfiguration> configFactoryIn) {
         super(configFactoryIn);

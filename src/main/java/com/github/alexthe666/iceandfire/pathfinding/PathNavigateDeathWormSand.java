@@ -61,7 +61,7 @@ public class PathNavigateDeathWormSand extends WaterBoundPathNavigation {
 
         if (raytraceresult.getType() == HitResult.Type.BLOCK) {
             Vec3 vec3i = raytraceresult.getLocation();
-            return mob.level().getBlockState(new BlockPos(vec3i)).is(BlockTags.SAND);
+            return mob.level().getBlockState(BlockPos.containing(vec3i)).is(BlockTags.SAND);
         }
 
         return raytraceresult.getType() == HitResult.Type.MISS;

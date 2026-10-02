@@ -10,6 +10,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.LogicalSide;
@@ -20,7 +21,7 @@ import java.util.function.Supplier;
 public class MessageUpdatePodium implements CustomPacketPayload {
 
     public static final CustomPacketPayload.Type<MessageUpdatePodium> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "update_podium"));
-    public static final StreamCodec<FriendlyByteBuf, MessageUpdatePodium> CODEC = StreamCodec.of((buf, msg) -> MessageUpdatePodium.write(msg, buf), MessageUpdatePodium::read);
+    public static final StreamCodec<RegistryFriendlyByteBuf, MessageUpdatePodium> CODEC = StreamCodec.of((buf, msg) -> MessageUpdatePodium.write(msg, buf), MessageUpdatePodium::read);
 
     @Override
     public @NotNull Type<? extends CustomPacketPayload> type() {
@@ -40,13 +41,13 @@ public class MessageUpdatePodium implements CustomPacketPayload {
     public MessageUpdatePodium() {
     }
 
-    public static MessageUpdatePodium read(FriendlyByteBuf buf) {
-        return new MessageUpdatePodium(buf.readLong(), PacketBufferUtils.readItemStack(buf));
+    public static MessageUpdatePodium read(RegistryFriendlyByteBuf buf) {
+        return new MessageUpdatePodium(buf.readLong(), ItemStack.OPTIONAL_STREAM_CODEC.decode(buf));
     }
 
-    public static void write(MessageUpdatePodium message, FriendlyByteBuf buf) {
+    public static void write(MessageUpdatePodium message, RegistryFriendlyByteBuf buf) {
         buf.writeLong(message.blockPos);
-        PacketBufferUtils.writeItemStack(buf, message.heldStack);
+        ItemStack.OPTIONAL_STREAM_CODEC.encode(buf, message.heldStack);
     }
 
     public static class Handler {
