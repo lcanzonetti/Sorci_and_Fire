@@ -59,9 +59,9 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
     public static final Animation ANIMATION_STRIKE_VERTICAL = Animation.create(20);
     public static final Animation ANIMATION_SPEAK = Animation.create(10);
     public static final Animation ANIMATION_ROAR = Animation.create(25);
-    public static final ResourceLocation FOREST_LOOT = new ResourceLocation("iceandfire", "entities/troll_forest");
-    public static final ResourceLocation FROST_LOOT = new ResourceLocation("iceandfire", "entities/troll_frost");
-    public static final ResourceLocation MOUNTAIN_LOOT = new ResourceLocation("iceandfire", "entities/troll_mountain");
+    public static final ResourceLocation FOREST_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/troll_forest");
+    public static final ResourceLocation FROST_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/troll_frost");
+    public static final ResourceLocation MOUNTAIN_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/troll_mountain");
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(EntityTroll.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> WEAPON = SynchedEntityData.defineId(EntityTroll.class, EntityDataSerializers.INT);
     public float stoneProgress;

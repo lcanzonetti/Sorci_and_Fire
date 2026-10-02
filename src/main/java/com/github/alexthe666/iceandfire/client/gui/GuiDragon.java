@@ -17,7 +17,7 @@ import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 public class GuiDragon extends AbstractContainerScreen<ContainerDragon> {
-    private static final ResourceLocation texture = new ResourceLocation("iceandfire:textures/gui/dragon.png");
+    private static final ResourceLocation texture = ResourceLocation.parse("iceandfire:textures/gui/dragon.png");
     private float mousePosx;
     private float mousePosY;
 

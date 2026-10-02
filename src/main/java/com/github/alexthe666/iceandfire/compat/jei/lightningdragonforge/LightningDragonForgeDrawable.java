@@ -2,14 +2,14 @@ package com.github.alexthe666.iceandfire.compat.jei.lightningdragonforge;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
+import org.joml.Matrix4f;
 import mezz.jei.api.gui.drawable.IDrawable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public class LightningDragonForgeDrawable implements IDrawable {
-    private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/dragonforge_lightning.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.parse("iceandfire:textures/gui/dragonforge_lightning.png");
 
     @Override
     public int getWidth() {

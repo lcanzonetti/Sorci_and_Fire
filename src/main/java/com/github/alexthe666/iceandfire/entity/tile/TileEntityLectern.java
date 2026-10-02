@@ -12,7 +12,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.util.Mth;
 import net.minecraft.world.ContainerHelper;
@@ -230,7 +229,7 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
 
     @Override
     public @NotNull Component getName() {
-        return new TranslatableComponent("block.iceandfire.lectern");
+        return Component.translatable("block.iceandfire.lectern");
     }
 
     @Override

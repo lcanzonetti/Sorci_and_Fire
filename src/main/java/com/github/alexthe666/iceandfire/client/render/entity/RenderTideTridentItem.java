@@ -1,10 +1,11 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import com.mojang.math.Axis;
 import com.github.alexthe666.iceandfire.client.model.ModelTideTrident;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
+import org.joml.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -42,7 +43,7 @@ public class RenderTideTridentItem extends BlockEntityWithoutLevelRenderer {
             } else {
                 stackIn.translate(0, 0.6F, 0.0F);
             }
-            stackIn.mulPose(Vector3f.XP.rotationDegrees(160));
+            stackIn.mulPose(Axis.XP.rotationDegrees(160));
             VertexConsumer glintVertexBuilder = ItemRenderer.getFoilBufferDirect(bufferIn, RenderType.entityCutoutNoCull(RenderTideTrident.TRIDENT), false, stack.hasFoil());
             MODEL.renderToBuffer(stackIn,
                 glintVertexBuilder, combinedLightIn,

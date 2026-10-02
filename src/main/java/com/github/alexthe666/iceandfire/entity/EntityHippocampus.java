@@ -20,7 +20,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -83,7 +82,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     // These are from TamableAnimal
     private static final int FLAG_SITTING = 1;
     private static final int FLAG_TAME = 4;
-    private static final Component CONTAINER_TITLE = new TranslatableComponent("entity.iceandfire.hippocampus");
+    private static final Component CONTAINER_TITLE = Component.translatable("entity.iceandfire.hippocampus");
 
     public static Animation ANIMATION_SPEAK;
     public float onLandProgress;

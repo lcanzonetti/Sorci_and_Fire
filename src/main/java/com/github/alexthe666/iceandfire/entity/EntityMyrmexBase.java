@@ -23,7 +23,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -66,10 +66,10 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
     private static final EntityDataAccessor<Byte> CLIMBING = SynchedEntityData.defineId(EntityMyrmexBase.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Integer> GROWTH_STAGE = SynchedEntityData.defineId(EntityMyrmexBase.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> VARIANT = SynchedEntityData.defineId(EntityMyrmexBase.class, EntityDataSerializers.BOOLEAN);
-    private static final ResourceLocation TEXTURE_DESERT_LARVA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_desert_larva.png");
-    private static final ResourceLocation TEXTURE_DESERT_PUPA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_desert_pupa.png");
-    private static final ResourceLocation TEXTURE_JUNGLE_LARVA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_larva.png");
-    private static final ResourceLocation TEXTURE_JUNGLE_PUPA = new ResourceLocation("iceandfire:textures/models/myrmex/myrmex_jungle_pupa.png");
+    private static final ResourceLocation TEXTURE_DESERT_LARVA = ResourceLocation.parse("iceandfire:textures/models/myrmex/myrmex_desert_larva.png");
+    private static final ResourceLocation TEXTURE_DESERT_PUPA = ResourceLocation.parse("iceandfire:textures/models/myrmex/myrmex_desert_pupa.png");
+    private static final ResourceLocation TEXTURE_JUNGLE_LARVA = ResourceLocation.parse("iceandfire:textures/models/myrmex/myrmex_jungle_larva.png");
+    private static final ResourceLocation TEXTURE_JUNGLE_PUPA = ResourceLocation.parse("iceandfire:textures/models/myrmex/myrmex_jungle_pupa.png");
     private final SimpleContainer villagerInventory = new SimpleContainer(8);
     public boolean isEnteringHive = false;
     public boolean isBeingGuarded = false;
@@ -505,19 +505,19 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
             }
         }
         if (this.getHive() == null) {
-            player.displayClientMessage(new TranslatableComponent("myrmex.message.null_hive"), true);
+            player.displayClientMessage(Component.translatable("myrmex.message.null_hive"), true);
 
         } else {
             if (staffUUID != null && staffUUID.equals(this.getHive().hiveUUID)) {
-                player.displayClientMessage(new TranslatableComponent("myrmex.message.staff_already_set"), true);
+                player.displayClientMessage(Component.translatable("myrmex.message.staff_already_set"), true);
             } else {
                 this.getHive().setWorld(this.level);
                 EntityMyrmexQueen queen = this.getHive().getQueen();
                 BlockPos center = this.getHive().getCenterGround();
                 if (queen != null && queen.hasCustomName()) {
-                    player.displayClientMessage(new TranslatableComponent("myrmex.message.staff_set_named", queen.getName(), center.getX(), center.getY(), center.getZ()), true);
+                    player.displayClientMessage(Component.translatable("myrmex.message.staff_set_named", queen.getName(), center.getX(), center.getY(), center.getZ()), true);
                 } else {
-                    player.displayClientMessage(new TranslatableComponent("myrmex.message.staff_set_unnamed", center.getX(), center.getY(), center.getZ()), true);
+                    player.displayClientMessage(Component.translatable("myrmex.message.staff_set_unnamed", center.getX(), center.getY(), center.getZ()), true);
                 }
                 itemstack.getTag().putUUID("HiveUUID", this.getHive().hiveUUID);
             }

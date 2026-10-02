@@ -31,7 +31,7 @@ import java.util.Random;
 public class WorldGenIceDragonRoosts extends Feature<NoneFeatureConfiguration> implements TypedFeature {
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     private static boolean isMale;
-    public static ResourceLocation DRAGON_CHEST = new ResourceLocation("iceandfire", "chest/ice_dragon_roost");
+    public static ResourceLocation DRAGON_CHEST = ResourceLocation.fromNamespaceAndPath("iceandfire", "chest/ice_dragon_roost");
 
     public WorldGenIceDragonRoosts(Codec<NoneFeatureConfiguration> configFactoryIn) {
         super(configFactoryIn);

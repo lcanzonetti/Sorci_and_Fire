@@ -38,7 +38,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -1300,13 +1299,13 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                         if (player.isShiftKeyDown()) {
                             if (this.hasHomePosition) {
                                 this.hasHomePosition = false;
-                                player.displayClientMessage(new TranslatableComponent("dragon.command.remove_home"), true);
+                                player.displayClientMessage(Component.translatable("dragon.command.remove_home"), true);
                                 return InteractionResult.SUCCESS;
                             } else {
                                 BlockPos pos = this.blockPosition();
                                 this.homePos = new HomePosition(pos, this.level);
                                 this.hasHomePosition = true;
-                                player.displayClientMessage(new TranslatableComponent("dragon.command.new_home", pos.getX(), pos.getY(), pos.getZ(), homePos.getDimension()), true);
+                                player.displayClientMessage(Component.translatable("dragon.command.new_home", pos.getX(), pos.getY(), pos.getZ(), homePos.getDimension()), true);
                                 return InteractionResult.SUCCESS;
                             }
                         } else {
@@ -1323,7 +1322,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                             } else if (this.getCommand() == 2) {
                                 commandText = "escort";
                             }
-                            player.displayClientMessage(new TranslatableComponent("dragon.command." + commandText), true);
+                            player.displayClientMessage(Component.translatable("dragon.command." + commandText), true);
                             return InteractionResult.SUCCESS;
                         }
                     }

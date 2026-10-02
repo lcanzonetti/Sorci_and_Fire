@@ -77,7 +77,7 @@ public class IceAndFire {
     private static int packetsRegistered = 0;
 
     static {
-        NetworkRegistry.ChannelBuilder channel = NetworkRegistry.ChannelBuilder.named(new ResourceLocation("iceandfire", "main_channel"));
+        NetworkRegistry.ChannelBuilder channel = NetworkRegistry.ChannelBuilder.named(ResourceLocation.fromNamespaceAndPath("iceandfire", "main_channel"));
         String version = PROTOCOL_VERSION;
         version.getClass();
         channel = channel.clientAcceptedVersions(version::equals);

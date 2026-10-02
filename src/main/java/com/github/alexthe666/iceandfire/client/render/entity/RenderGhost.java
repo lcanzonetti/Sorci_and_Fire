@@ -1,13 +1,14 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import com.mojang.math.Axis;
 import com.github.alexthe666.iceandfire.client.model.ModelGhost;
 import com.github.alexthe666.iceandfire.client.render.IafRenderType;
 import com.github.alexthe666.iceandfire.entity.EntityGhost;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -22,10 +23,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
 
-    public static final ResourceLocation TEXTURE_0 = new ResourceLocation("iceandfire:textures/models/ghost/ghost_white.png");
-    public static final ResourceLocation TEXTURE_1 = new ResourceLocation("iceandfire:textures/models/ghost/ghost_blue.png");
-    public static final ResourceLocation TEXTURE_2 = new ResourceLocation("iceandfire:textures/models/ghost/ghost_green.png");
-    public static final ResourceLocation TEXTURE_SHOPPING_LIST = new ResourceLocation("iceandfire:textures/models/ghost/haunted_shopping_list.png");
+    public static final ResourceLocation TEXTURE_0 = ResourceLocation.parse("iceandfire:textures/models/ghost/ghost_white.png");
+    public static final ResourceLocation TEXTURE_1 = ResourceLocation.parse("iceandfire:textures/models/ghost/ghost_blue.png");
+    public static final ResourceLocation TEXTURE_2 = ResourceLocation.parse("iceandfire:textures/models/ghost/ghost_green.png");
+    public static final ResourceLocation TEXTURE_SHOPPING_LIST = ResourceLocation.parse("iceandfire:textures/models/ghost/haunted_shopping_list.png");
 
     public RenderGhost(EntityRendererProvider.Context renderManager) {
         super(renderManager, new ModelGhost(0.0F), 0.55F);
@@ -119,7 +120,7 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
                 matrixStackIn.pushPose();
                 matrixStackIn.translate(0, 0.8F + Mth.sin((entityIn.tickCount + partialTicks) * 0.15F) * 0.1F, 0);
                 matrixStackIn.scale(0.6F, 0.6F, 0.6F);
-                matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+                matrixStackIn.mulPose(Axis.YP.rotationDegrees(180.0F));
                 {
                     matrixStackIn.pushPose();
                     PoseStack.Pose matrixstack$entry = matrixStackIn.last();
@@ -131,7 +132,7 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
                     this.drawVertex(matrix4f, matrix3f, ivertexbuilder, i, (int) (alphaForRender * 255), -1, 2, 0, 1F, 1, 0, 1, 0, 240);
                     matrixStackIn.popPose();
                 }
-                matrixStackIn.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+                matrixStackIn.mulPose(Axis.YP.rotationDegrees(180.0F));
                 {
                     matrixStackIn.pushPose();
                     PoseStack.Pose matrixstack$entry = matrixStackIn.last();

@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -56,7 +55,7 @@ public class ItemDragonArmor extends Item {
             case 3 -> "dragon.armor_tail";
             default -> "dragon.armor_head";
         };
-        tooltip.add(new TranslatableComponent(words).withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable(words).withStyle(ChatFormatting.GRAY));
     }
 
     public enum DragonArmorType {

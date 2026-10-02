@@ -15,7 +15,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.util.Mth;
 import net.minecraft.world.ContainerHelper;
@@ -386,7 +385,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
 
     @Override
     protected @NotNull Component getDefaultName() {
-        return new TranslatableComponent("container.dragonforge_fire" + DragonType.getNameFromInt(fireType));
+        return Component.translatable("container.dragonforge_fire" + DragonType.getNameFromInt(fireType));
     }
 
     public void transferPower(int i) {

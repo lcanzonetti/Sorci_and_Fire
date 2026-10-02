@@ -106,11 +106,11 @@ public class IafWorldRegistry {
     public static final RegistryObject<StructureFeature<JigsawConfiguration>> MAUSOLEUM = STRUCTURES.register("mausoleum", DreadMausoleumStructure::new);
     public static final RegistryObject<StructureFeature<JigsawConfiguration>> GRAVEYARD = STRUCTURES.register("graveyard", GraveyardStructure::new);
 
-    public static final TagKey<Biome> HAS_GORGON_TEMPLE = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(IceAndFire.MODID, "has_structure/gorgon_temple"));
-    public static final TagKey<Biome> HAS_MAUSOLEUM = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(IceAndFire.MODID, "has_structure/mausoleum"));
-    public static final TagKey<Biome> HAS_GRAVEYARD = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(IceAndFire.MODID, "has_structure/graveyard"));
+    public static final TagKey<Biome> HAS_GORGON_TEMPLE = TagKey.create(Registry.BIOME_REGISTRY, ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "has_structure/gorgon_temple"));
+    public static final TagKey<Biome> HAS_MAUSOLEUM = TagKey.create(Registry.BIOME_REGISTRY, ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "has_structure/mausoleum"));
+    public static final TagKey<Biome> HAS_GRAVEYARD = TagKey.create(Registry.BIOME_REGISTRY, ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "has_structure/graveyard"));
 
-    public static final ResourceLocation RL_IAF_STRUCTURE_SET = new ResourceLocation(IceAndFire.MODID, "iaf_structure_set");
+    public static final ResourceLocation RL_IAF_STRUCTURE_SET = ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "iaf_structure_set");
     public static final TagKey<StructureSet> IAF_STRUCTURE_SET = TagKey.create(Registry.STRUCTURE_SET_REGISTRY, RL_IAF_STRUCTURE_SET);
 
     public static StructurePieceType DUMMY_PIECE;
@@ -194,7 +194,7 @@ public class IafWorldRegistry {
     }
 
     private static <C extends FeatureConfiguration, F extends Feature<C>> Holder<PlacedFeature> register(String registerName, ConfiguredFeature<C, F> feature, PlacementModifier... modifiers) {
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(registerName), feature);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, ResourceLocation.parse(registerName), feature);
         return PlacementUtils.register(registerName, Holder.direct(feature), modifiers);
     }
 
@@ -275,10 +275,10 @@ public class IafWorldRegistry {
     }
 
     public static void registerStructureSet(Holder<ConfiguredStructureFeature<?, ?>> structure, String name, int spacing, int separation, int seed) {
-        BuiltinRegistries.register(BuiltinRegistries.STRUCTURE_SETS, new ResourceLocation(IceAndFire.MODID, name), new StructureSet(structure, new RandomSpreadStructurePlacement(spacing, separation, RandomSpreadType.LINEAR, seed)));
+        BuiltinRegistries.register(BuiltinRegistries.STRUCTURE_SETS, ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, name), new StructureSet(structure, new RandomSpreadStructurePlacement(spacing, separation, RandomSpreadType.LINEAR, seed)));
         //BuiltinRegistries.register(
         //        BuiltinRegistries.STRUCTURE_SETS,
-        //        ResourceKey.create(Registry.STRUCTURE_SET_REGISTRY, new ResourceLocation("%s/%s".formatted(IceAndFire.MODID, name))),
+        //        ResourceKey.create(Registry.STRUCTURE_SET_REGISTRY, ResourceLocation.parse("%s/%s".formatted(IceAndFire.MODID, name))),
         //        new StructureSet(structure,
         //                new RandomSpreadStructurePlacement(spacing, separation, RandomSpreadType.LINEAR, seed)));
     }
@@ -305,7 +305,7 @@ public class IafWorldRegistry {
                 ),
                 new RandomSpreadStructurePlacement(Math.max(average, 2), Math.max(average / 2, 1), RandomSpreadType.LINEAR, 342226450));
 
-        BuiltinRegistries.register(BuiltinRegistries.STRUCTURE_SETS, new ResourceLocation(IceAndFire.MODID, "structures"), structures);
+        BuiltinRegistries.register(BuiltinRegistries.STRUCTURE_SETS, ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "structures"), structures);
     }
 
 

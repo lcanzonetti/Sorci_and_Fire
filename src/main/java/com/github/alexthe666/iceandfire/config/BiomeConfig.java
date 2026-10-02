@@ -71,7 +71,7 @@ public class BiomeConfig {
                 if (obj instanceof Pair) {
                     String id = (String) ((Pair) obj).getLeft();
                     IafSpawnBiomeData data = (IafSpawnBiomeData) ((Pair) obj).getRight();
-                    biomeConfigValues.put(id, SpawnBiomeConfig.create(new ResourceLocation(id), data));
+                    biomeConfigValues.put(id, SpawnBiomeConfig.create(ResourceLocation.parse(id), data));
                 }
             }
         }catch (Exception e){

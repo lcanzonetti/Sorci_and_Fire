@@ -48,9 +48,9 @@ public class EntityLightningDragon extends EntityDragonBase {
     public static final float[] growth_stage_4 = new float[]{12.5F, 20F};
     public static final float[] growth_stage_5 = new float[]{20F, 30F};
 
-    public static final ResourceLocation FEMALE_LOOT = new ResourceLocation("iceandfire", "entities/dragon/lightning_dragon_female");
-    public static final ResourceLocation MALE_LOOT = new ResourceLocation("iceandfire", "entities/dragon/lightning_dragon_male");
-    public static final ResourceLocation SKELETON_LOOT = new ResourceLocation("iceandfire", "entities/dragon/lightning_dragon_skeleton");
+    public static final ResourceLocation FEMALE_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/dragon/lightning_dragon_female");
+    public static final ResourceLocation MALE_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/dragon/lightning_dragon_male");
+    public static final ResourceLocation SKELETON_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/dragon/lightning_dragon_skeleton");
     private static final EntityDataAccessor<Boolean> HAS_LIGHTNING_TARGET = SynchedEntityData.defineId(EntityLightningDragon.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Float> LIGHTNING_TARGET_X = SynchedEntityData.defineId(EntityLightningDragon.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> LIGHTNING_TARGET_Y = SynchedEntityData.defineId(EntityLightningDragon.class, EntityDataSerializers.FLOAT);

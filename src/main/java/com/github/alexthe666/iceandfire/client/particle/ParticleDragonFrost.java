@@ -1,10 +1,11 @@
 package com.github.alexthe666.iceandfire.client.particle;
 
+import com.mojang.math.Axis;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleRenderType;
@@ -18,8 +19,8 @@ import javax.annotation.Nullable;
 
 public class ParticleDragonFrost extends TextureSheetParticle {
 
-    private static final ResourceLocation SNOWFLAKE = new ResourceLocation("iceandfire:textures/particles/snowflake_0.png");
-    private static final ResourceLocation SNOWFLAKE_BIG = new ResourceLocation("iceandfire:textures/particles/snowflake_1.png");
+    private static final ResourceLocation SNOWFLAKE = ResourceLocation.parse("iceandfire:textures/particles/snowflake_0.png");
+    private static final ResourceLocation SNOWFLAKE_BIG = ResourceLocation.parse("iceandfire:textures/particles/snowflake_1.png");
     private final float dragonSize;
     private final double initialX;
     private final double initialY;
@@ -73,13 +74,13 @@ public class ParticleDragonFrost extends TextureSheetParticle {
         float f = (float) (Mth.lerp(partialTicks, this.xo, this.x) - Vector3d.x());
         float f1 = (float) (Mth.lerp(partialTicks, this.yo, this.y) - Vector3d.y());
         float f2 = (float) (Mth.lerp(partialTicks, this.zo, this.z) - Vector3d.z());
-        Quaternion quaternion;
+        Quaternionf quaternion;
         if (this.roll == 0.0F) {
             quaternion = renderInfo.rotation();
         } else {
-            quaternion = new Quaternion(renderInfo.rotation());
+            quaternion = new Quaternionf(renderInfo.rotation());
             float f3 = Mth.lerp(partialTicks, this.oRoll, this.roll);
-            quaternion.mul(Vector3f.ZP.rotation(f3));
+            quaternion.mul(Axis.ZP.rotation(f3));
         }
 
         Vector3f vector3f1 = new Vector3f(-1.0F, -1.0F, 0.0F);

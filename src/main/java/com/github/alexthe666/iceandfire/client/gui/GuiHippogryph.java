@@ -16,7 +16,7 @@ import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 public class GuiHippogryph extends AbstractContainerScreen<ContainerHippogryph> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/hippogryph.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.parse("iceandfire:textures/gui/hippogryph.png");
     private float mousePosx;
     private float mousePosY;
 

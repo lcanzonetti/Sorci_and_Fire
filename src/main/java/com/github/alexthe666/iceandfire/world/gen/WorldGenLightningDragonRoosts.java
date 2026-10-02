@@ -30,7 +30,7 @@ import java.util.Random;
 public class WorldGenLightningDragonRoosts extends Feature<NoneFeatureConfiguration> {
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
     private static boolean isMale;
-    public static ResourceLocation DRAGON_CHEST = new ResourceLocation("iceandfire", "chest/lightning_dragon_roost");
+    public static ResourceLocation DRAGON_CHEST = ResourceLocation.fromNamespaceAndPath("iceandfire", "chest/lightning_dragon_roost");
 
     public WorldGenLightningDragonRoosts(Codec<NoneFeatureConfiguration> configFactoryIn) {
         super(configFactoryIn);

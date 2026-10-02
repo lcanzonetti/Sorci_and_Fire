@@ -28,13 +28,13 @@ public class ArrayLayeredTexture extends AbstractTexture {
         Iterator<String> iterator = this.layeredTextureNames.iterator();
         String s = iterator.next();
 
-        try (Resource iresource = manager.getResource(new ResourceLocation(s))) {
-            NativeImage nativeimage = net.neoforged.neoforge.client.MinecraftForgeClient.getImageLayer(new ResourceLocation(s), manager);
+        try (Resource iresource = manager.getResource(ResourceLocation.parse(s))) {
+            NativeImage nativeimage = net.neoforged.neoforge.client.MinecraftForgeClient.getImageLayer(ResourceLocation.parse(s), manager);
             while (iterator.hasNext()) {
                 String s1 = iterator.next();
                 if (s1 != null) {
                     try (
-                        Resource iresource1 = manager.getResource(new ResourceLocation(s1));
+                        Resource iresource1 = manager.getResource(ResourceLocation.parse(s1));
                         NativeImage nativeimage1 = NativeImage.read(iresource1.getInputStream())
                     ) {
                         for (int i = 0; i < Math.min(nativeimage1.getHeight(), nativeimage.getHeight()); i++) {

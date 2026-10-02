@@ -7,8 +7,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -75,14 +73,14 @@ public class ItemBestiary extends Item {
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if (stack.getTag() != null) {
             if (IceAndFire.PROXY.shouldSeeBestiaryContents()) {
-                tooltip.add(new TranslatableComponent("bestiary.contains").withStyle(ChatFormatting.GRAY));
+                tooltip.add(Component.translatable("bestiary.contains").withStyle(ChatFormatting.GRAY));
                 final Set<EnumBestiaryPages> pages = EnumBestiaryPages
                     .containedPages(Ints.asList(stack.getTag().getIntArray("Pages")));
                 for (EnumBestiaryPages page : pages) {
-                    tooltip.add(new TextComponent(ChatFormatting.WHITE + "-").append(new TranslatableComponent("bestiary." + EnumBestiaryPages.values()[page.ordinal()].toString().toLowerCase())).withStyle(ChatFormatting.GRAY));
+                    tooltip.add(Component.literal(ChatFormatting.WHITE + "-").append(Component.translatable("bestiary." + EnumBestiaryPages.values()[page.ordinal()].toString().toLowerCase())).withStyle(ChatFormatting.GRAY));
                 }
             } else {
-                tooltip.add(new TranslatableComponent("bestiary.hold_shift").withStyle(ChatFormatting.GRAY));
+                tooltip.add(Component.translatable("bestiary.hold_shift").withStyle(ChatFormatting.GRAY));
             }
 
         }

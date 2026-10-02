@@ -7,7 +7,6 @@ import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -80,8 +79,8 @@ public class ItemSeaSerpentArmor extends ArmorItem {
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
 
-        tooltip.add(new TranslatableComponent("sea_serpent." + armor_type.resourceName).withStyle(armor_type.color));
-        tooltip.add(new TranslatableComponent("item.iceandfire.sea_serpent_armor.desc_0").withStyle(ChatFormatting.GRAY));
-        tooltip.add(new TranslatableComponent("item.iceandfire.sea_serpent_armor.desc_1").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("sea_serpent." + armor_type.resourceName).withStyle(armor_type.color));
+        tooltip.add(Component.translatable("item.iceandfire.sea_serpent_armor.desc_0").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("item.iceandfire.sea_serpent_armor.desc_1").withStyle(ChatFormatting.GRAY));
     }
 }

@@ -1,12 +1,13 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import com.mojang.math.Axis;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.props.ChainProperties;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class RenderChain {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/models/misc/chain_link.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.parse("iceandfire:textures/models/misc/chain_link.png");
 
     public static void render(LivingEntity entityLivingIn, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int lightIn) {
         List<Entity> chainTargets = ChainProperties.getChainedTo(entityLivingIn);
@@ -49,8 +50,8 @@ public class RenderChain {
         vector3d2 = vector3d2.normalize();
         float f5 = (float) Math.acos(vector3d2.y);
         float f6 = (float) Math.atan2(vector3d2.z, vector3d2.x);
-        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees((((float) Math.PI / 2F) - f6) * (180F / (float) Math.PI)));
-        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(f5 * (180F / (float) Math.PI)));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees((((float) Math.PI / 2F) - f6) * (180F / (float) Math.PI)));
+        matrixStackIn.mulPose(Axis.XP.rotationDegrees(f5 * (180F / (float) Math.PI)));
         float f7 = -1.0F;
         int j = 255;
         int k = 255;

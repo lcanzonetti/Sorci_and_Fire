@@ -20,7 +20,7 @@ public class SpawnBiomeConfig {
 
     private SpawnBiomeConfig(ResourceLocation fileName) {
         if (!fileName.getNamespace().endsWith(".json")) {
-            this.fileName = new ResourceLocation(fileName.getNamespace(), fileName.getPath() + ".json");
+            this.fileName = ResourceLocation.fromNamespaceAndPath(fileName.getNamespace(), fileName.getPath() + ".json");
         } else {
             this.fileName = fileName;
         }

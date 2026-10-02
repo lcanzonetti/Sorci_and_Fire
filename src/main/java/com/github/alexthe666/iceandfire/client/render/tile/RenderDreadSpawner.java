@@ -1,8 +1,9 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
+import com.mojang.math.Axis;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDreadSpawner;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import org.joml.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -32,9 +33,9 @@ public class RenderDreadSpawner<T extends TileEntityDreadSpawner> implements Blo
             }
 
             matrixStackIn.translate(0.0D, 0.4F, 0.0D);
-            matrixStackIn.mulPose(Vector3f.YP.rotationDegrees((float) Mth.lerp(partialTicks, abstractspawner.getoSpin(), abstractspawner.getSpin()) * 10.0F));
+            matrixStackIn.mulPose(Axis.YP.rotationDegrees((float) Mth.lerp(partialTicks, abstractspawner.getoSpin(), abstractspawner.getSpin()) * 10.0F));
             matrixStackIn.translate(0.0D, -0.2F, 0.0D);
-            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(-30.0F));
+            matrixStackIn.mulPose(Axis.XP.rotationDegrees(-30.0F));
             matrixStackIn.scale(f, f, f);
             Minecraft.getInstance().getEntityRenderDispatcher().render(entity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, matrixStackIn, bufferIn, combinedLightIn);
         }

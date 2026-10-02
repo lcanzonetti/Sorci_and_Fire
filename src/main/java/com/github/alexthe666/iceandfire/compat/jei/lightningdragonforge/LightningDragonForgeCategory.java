@@ -9,7 +9,6 @@ import mezz.jei.api.gui.ingredient.IGuiItemStackGroup;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +37,7 @@ public class LightningDragonForgeCategory implements IRecipeCategory<DragonForge
 
     @Override
     public @NotNull Component getTitle() {
-        return new TranslatableComponent("iceandfire.lightning_dragon_forge");
+        return Component.translatable("iceandfire.lightning_dragon_forge");
     }
 
     @Override

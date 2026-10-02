@@ -18,7 +18,7 @@ import java.util.Random;
 
 public class VillageHouseProcessor extends StructureProcessor {
 
-    public static final ResourceLocation LOOT = new ResourceLocation("iceandfire", "chest/village_scribe");
+    public static final ResourceLocation LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "chest/village_scribe");
     public static final VillageHouseProcessor INSTANCE = new VillageHouseProcessor();
     public static final Codec<VillageHouseProcessor> CODEC = Codec.unit(() -> INSTANCE);
 

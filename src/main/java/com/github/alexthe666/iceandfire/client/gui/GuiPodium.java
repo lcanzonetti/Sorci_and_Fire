@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class GuiPodium extends AbstractContainerScreen<ContainerPodium> {
 
-    public static final ResourceLocation PODUIM_TEXTURE = new ResourceLocation("iceandfire:textures/gui/podium.png");
+    public static final ResourceLocation PODUIM_TEXTURE = ResourceLocation.parse("iceandfire:textures/gui/podium.png");
 
     public GuiPodium(ContainerPodium container, Inventory inv, Component name) {
         super(container, inv, name);

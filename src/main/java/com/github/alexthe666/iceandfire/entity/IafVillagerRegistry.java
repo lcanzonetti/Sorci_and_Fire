@@ -48,7 +48,7 @@ public class IafVillagerRegistry {
     public static final RegistryObject<VillagerProfession> SCRIBE = PROFESSIONS.register("scribe", ()-> new VillagerProfession("scribe", SCRIBE_POI.get(), ImmutableSet.of(), ImmutableSet.of(), SoundEvents.VILLAGER_WORK_LIBRARIAN));
 
     private static final String[] VILLAGE_TYPES = new String[]{"plains", "desert", "snowy", "savanna", "taiga"};
-    private static final Holder<StructureProcessorList> HOUSE_PROCESSOR = BuiltinRegistries.register(BuiltinRegistries.PROCESSOR_LIST, new ResourceLocation("iceandfire:village_house_processor"), genVillageHouseProcessor());
+    private static final Holder<StructureProcessorList> HOUSE_PROCESSOR = BuiltinRegistries.register(BuiltinRegistries.PROCESSOR_LIST, ResourceLocation.parse("iceandfire:village_house_processor"), genVillageHouseProcessor());
 
     private static StructureProcessorList genVillageHouseProcessor() {
         RuleProcessor mossify = new RuleProcessor(ImmutableList.of(new ProcessorRule(new RandomBlockMatchTest(Blocks.COBBLESTONE, 0.1F), AlwaysTrueTest.INSTANCE, Blocks.MOSSY_COBBLESTONE.defaultBlockState())));
@@ -64,7 +64,7 @@ public class IafVillagerRegistry {
             TaigaVillagePools.bootstrap();
 
             for (String type : VILLAGE_TYPES) {
-                addStructureToPool(new ResourceLocation("village/" + type + "/houses"), new ResourceLocation("iceandfire", "village/" + type + "_scriber_1"), IafConfig.villagerHouseWeight);
+                addStructureToPool(ResourceLocation.parse("village/" + type + "/houses"), ResourceLocation.fromNamespaceAndPath("iceandfire", "village/" + type + "_scriber_1"), IafConfig.villagerHouseWeight);
             }
         }
 

@@ -61,12 +61,12 @@ import javax.annotation.Nullable;
 
 public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICustomCollisions, IBlacklistedFromStatues, IAnimatedEntity, IVillagerFear, IAnimalFear, IGroundMount, IHasCustomizableAttributes, ICustomMoveController {
 
-    public static final ResourceLocation TAN_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_tan");
-    public static final ResourceLocation WHITE_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_white");
-    public static final ResourceLocation RED_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_red");
-    public static final ResourceLocation TAN_GIANT_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_tan_giant");
-    public static final ResourceLocation WHITE_GIANT_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_white_giant");
-    public static final ResourceLocation RED_GIANT_LOOT = new ResourceLocation("iceandfire", "entities/deathworm_red_giant");
+    public static final ResourceLocation TAN_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_tan");
+    public static final ResourceLocation WHITE_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_white");
+    public static final ResourceLocation RED_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_red");
+    public static final ResourceLocation TAN_GIANT_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_tan_giant");
+    public static final ResourceLocation WHITE_GIANT_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_white_giant");
+    public static final ResourceLocation RED_GIANT_LOOT = ResourceLocation.fromNamespaceAndPath("iceandfire", "entities/deathworm_red_giant");
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(EntityDeathWorm.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> SCALE = SynchedEntityData.defineId(EntityDeathWorm.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Integer> JUMP_TICKS = SynchedEntityData.defineId(EntityDeathWorm.class, EntityDataSerializers.INT);

@@ -1,11 +1,12 @@
 package com.github.alexthe666.iceandfire.client.particle;
 
+import com.mojang.math.Axis;
 import com.github.alexthe666.iceandfire.entity.EntityCockatrice;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -16,7 +17,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class CockatriceBeamRender {
 
-    public static final RenderType TEXTURE_BEAM = RenderType.entityCutoutNoCull(new ResourceLocation("iceandfire:textures/models/cockatrice/beam.png"));
+    public static final RenderType TEXTURE_BEAM = RenderType.entityCutoutNoCull(ResourceLocation.parse("iceandfire:textures/models/cockatrice/beam.png"));
 
     private static void vertex(VertexConsumer p_229108_0_, Matrix4f p_229108_1_, Matrix3f p_229108_2_, float p_229108_3_, float p_229108_4_, float p_229108_5_, int p_229108_6_, int p_229108_7_, int p_229108_8_, float p_229108_9_, float p_229108_10_) {
         p_229108_0_.vertex(p_229108_1_, p_229108_3_, p_229108_4_, p_229108_5_).color(p_229108_6_, p_229108_7_, p_229108_8_, 255).uv(p_229108_9_, p_229108_10_).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(p_229108_2_, 0.0F, 1.0F, 0.0F).endVertex();
@@ -39,8 +40,8 @@ public class CockatriceBeamRender {
         Vector3d2 = Vector3d2.normalize();
         float f5 = (float) Math.acos(Vector3d2.y);
         float f6 = (float) Math.atan2(Vector3d2.z, Vector3d2.x);
-        matrixStackIn.mulPose(Vector3f.YP.rotationDegrees((((float) Math.PI / 2F) - f6) * (180F / (float) Math.PI)));
-        matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(f5 * (180F / (float) Math.PI)));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees((((float) Math.PI / 2F) - f6) * (180F / (float) Math.PI)));
+        matrixStackIn.mulPose(Axis.XP.rotationDegrees(f5 * (180F / (float) Math.PI)));
         int i = 1;
         float f7 = f1 * 0.05F * -1.5F;
         float f8 = f * f;

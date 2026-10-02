@@ -14,7 +14,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -22,8 +22,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class GuiMyrmexStaff extends Screen {
-    private static final ResourceLocation JUNGLE_TEXTURE = new ResourceLocation("iceandfire:textures/gui/myrmex_staff_jungle.png");
-    private static final ResourceLocation DESERT_TEXTURE = new ResourceLocation("iceandfire:textures/gui/myrmex_staff_desert.png");
+    private static final ResourceLocation JUNGLE_TEXTURE = ResourceLocation.parse("iceandfire:textures/gui/myrmex_staff_jungle.png");
+    private static final ResourceLocation DESERT_TEXTURE = ResourceLocation.parse("iceandfire:textures/gui/myrmex_staff_desert.png");
     private static final WorldGenMyrmexHive.RoomType[] ROOMS = {WorldGenMyrmexHive.RoomType.FOOD, WorldGenMyrmexHive.RoomType.NURSERY, WorldGenMyrmexHive.RoomType.EMPTY};
     private static final int ROOMS_PER_PAGE = 5;
     private final List<Room> allRoomPos = Lists.newArrayList();
@@ -36,7 +36,7 @@ public class GuiMyrmexStaff extends Screen {
     private int hiveCount;
 
     public GuiMyrmexStaff(ItemStack staff) {
-        super(new TranslatableComponent("myrmex_staff_screen"));
+        super(Component.translatable("myrmex_staff_screen"));
         this.jungle = staff.getItem() == IafItemRegistry.MYRMEX_JUNGLE_STAFF.get();
     }
 
@@ -53,7 +53,7 @@ public class GuiMyrmexStaff extends Screen {
             return;
         }
         populateRoomMap();
-        this.addWidget(new Button(i + 124, j + 15, 120, 20, ClientProxy.getReferedClientHive().reproduces ? new TranslatableComponent("myrmex.message.disablebreeding") : new TranslatableComponent("myrmex.message.enablebreeding"), (p_214132_1_) -> {
+        this.addWidget(new Button(i + 124, j + 15, 120, 20, ClientProxy.getReferedClientHive().reproduces ? Component.translatable("myrmex.message.disablebreeding") : Component.translatable("myrmex.message.enablebreeding"), (p_214132_1_) -> {
             boolean opposite = !ClientProxy.getReferedClientHive().reproduces;
             ClientProxy.getReferedClientHive().reproduces = opposite;
         }));
@@ -74,7 +74,7 @@ public class GuiMyrmexStaff extends Screen {
             int yIndex = rooms % ROOMS_PER_PAGE;
             BlockPos pos = allRoomPos.get(rooms).pos;
             //IndexPageButton button = new IndexPageButton(2 + i, centerX + 15 + (xIndex * 200), centerY + 10 + (yIndex * 20) - (xIndex == 1 ? 20 : 0), StatCollector.translateToLocal("bestiary." + EnumBestiaryPages.values()[allPageTypes.get(i).ordinal()].toString().toLowerCase()));
-            MyrmexDeleteButton button = new MyrmexDeleteButton(i + x_translate, j + y_translate + (yIndex) * 22, pos, new TranslatableComponent("myrmex.message.delete"), (p_214132_1_) -> {
+            MyrmexDeleteButton button = new MyrmexDeleteButton(i + x_translate, j + y_translate + (yIndex) * 22, pos, Component.translatable("myrmex.message.delete"), (p_214132_1_) -> {
                 if (ticksSinceDeleted <= 0) {
                     ClientProxy.getReferedClientHive().removeRoom(pos);
                     ticksSinceDeleted = 5;

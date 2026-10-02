@@ -11,7 +11,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.WorldlyContainer;
@@ -198,7 +197,7 @@ public class TileEntityPodium extends BaseContainerBlockEntity implements Worldl
 
     @Override
     protected @NotNull Component getDefaultName() {
-        return new TranslatableComponent("block.iceandfire.podium");
+        return Component.translatable("block.iceandfire.podium");
     }
 
     @Override

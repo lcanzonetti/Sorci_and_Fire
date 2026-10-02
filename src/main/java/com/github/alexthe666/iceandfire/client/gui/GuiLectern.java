@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.gui;
 
+import com.mojang.math.Axis;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
@@ -11,8 +12,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector3f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -23,7 +24,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
@@ -35,8 +35,8 @@ import java.util.List;
 import java.util.Random;
 
 public class GuiLectern extends AbstractContainerScreen<ContainerLectern> {
-    private static final ResourceLocation ENCHANTMENT_TABLE_GUI_TEXTURE = new ResourceLocation("iceandfire:textures/gui/lectern.png");
-    private static final ResourceLocation ENCHANTMENT_TABLE_BOOK_TEXTURE = new ResourceLocation("iceandfire:textures/models/lectern_book.png");
+    private static final ResourceLocation ENCHANTMENT_TABLE_GUI_TEXTURE = ResourceLocation.parse("iceandfire:textures/gui/lectern.png");
+    private static final ResourceLocation ENCHANTMENT_TABLE_BOOK_TEXTURE = ResourceLocation.parse("iceandfire:textures/models/lectern_book.png");
     private static BookModel bookModel;
     private final Random random = new Random();
     private final Component nameable;
@@ -115,13 +115,13 @@ public class GuiLectern extends AbstractContainerScreen<ContainerLectern> {
         matrixStack.translate(0.0D, 3.3F, 1984.0D);
         float f = 5.0F;
         matrixStack.scale(5.0F, 5.0F, 5.0F);
-        matrixStack.mulPose(Vector3f.ZP.rotationDegrees(180.0F));
-        matrixStack.mulPose(Vector3f.XP.rotationDegrees(20.0F));
+        matrixStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+        matrixStack.mulPose(Axis.XP.rotationDegrees(20.0F));
         float f1 = Mth.lerp(partialTicks, this.oOpen, this.open);
         matrixStack.translate(((1.0F - f1) * 0.2F), ((1.0F - f1) * 0.1F), ((1.0F - f1) * 0.25F));
         float f2 = -(1.0F - f1) * 90.0F - 90.0F;
-        matrixStack.mulPose(Vector3f.YP.rotationDegrees(f2));
-        matrixStack.mulPose(Vector3f.XP.rotationDegrees(180.0F));
+        matrixStack.mulPose(Axis.YP.rotationDegrees(f2));
+        matrixStack.mulPose(Axis.XP.rotationDegrees(180.0F));
         float f3 = Mth.lerp(partialTicks, this.oFlip, this.flip) + 0.25F;
         float f4 = Mth.lerp(partialTicks, this.oFlip, this.flip) + 0.75F;
         f3 = (f3 - (float) Mth.fastFloor(f3)) * 1.6F - 0.3F;
@@ -225,13 +225,13 @@ public class GuiLectern extends AbstractContainerScreen<ContainerLectern> {
                 List<FormattedCharSequence> list = Lists.newArrayList();
 
                 if (enchantment == null) {
-                    list.add(new TextComponent(ChatFormatting.RED + I18n.get("container.lectern.no_bestiary")).getVisualOrderText());
+                    list.add(Component.literal(ChatFormatting.RED + I18n.get("container.lectern.no_bestiary")).getVisualOrderText());
                 } else if (!flag) {
-                    list.add(new TextComponent("" + ChatFormatting.WHITE + ChatFormatting.ITALIC + I18n.get(enchantment == null ? "" : "bestiary." + enchantment.name().toLowerCase())).getVisualOrderText());
+                    list.add(Component.literal("" + ChatFormatting.WHITE + ChatFormatting.ITALIC + I18n.get(enchantment == null ? "" : "bestiary." + enchantment.name().toLowerCase())).getVisualOrderText());
                     ChatFormatting textformatting = i >= i1 ? ChatFormatting.GRAY : ChatFormatting.RED;
-                    list.add(new TextComponent(textformatting + "" + I18n.get("container.lectern.costs")).getVisualOrderText());
+                    list.add(Component.literal(textformatting + "" + I18n.get("container.lectern.costs")).getVisualOrderText());
                     String s = I18n.get("container.lectern.manuscript.many", i1);
-                    list.add(new TextComponent(textformatting + "" + s).getVisualOrderText());
+                    list.add(Component.literal(textformatting + "" + s).getVisualOrderText());
                 }
 
                 this.renderTooltip(matrixStack, list, mouseX, mouseY);

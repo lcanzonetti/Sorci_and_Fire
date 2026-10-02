@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import com.mojang.math.Axis;
 import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.ICustomStatueModel;
@@ -12,8 +13,8 @@ import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PigModel;
@@ -36,7 +37,7 @@ import java.util.Map;
 
 public class RenderStoneStatue extends EntityRenderer<EntityStoneStatue> {
 
-    protected static final ResourceLocation[] DESTROY_STAGES = new ResourceLocation[]{new ResourceLocation("textures/block/destroy_stage_0.png"), new ResourceLocation("textures/block/destroy_stage_1.png"), new ResourceLocation("textures/block/destroy_stage_2.png"), new ResourceLocation("textures/block/destroy_stage_3.png"), new ResourceLocation("textures/block/destroy_stage_4.png"), new ResourceLocation("textures/block/destroy_stage_5.png"), new ResourceLocation("textures/block/destroy_stage_6.png"), new ResourceLocation("textures/block/destroy_stage_7.png"), new ResourceLocation("textures/block/destroy_stage_8.png"), new ResourceLocation("textures/block/destroy_stage_9.png")};
+    protected static final ResourceLocation[] DESTROY_STAGES = new ResourceLocation[]{ResourceLocation.parse("textures/block/destroy_stage_0.png"), ResourceLocation.parse("textures/block/destroy_stage_1.png"), ResourceLocation.parse("textures/block/destroy_stage_2.png"), ResourceLocation.parse("textures/block/destroy_stage_3.png"), ResourceLocation.parse("textures/block/destroy_stage_4.png"), ResourceLocation.parse("textures/block/destroy_stage_5.png"), ResourceLocation.parse("textures/block/destroy_stage_6.png"), ResourceLocation.parse("textures/block/destroy_stage_7.png"), ResourceLocation.parse("textures/block/destroy_stage_8.png"), ResourceLocation.parse("textures/block/destroy_stage_9.png")};
     private final Map<String, EntityModel> modelMap = new HashMap();
     private final Map<String, Entity> hollowEntityMap = new HashMap();
     private final EntityRendererProvider.Context context;
@@ -111,8 +112,8 @@ public class RenderStoneStatue extends EntityRenderer<EntityStoneStatue> {
         }
         preRenderCallback(entityIn, matrixStackIn, partialTicks);
         matrixStackIn.translate(0, 1.5F, 0);
-        matrixStackIn.mulPose(new Quaternion(Vector3f.XP, 180, true));
-        matrixStackIn.mulPose(new Quaternion(Vector3f.YP, yaw, true));
+        matrixStackIn.mulPose(Axis.XP.rotationDegrees(180));
+        matrixStackIn.mulPose(Axis.YP.rotationDegrees(yaw));
         if (model instanceof ICustomStatueModel && fakeEntity != null) {
             ((ICustomStatueModel) model).renderStatue(matrixStackIn, ivertexbuilder, packedLightIn, fakeEntity);
             if (model instanceof ModelHydraBody && fakeEntity instanceof EntityHydra) {
@@ -132,8 +133,8 @@ public class RenderStoneStatue extends EntityRenderer<EntityStoneStatue> {
             matrixStackIn.pushPose();
             preRenderCallback(entityIn, matrixStackIn, partialTicks);
             matrixStackIn.translate(0, 1.5F, 0);
-            matrixStackIn.mulPose(new Quaternion(Vector3f.XP, 180, true));
-            matrixStackIn.mulPose(new Quaternion(Vector3f.YP, yaw, true));
+            matrixStackIn.mulPose(Axis.XP.rotationDegrees(180));
+            matrixStackIn.mulPose(Axis.YP.rotationDegrees(yaw));
             if (model instanceof ICustomStatueModel) {
                 ((ICustomStatueModel) model).renderStatue(matrixStackIn, ivertexbuilder2, packedLightIn, fakeEntity);
             } else {

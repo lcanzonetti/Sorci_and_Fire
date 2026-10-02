@@ -20,7 +20,7 @@ import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.world.item.Item;
@@ -38,10 +38,10 @@ import java.util.*;
 public class GuiBestiary extends Screen {
     protected static final int X = 390;
     protected static final int Y = 245;
-    private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/bestiary/bestiary.png");
-    private static final ResourceLocation DRAWINGS_0 = new ResourceLocation("iceandfire:textures/gui/bestiary/drawings_0.png");
-    private static final ResourceLocation DRAWINGS_1 = new ResourceLocation("iceandfire:textures/gui/bestiary/drawings_1.png");
-    private static final ResourceLocation BOOK_WIDGET_TEXTURE = new ResourceLocation("citadel:textures/gui/book/widgets.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.parse("iceandfire:textures/gui/bestiary/bestiary.png");
+    private static final ResourceLocation DRAWINGS_0 = ResourceLocation.parse("iceandfire:textures/gui/bestiary/drawings_0.png");
+    private static final ResourceLocation DRAWINGS_1 = ResourceLocation.parse("iceandfire:textures/gui/bestiary/drawings_1.png");
+    private static final ResourceLocation BOOK_WIDGET_TEXTURE = ResourceLocation.parse("citadel:textures/gui/book/widgets.png");
     private static final Map<String, ResourceLocation> PICTURE_LOCATION_CACHE = Maps.newHashMap();
     public List<EnumBestiaryPages> allPageTypes = new ArrayList<>();
     public EnumBestiaryPages pageType;
@@ -57,7 +57,7 @@ public class GuiBestiary extends Screen {
     protected Font font = getFont();
 
     public GuiBestiary(ItemStack book) {
-        super(new TranslatableComponent("bestiary_gui"));
+        super(Component.translatable("bestiary_gui"));
         this.book = book;
         if (!book.isEmpty() && book.getItem() != null && book.getItem() == IafItemRegistry.BESTIARY.get()) {
             if (book.getTag() != null) {
@@ -81,7 +81,7 @@ public class GuiBestiary extends Screen {
     }
 
     private static Item getItemByRegistryName(String registryName) {
-        return ForgeRegistries.ITEMS.getValue(new ResourceLocation(registryName));
+        return ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(registryName));
     }
 
     @Override
@@ -126,7 +126,7 @@ public class GuiBestiary extends Screen {
                 int id = 2 + i;
                 IndexPageButton button = new IndexPageButton(centerX + 15 + (xIndex * 200),
                     centerY + 10 + (yIndex * 20) - (xIndex == 1 ? 20 : 0),
-                    new TranslatableComponent("bestiary."
+                    Component.translatable("bestiary."
                         + EnumBestiaryPages.values()[allPageTypes.get(i).ordinal()].toString().toLowerCase()),
                     (p_214132_1_) -> {
                         if (this.indexButtons.get(id - 2) != null && allPageTypes.get(id - 2) != null) {
@@ -787,8 +787,8 @@ public class GuiBestiary extends Screen {
     public void imageFromTxt(PoseStack ms) {
         String fileName = this.pageType.toString().toLowerCase(Locale.ROOT) + "_" + this.bookPages + ".txt";
         String languageName = Minecraft.getInstance().options.languageCode.toLowerCase(Locale.ROOT);
-        ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + languageName + "_0/" + fileName);
-        ResourceLocation backupLoc = new ResourceLocation("iceandfire:lang/bestiary/en_us_0/" + fileName);
+        ResourceLocation fileLoc = ResourceLocation.parse("iceandfire:lang/bestiary/" + languageName + "_0/" + fileName);
+        ResourceLocation backupLoc = ResourceLocation.parse("iceandfire:lang/bestiary/en_us_0/" + fileName);
         Resource resource = null;
 
         try {
@@ -812,7 +812,7 @@ public class GuiBestiary extends Screen {
                         String texture = "iceandfire:textures/gui/bestiary/" + split[0];
                         ResourceLocation resourcelocation = PICTURE_LOCATION_CACHE.get(texture);
                         if (resourcelocation == null) {
-                            resourcelocation = new ResourceLocation(texture);
+                            resourcelocation = ResourceLocation.parse(texture);
                             PICTURE_LOCATION_CACHE.put(texture, resourcelocation);
                         }
                         ms.pushPose();
@@ -900,8 +900,8 @@ public class GuiBestiary extends Screen {
     public void writeFromTxt(PoseStack ms) {
         String fileName = this.pageType.toString().toLowerCase(Locale.ROOT) + "_" + this.bookPages + ".txt";
         String languageName = Minecraft.getInstance().options.languageCode.toLowerCase(Locale.ROOT);
-        ResourceLocation fileLoc = new ResourceLocation("iceandfire:lang/bestiary/" + languageName + "_0/" + fileName);
-        ResourceLocation backupLoc = new ResourceLocation("iceandfire:lang/bestiary/en_us_0/" + fileName);
+        ResourceLocation fileLoc = ResourceLocation.parse("iceandfire:lang/bestiary/" + languageName + "_0/" + fileName);
+        ResourceLocation backupLoc = ResourceLocation.parse("iceandfire:lang/bestiary/en_us_0/" + fileName);
         Resource resource = null;
 
         try {

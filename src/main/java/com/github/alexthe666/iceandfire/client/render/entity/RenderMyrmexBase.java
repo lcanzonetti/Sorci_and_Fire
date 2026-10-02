@@ -1,12 +1,13 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import com.mojang.math.Axis;
 import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.iceandfire.client.model.ModelMyrmexPupa;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerMyrmexItem;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -50,7 +51,7 @@ public class RenderMyrmexBase extends MobRenderer<EntityMyrmexBase, AdvancedEnti
         }
         matrixStackIn.scale(scale, scale, scale);
         if (myrmex.isPassenger() && myrmex.getGrowthStage() < 2) {
-            matrixStackIn.mulPose(new Quaternion(Vector3f.YP, 90, true));
+            matrixStackIn.mulPose(Axis.YP.rotationDegrees(90));
         }
     }
 

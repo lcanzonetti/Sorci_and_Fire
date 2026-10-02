@@ -15,7 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -464,13 +464,13 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
                 if (player.isShiftKeyDown()) {
                     if (this.hasHomePosition) {
                         this.hasHomePosition = false;
-                        player.displayClientMessage(new TranslatableComponent("cockatrice.command.remove_home"), true);
+                        player.displayClientMessage(Component.translatable("cockatrice.command.remove_home"), true);
                         return InteractionResult.SUCCESS;
                     } else {
                         BlockPos pos = this.blockPosition();
                         this.homePos = new HomePosition(pos, this.level);
                         this.hasHomePosition = true;
-                        player.displayClientMessage(new TranslatableComponent("cockatrice.command.new_home", pos.getX(), pos.getY(), pos.getZ(), homePos.getDimension()), true);
+                        player.displayClientMessage(Component.translatable("cockatrice.command.new_home", pos.getX(), pos.getY(), pos.getZ(), homePos.getDimension()), true);
                         return InteractionResult.SUCCESS;
                     }
                 } else {
@@ -478,7 +478,7 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
                     if (this.getCommand() > 3) {
                         this.setCommand(0);
                     }
-                    player.displayClientMessage(new TranslatableComponent("cockatrice.command." + this.getCommand()), true);
+                    player.displayClientMessage(Component.translatable("cockatrice.command." + this.getCommand()), true);
                     this.playSound(SoundEvents.ZOMBIE_INFECT, 1, 1);
                     return InteractionResult.SUCCESS;
                 }

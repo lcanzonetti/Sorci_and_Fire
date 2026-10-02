@@ -1,8 +1,9 @@
 package com.github.alexthe666.iceandfire.event;
 
+import com.mojang.math.Axis;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -15,12 +16,12 @@ import net.neoforged.bus.api.SubscribeEvent;
 import java.util.UUID;
 
 public class PlayerRenderEvents {
-    public ResourceLocation redTex = new ResourceLocation("iceandfire", "textures/models/misc/cape_fire.png");
-    public ResourceLocation redElytraTex = new ResourceLocation("iceandfire", "textures/models/misc/elytra_fire.png");
-    public ResourceLocation blueTex = new ResourceLocation("iceandfire", "textures/models/misc/cape_ice.png");
-    public ResourceLocation blueElytraTex = new ResourceLocation("iceandfire", "textures/models/misc/elytra_ice.png");
-    public ResourceLocation betaTex = new ResourceLocation("iceandfire", "textures/models/misc/cape_beta.png");
-    public ResourceLocation betaElytraTex = new ResourceLocation("iceandfire", "textures/models/misc/elytra_beta.png");
+    public ResourceLocation redTex = ResourceLocation.fromNamespaceAndPath("iceandfire", "textures/models/misc/cape_fire.png");
+    public ResourceLocation redElytraTex = ResourceLocation.fromNamespaceAndPath("iceandfire", "textures/models/misc/elytra_fire.png");
+    public ResourceLocation blueTex = ResourceLocation.fromNamespaceAndPath("iceandfire", "textures/models/misc/cape_ice.png");
+    public ResourceLocation blueElytraTex = ResourceLocation.fromNamespaceAndPath("iceandfire", "textures/models/misc/elytra_ice.png");
+    public ResourceLocation betaTex = ResourceLocation.fromNamespaceAndPath("iceandfire", "textures/models/misc/cape_beta.png");
+    public ResourceLocation betaElytraTex = ResourceLocation.fromNamespaceAndPath("iceandfire", "textures/models/misc/elytra_beta.png");
 
     public UUID[] redcapes = new UUID[]{
             /* zeklo */UUID.fromString("59efccaf-902d-45da-928a-5a549b9fd5e0"),
@@ -62,7 +63,7 @@ public class PlayerRenderEvents {
             float f3 = Mth.sin(f2 / 10.0F) * 0.1F + 0.1F;
             event.getPoseStack().translate((float) 0, event.getEntityLiving().getBbHeight() * 1.25F, (float) 0);
             float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
-            event.getPoseStack().mulPose(new Quaternion(Vector3f.YP, f4, true));
+            event.getPoseStack().mulPose(Axis.YP.rotationDegrees(f4));
             event.getPoseStack().pushPose();
             Minecraft.getInstance().getItemRenderer().renderStatic(Minecraft.getInstance().player, new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM.get()), ItemTransforms.TransformType.GROUND, false, event.getPoseStack(), event.getMultiBufferSource(), event.getEntityLiving().level, event.getPackedLight(), OverlayTexture.NO_OVERLAY, 0);
             event.getPoseStack().popPose();

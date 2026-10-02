@@ -50,7 +50,7 @@ import java.util.Random;
 @Mod.EventBusSubscriber(modid = IceAndFire.MODID, value = Dist.CLIENT)
 public class ClientEvents {
 
-    private static final ResourceLocation SIREN_SHADER = new ResourceLocation("iceandfire:shaders/post/siren.json");
+    private static final ResourceLocation SIREN_SHADER = ResourceLocation.parse("iceandfire:shaders/post/siren.json");
 
     private final Random rand = new Random();
 

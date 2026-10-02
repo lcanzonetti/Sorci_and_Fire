@@ -268,7 +268,7 @@ public final class IafSoundRegistry {
     public static final SoundEvent GHOST_JUMPSCARE = createSoundEvent("ghost_jumpscare");
 
     private static SoundEvent createSoundEvent(final String soundName) {
-        final ResourceLocation soundID = new ResourceLocation(MODID, soundName);
+        final ResourceLocation soundID = ResourceLocation.fromNamespaceAndPath(MODID, soundName);
         return new SoundEvent(soundID).setRegistryName(soundID);
     }
 

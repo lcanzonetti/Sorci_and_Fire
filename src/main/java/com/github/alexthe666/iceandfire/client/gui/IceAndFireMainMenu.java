@@ -1,10 +1,11 @@
 package com.github.alexthe666.iceandfire.client.gui;
 
+import com.mojang.math.Axis;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Vector3f;
+import org.joml.Vector3f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
@@ -30,10 +31,10 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class IceAndFireMainMenu extends TitleScreen {
     public static final int LAYER_COUNT = 2;
-    public static final ResourceLocation splash = new ResourceLocation(IceAndFire.MODID, "splashes.txt");
-    private static final ResourceLocation MINECRAFT_TITLE_TEXTURES = new ResourceLocation("textures/gui/title/minecraft.png");
-    private static final ResourceLocation BESTIARY_TEXTURE = new ResourceLocation("iceandfire:textures/gui/main_menu/bestiary_menu.png");
-    private static final ResourceLocation TABLE_TEXTURE = new ResourceLocation("iceandfire:textures/gui/main_menu/table.png");
+    public static final ResourceLocation splash = ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "splashes.txt");
+    private static final ResourceLocation MINECRAFT_TITLE_TEXTURES = ResourceLocation.parse("textures/gui/title/minecraft.png");
+    private static final ResourceLocation BESTIARY_TEXTURE = ResourceLocation.parse("iceandfire:textures/gui/main_menu/bestiary_menu.png");
+    private static final ResourceLocation TABLE_TEXTURE = ResourceLocation.parse("iceandfire:textures/gui/main_menu/table.png");
     public static ResourceLocation[] pageFlipTextures;
     public static ResourceLocation[] drawingTextures = new ResourceLocation[22];
     private int layerTick;
@@ -45,14 +46,14 @@ public class IceAndFireMainMenu extends TitleScreen {
     private float globalAlpha = 1F;
 
     public IceAndFireMainMenu() {
-        pageFlipTextures = new ResourceLocation[]{new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_1.png"),
-            new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_2.png"),
-            new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_3.png"),
-            new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_4.png"),
-            new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_5.png"),
-            new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/page_6.png")};
+        pageFlipTextures = new ResourceLocation[]{ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "textures/gui/main_menu/page_1.png"),
+            ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "textures/gui/main_menu/page_2.png"),
+            ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "textures/gui/main_menu/page_3.png"),
+            ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "textures/gui/main_menu/page_4.png"),
+            ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "textures/gui/main_menu/page_5.png"),
+            ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "textures/gui/main_menu/page_6.png")};
         for (int i = 0; i < drawingTextures.length; i++) {
-            drawingTextures[i] = new ResourceLocation(IceAndFire.MODID, "textures/gui/main_menu/drawing_" + (i + 1) + ".png");
+            drawingTextures[i] = ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "textures/gui/main_menu/drawing_" + (i + 1) + ".png");
         }
         resetDrawnImages();
         final String branch = "1.17";
@@ -205,7 +206,7 @@ public class IceAndFireMainMenu extends TitleScreen {
         if (this.splashText != null) {
             ms.pushPose();
             ms.translate((this.width / 2 + 90), 70.0D, 0.0D);
-            ms.mulPose(Vector3f.ZP.rotationDegrees(-20.0F));
+            ms.mulPose(Axis.ZP.rotationDegrees(-20.0F));
             float f2 = 1.8F - Mth.abs(Mth.sin((float) (Util.getMillis() % 1000L) / 1000.0F * ((float) Math.PI * 2F)) * 0.1F);
             f2 = f2 * 100.0F / (float) (this.font.width(this.splashText) + 32);
             ms.scale(f2, f2, f2);

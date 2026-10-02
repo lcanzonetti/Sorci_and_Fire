@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import com.mojang.math.Axis;
 import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonArmor;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonBanner;
@@ -10,8 +11,8 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -49,7 +50,7 @@ public class RenderDragonBase extends MobRenderer<EntityDragonBase, AdvancedEnti
     protected void scale(EntityDragonBase entity, PoseStack matrixStackIn, float partialTickTime) {
         this.shadowRadius = entity.getRenderSize() / 3;
         float f7 = entity.prevDragonPitch + (entity.getDragonPitch() - entity.prevDragonPitch) * partialTickTime;
-        matrixStackIn.mulPose(new Quaternion(Vector3f.XP, f7, true));
+        matrixStackIn.mulPose(Axis.XP.rotationDegrees(f7));
         matrixStackIn.scale(shadowRadius, shadowRadius, shadowRadius);
     }
 
@@ -58,7 +59,7 @@ public class RenderDragonBase extends MobRenderer<EntityDragonBase, AdvancedEnti
         String baseTexture = entity.getVariantName(entity.getVariant()) + entity.getDragonStage() + entity.isModelDead() + entity.isMale() + entity.isSkeletal() + entity.isSleeping() + entity.isBlinking();
         ResourceLocation resourcelocation = LAYERED_TEXTURE_CACHE.get(baseTexture);
         if (resourcelocation == null) {
-            resourcelocation = new ResourceLocation("iceandfire:" + "dragon_texture_" + baseTexture);
+            resourcelocation = ResourceLocation.parse("iceandfire:" + "dragon_texture_" + baseTexture);
             List<String> tex = new ArrayList<String>();
             tex.add(EnumDragonTextures.getTextureFromDragon(entity).toString());
             if (entity.isMale() && !entity.isSkeletal()) {

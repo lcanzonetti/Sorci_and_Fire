@@ -15,7 +15,7 @@ import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -211,7 +211,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
                     BlockPos pos = this.blockPosition();
                     this.homePos = pos;
                     this.hasHomePosition = true;
-                    player.displayClientMessage(new TranslatableComponent("amphithere.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
+                    player.displayClientMessage(Component.translatable("amphithere.command.new_home", homePos.getX(), homePos.getY(), homePos.getZ()), true);
                     return InteractionResult.SUCCESS;
                 }
                 return InteractionResult.SUCCESS;
@@ -222,7 +222,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
                     if (this.getCommand() > 2) {
                         this.setCommand(0);
                     }
-                    player.displayClientMessage(new TranslatableComponent("amphithere.command." + this.getCommand()), true);
+                    player.displayClientMessage(Component.translatable("amphithere.command." + this.getCommand()), true);
                     this.playSound(SoundEvents.ZOMBIE_INFECT, 1, 1);
                     return InteractionResult.SUCCESS;
                 }

@@ -94,7 +94,7 @@ public class DataGenerators {
     }
 
     static void addBiomeTag(String location, Tag.Builder builder) {
-        resources.add(new ResourceLocation(IceAndFire.MODID, "tags/worldgen/biome/" + location), builder.serializeToJson());
+        resources.add(ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "tags/worldgen/biome/" + location), builder.serializeToJson());
     }
 
     public static class PackResources implements net.minecraft.server.packs.PackResources {

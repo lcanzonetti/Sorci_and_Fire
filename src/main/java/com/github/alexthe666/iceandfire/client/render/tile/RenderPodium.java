@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
+import com.mojang.math.Axis;
 import com.github.alexthe666.iceandfire.client.model.ModelDragonEgg;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderDragonEgg;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderMyrmexEgg;
@@ -9,8 +10,8 @@ import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
 import com.github.alexthe666.iceandfire.item.ItemMyrmexEgg;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -90,7 +91,7 @@ public class RenderPodium<T extends TileEntityPodium> implements BlockEntityRend
                 float f3 = Mth.sin(f2 / 10.0F) * 0.1F + 0.1F;
                 matrixStackIn.translate(0.5F, 1.55F + f3, 0.5F);
                 float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
-                matrixStackIn.mulPose(new Quaternion(Vector3f.YP, f4, true));
+                matrixStackIn.mulPose(Axis.YP.rotationDegrees(f4));
                 matrixStackIn.pushPose();
                 matrixStackIn.translate(0, 0.2F, 0);
                 matrixStackIn.scale(0.65F, 0.65F, 0.65F);

@@ -55,9 +55,9 @@ public class IafClientSetup {
     public static TabulaModel LIGHTNING_DRAGON_BASE_MODEL;
     private static ShaderInstance rendertypeDreadPortalShader;
     private static ShaderInstance rendertypeScalableTextureShader;
-    public static final ResourceLocation GHOST_CHEST_LOCATION = new ResourceLocation(IceAndFire.MODID, "models/ghost/ghost_chest");
-    public static final ResourceLocation GHOST_CHEST_LEFT_LOCATION = new ResourceLocation(IceAndFire.MODID, "models/ghost/ghost_chest_left");
-    public static final ResourceLocation GHOST_CHEST_RIGHT_LOCATION = new ResourceLocation(IceAndFire.MODID, "models/ghost/ghost_chest_right");
+    public static final ResourceLocation GHOST_CHEST_LOCATION = ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "models/ghost/ghost_chest");
+    public static final ResourceLocation GHOST_CHEST_LEFT_LOCATION = ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "models/ghost/ghost_chest_left");
+    public static final ResourceLocation GHOST_CHEST_RIGHT_LOCATION = ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "models/ghost/ghost_chest_right");
 
 
     public static void clientInit() {
@@ -143,10 +143,10 @@ public class IafClientSetup {
     @SubscribeEvent
     public static void setupShaders(RegisterShadersEvent event) throws IOException {
         ResourceManager manager = event.getResourceManager();
-        event.registerShader(new ShaderInstance(manager, new ResourceLocation(IceAndFire.MODID, "rendertype_dread_portal"), DefaultVertexFormat.POSITION_COLOR), (p_172782_) -> {
+        event.registerShader(new ShaderInstance(manager, ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "rendertype_dread_portal"), DefaultVertexFormat.POSITION_COLOR), (p_172782_) -> {
             rendertypeDreadPortalShader = p_172782_;
         });
-        event.registerShader(new ShaderInstance(manager, new ResourceLocation(IceAndFire.MODID, "rendertype_scalable_texture"), DefaultVertexFormat.NEW_ENTITY), (p_172782_) -> {
+        event.registerShader(new ShaderInstance(manager, ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "rendertype_scalable_texture"), DefaultVertexFormat.NEW_ENTITY), (p_172782_) -> {
             rendertypeScalableTextureShader = p_172782_;
         });
     }
@@ -223,7 +223,7 @@ public class IafClientSetup {
         ItemBlockRenderTypes.setRenderLayer(IafBlockRegistry.DREAD_SPAWNER.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(IafBlockRegistry.DREAD_TORCH_WALL.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(IafBlockRegistry.BURNT_TORCH_WALL.get(), RenderType.cutout());
-        ItemPropertyFunction pulling = ItemProperties.getProperty(Items.BOW, new ResourceLocation("pulling"));
+        ItemPropertyFunction pulling = ItemProperties.getProperty(Items.BOW, ResourceLocation.parse("pulling"));
         ItemPropertyFunction pull = (stack, worldIn, entity, p) -> {
             if (entity == null) {
                 return 0.0F;
@@ -233,21 +233,21 @@ public class IafClientSetup {
             }
         };
 
-            ItemProperties.register(IafItemRegistry.DRAGON_BOW.get().asItem(), new ResourceLocation("pulling"), pulling);
-            ItemProperties.register(IafItemRegistry.DRAGON_BOW.get().asItem(), new ResourceLocation("pull"), pull);
-            ItemProperties.register(IafItemRegistry.DRAGON_HORN.get(), new ResourceLocation("iceorfire"), (stack, level, entity, p) -> {
+            ItemProperties.register(IafItemRegistry.DRAGON_BOW.get().asItem(), ResourceLocation.parse("pulling"), pulling);
+            ItemProperties.register(IafItemRegistry.DRAGON_BOW.get().asItem(), ResourceLocation.parse("pull"), pull);
+            ItemProperties.register(IafItemRegistry.DRAGON_HORN.get(), ResourceLocation.parse("iceorfire"), (stack, level, entity, p) -> {
                 return ItemDragonHorn.getDragonType(stack) * 0.25F;
             });
-            ItemProperties.register(IafItemRegistry.SUMMONING_CRYSTAL_FIRE.get(), new ResourceLocation("has_dragon"), (stack, level, entity, p) -> {
+            ItemProperties.register(IafItemRegistry.SUMMONING_CRYSTAL_FIRE.get(), ResourceLocation.parse("has_dragon"), (stack, level, entity, p) -> {
                 return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
             });
-            ItemProperties.register(IafItemRegistry.SUMMONING_CRYSTAL_ICE.get(), new ResourceLocation("has_dragon"), (stack, level, entity, p) -> {
+            ItemProperties.register(IafItemRegistry.SUMMONING_CRYSTAL_ICE.get(), ResourceLocation.parse("has_dragon"), (stack, level, entity, p) -> {
                 return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
             });
-            ItemProperties.register(IafItemRegistry.SUMMONING_CRYSTAL_LIGHTNING.get(), new ResourceLocation("has_dragon"), (stack, level, entity, p) -> {
+            ItemProperties.register(IafItemRegistry.SUMMONING_CRYSTAL_LIGHTNING.get(), ResourceLocation.parse("has_dragon"), (stack, level, entity, p) -> {
                 return ItemSummoningCrystal.hasDragon(stack) ? 1.0F : 0.0F;
             });
-            ItemProperties.register(IafItemRegistry.TIDE_TRIDENT.get(), new ResourceLocation("throwing"), (stack, level, entity, p) -> {
+            ItemProperties.register(IafItemRegistry.TIDE_TRIDENT.get(), ResourceLocation.parse("throwing"), (stack, level, entity, p) -> {
                 return entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F;
             });
         });

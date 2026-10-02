@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -69,9 +68,9 @@ public class ItemMyrmexEgg extends Item {
                 caste = "queen";
         }
         if (eggOrdinal == 4) {
-            tooltip.add(new TranslatableComponent("myrmex.caste_" + caste + ".name").withStyle(ChatFormatting.LIGHT_PURPLE));
+            tooltip.add(Component.translatable("myrmex.caste_" + caste + ".name").withStyle(ChatFormatting.LIGHT_PURPLE));
         } else {
-            tooltip.add(new TranslatableComponent("myrmex.caste_" + caste + ".name").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("myrmex.caste_" + caste + ".name").withStyle(ChatFormatting.GRAY));
         }
     }
 

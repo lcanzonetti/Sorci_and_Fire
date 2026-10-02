@@ -18,8 +18,8 @@ import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConf
 import java.util.Random;
 
 public class WorldGenLightningDragonCave extends WorldGenDragonCave {
-    public static ResourceLocation LIGHTNING_DRAGON_CHEST = new ResourceLocation(IceAndFire.MODID, "chest/lightning_dragon_female_cave");
-    public static ResourceLocation LIGHTNING_DRAGON_CHEST_MALE = new ResourceLocation(IceAndFire.MODID, "chest/lightning_dragon_male_cave");
+    public static ResourceLocation LIGHTNING_DRAGON_CHEST = ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "chest/lightning_dragon_female_cave");
+    public static ResourceLocation LIGHTNING_DRAGON_CHEST_MALE = ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "chest/lightning_dragon_male_cave");
 
     public WorldGenLightningDragonCave(final Codec<NoneFeatureConfiguration> configuration) {
         super(configuration);

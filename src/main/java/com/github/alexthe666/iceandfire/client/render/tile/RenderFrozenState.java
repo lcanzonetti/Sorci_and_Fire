@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.client.render.IafRenderType;
 import com.github.alexthe666.iceandfire.entity.props.FrozenProperties;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
+import org.joml.Matrix4f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -13,10 +13,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 
 public class RenderFrozenState {
-    private static final ResourceLocation TEXTURE_0 = new ResourceLocation("textures/block/frosted_ice_0.png");
-    private static final ResourceLocation TEXTURE_1 = new ResourceLocation("textures/block/frosted_ice_1.png");
-    private static final ResourceLocation TEXTURE_2 = new ResourceLocation("textures/block/frosted_ice_2.png");
-    private static final ResourceLocation TEXTURE_3 = new ResourceLocation("textures/block/frosted_ice_3.png");
+    private static final ResourceLocation TEXTURE_0 = ResourceLocation.parse("textures/block/frosted_ice_0.png");
+    private static final ResourceLocation TEXTURE_1 = ResourceLocation.parse("textures/block/frosted_ice_1.png");
+    private static final ResourceLocation TEXTURE_2 = ResourceLocation.parse("textures/block/frosted_ice_2.png");
+    private static final ResourceLocation TEXTURE_3 = ResourceLocation.parse("textures/block/frosted_ice_3.png");
 
     public static void render(LivingEntity entity, PoseStack matrixStack, MultiBufferSource bufferIn, int light) {
         float sideExpand = -0.125F;
