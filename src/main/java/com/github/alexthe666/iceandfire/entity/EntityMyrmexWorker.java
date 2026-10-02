@@ -84,7 +84,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     }
 
     @Override
-    protected int getExperienceReward(Player player) {
+    protected int getBaseExperienceReward() {
         return 3;
     }
 
@@ -268,8 +268,8 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     }
 
     @Override
-    public void positionRider(@NotNull Entity passenger) {
-        super.positionRider(passenger);
+    protected void positionRider(@NotNull Entity passenger, @NotNull Entity.MoveFunction moveFunction) {
+        super.positionRider(passenger, moveFunction);
         if (this.hasPassenger(passenger)) {
             yBodyRot = getYRot();
             float radius = 1.05F;
@@ -304,8 +304,8 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
             Player owner = null;
             try {
-                if (itemEntity.getThrower() != null) {
-                    owner = this.level().getPlayerByUUID(itemEntity.getThrower());
+                if (itemEntity.getOwner() != null) {
+                    owner = this.level().getPlayerByUUID(itemEntity.getOwner());
                 }
             } catch (Exception e) {
                 IceAndFire.LOGGER.warn("Myrmex picked up resin that wasn't thrown!");

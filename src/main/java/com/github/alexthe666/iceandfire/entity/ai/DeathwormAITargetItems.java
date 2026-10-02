@@ -9,7 +9,6 @@ import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.scores.Team;
 
@@ -110,8 +109,8 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
             this.mob.playSound(SoundEvents.GENERIC_EAT, 1, 1);
             deathWorm.setAnimation(EntityDeathWorm.ANIMATION_BITE);
             Player thrower = null;
-            if (this.targetEntity.getThrower() != null)
-                thrower = this.targetEntity.level().getPlayerByUUID(this.targetEntity.getThrower());
+            if (this.targetEntity.getOwner() != null)
+                thrower = this.targetEntity.level().getPlayerByUUID(this.targetEntity.getOwner());
             deathWorm.setExplosive(true, thrower);
             stop();
         }

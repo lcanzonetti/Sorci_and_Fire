@@ -76,7 +76,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
     }
 
     @Override
-    protected int getExperienceReward(Player player) {
+    protected int getBaseExperienceReward() {
         return 8;
     }
 
@@ -251,8 +251,8 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
     }
 
     @Override
-    public void positionRider(@NotNull Entity passenger) {
-        super.positionRider(passenger);
+    protected void positionRider(@NotNull Entity passenger, @NotNull Entity.MoveFunction moveFunction) {
+        super.positionRider(passenger, moveFunction);
         if (this.hasPassenger(passenger)) {
             yBodyRot = getYRot();
             float radius = 1.25F;

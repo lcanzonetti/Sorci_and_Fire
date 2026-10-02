@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import net.minecraft.core.HolderLookup;
 import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
@@ -57,7 +58,7 @@ public class TileEntityJar extends BlockEntity {
     }
 
     @Override
-    public void saveAdditional(CompoundTag compound) {
+    protected void saveAdditional(@NotNull CompoundTag compound, @NotNull HolderLookup.Provider registries) {
         compound.putBoolean("HasPixie", hasPixie);
         compound.putInt("PixieType", pixieType);
         compound.putBoolean("HasProduced", hasProduced);
@@ -66,7 +67,7 @@ public class TileEntityJar extends BlockEntity {
             compound.putUUID("PixieOwnerUUID", pixieOwnerUUID);
         }
         compound.putInt("TicksExisted", ticksExisted);
-        ContainerHelper.saveAllItems(compound, this.pixieItems);
+        ContainerHelper.saveAllItems(compound, this.pixieItems, registries);
     }
 
     @Override
@@ -75,15 +76,15 @@ public class TileEntityJar extends BlockEntity {
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
-        load(packet.getTag());
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, @NotNull HolderLookup.Provider registries) {
+        loadAdditional(packet.getTag(), registries);
         if (!level.isClientSide) {
             IceAndFire.sendMSGToAll(new MessageUpdatePixieHouseModel(worldPosition.asLong(), packet.getTag().getInt("PixieType")));
         }
     }
 
     @Override
-    public void load(CompoundTag compound) {
+    protected void loadAdditional(@NotNull CompoundTag compound, @NotNull HolderLookup.Provider registries) {
         hasPixie = compound.getBoolean("HasPixie");
         pixieType = compound.getInt("PixieType");
         hasProduced = compound.getBoolean("HasProduced");
@@ -93,8 +94,8 @@ public class TileEntityJar extends BlockEntity {
             pixieOwnerUUID = compound.getUUID("PixieOwnerUUID");
         }
         this.pixieItems = NonNullList.withSize(1, ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(compound, pixieItems);
-        super.load(compound);
+        ContainerHelper.loadAllItems(compound, pixieItems, registries);
+        super.loadAdditional(compound, registries);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, TileEntityJar entityJar) {

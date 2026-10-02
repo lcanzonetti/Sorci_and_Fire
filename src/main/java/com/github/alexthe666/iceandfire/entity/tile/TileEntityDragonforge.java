@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import net.minecraft.core.HolderLookup;
 import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeBricks;
@@ -203,17 +204,17 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     }
 
     @Override
-    public void load(@NotNull CompoundTag compound) {
-        super.load(compound);
+    protected void loadAdditional(@NotNull CompoundTag compound, @NotNull HolderLookup.Provider registries) {
+        super.loadAdditional(compound, registries);
         this.forgeItemStacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(compound, this.forgeItemStacks);
+        ContainerHelper.loadAllItems(compound, this.forgeItemStacks, registries);
         this.cookTime = compound.getInt("CookTime");
     }
 
     @Override
-    public void saveAdditional(CompoundTag compound) {
+    protected void saveAdditional(@NotNull CompoundTag compound, @NotNull HolderLookup.Provider registries) {
         compound.putInt("CookTime", (short) this.cookTime);
-        ContainerHelper.saveAllItems(compound, this.forgeItemStacks);
+        ContainerHelper.saveAllItems(compound, this.forgeItemStacks, registries);
     }
 
     @Override
@@ -416,13 +417,13 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
-        load(packet.getTag());
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, @NotNull HolderLookup.Provider registries) {
+        loadAdditional(packet.getTag(), registries);
     }
 
     @Override
-    public @NotNull CompoundTag getUpdateTag() {
-        return this.saveWithFullMetadata();
+    public @NotNull CompoundTag getUpdateTag(@NotNull HolderLookup.Provider registries) {
+        return this.saveWithFullMetadata(registries);
     }
 
     public boolean assembled() {

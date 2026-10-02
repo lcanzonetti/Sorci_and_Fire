@@ -65,7 +65,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
     }
 
     @Override
-    protected int getExperienceReward(Player player) {
+    protected int getBaseExperienceReward() {
         return 5;
     }
 

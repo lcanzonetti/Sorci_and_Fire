@@ -38,7 +38,7 @@ public enum SurfaceType
             || block instanceof WallBlock
             || block instanceof FireBlock
             || block instanceof CampfireBlock
-            || block instanceof BambooBlock
+            || block instanceof BambooStalkBlock
             || block instanceof DoorBlock
             || block instanceof MagmaBlock) {
             return SurfaceType.NOT_PASSABLE;

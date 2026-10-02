@@ -320,7 +320,7 @@ public class EntityFireDragon extends EntityDragonBase {
                     }
                     this.setDeltaMovement(currentMotion.scale(0.7D));
 
-                    this.calculateEntityAnimation(this, false);
+                    this.calculateEntityAnimation(false);
                 } else {
                     this.setDeltaMovement(Vec3.ZERO);
                 }

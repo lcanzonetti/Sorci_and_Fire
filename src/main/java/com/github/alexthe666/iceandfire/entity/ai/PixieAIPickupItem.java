@@ -97,9 +97,9 @@ public class PixieAIPickupItem<T extends ItemEntity> extends TargetGoal {
                 if (this.targetEntity.getItem().getItem() == Items.SUGAR) {
                     pixie.heal(5);
                 } else if (this.targetEntity.getItem().getItem() == Items.CAKE) {
-                    if (!pixie.isTame() && this.targetEntity.getThrower() != null && this.mob.level().getPlayerByUUID(this.targetEntity.getThrower()) != null) {
-                        Player owner = this.mob.level().getPlayerByUUID(this.targetEntity.getThrower());
-                        pixie.setTame(true);
+                    if (!pixie.isTame() && this.targetEntity.getOwner() != null && this.mob.level().getPlayerByUUID(this.targetEntity.getOwner()) != null) {
+                        Player owner = this.mob.level().getPlayerByUUID(this.targetEntity.getOwner());
+                        pixie.setTame(true, true);
                         if (owner != null) {
                             pixie.tame(owner);
                         }

@@ -72,7 +72,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -596,7 +595,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    protected int getExperienceReward(@NotNull Player player) {
+    protected int getBaseExperienceReward() {
         switch (this.getDragonStage()) {
             case 2:
                 return 20;
@@ -1059,7 +1058,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public void killed(@NotNull ServerLevel world, @NotNull LivingEntity entity) {
+    public boolean killedEntity(@NotNull ServerLevel world, @NotNull LivingEntity entity) {
         this.setHunger(this.getHunger() + FoodUtils.getFoodPoints(entity));
     }
 
@@ -1175,7 +1174,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         }
         if (!this.isModelDead()) {
             if (stack.getItem() == IafItemRegistry.CREATIVE_DRAGON_MEAL.get()) {
-                this.setTame(true);
+                this.setTame(true, true);
                 this.tame(player);
                 this.setHunger(this.getHunger() + 20);
                 this.heal(Math.min(this.getHealth(), (int) (this.getMaxHealth() / 2)));
@@ -1553,8 +1552,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public void positionRider(@NotNull Entity passenger) {
-        super.positionRider(passenger);
+    protected void positionRider(@NotNull Entity passenger, @NotNull Entity.MoveFunction moveFunction) {
+        super.positionRider(passenger, moveFunction);
         if (this.hasPassenger(passenger)) {
             if (this.getControllingPassenger() == null || !this.getControllingPassenger().getUUID().equals(passenger.getUUID())) {
                 updatePreyInMouth(passenger);
@@ -1633,8 +1632,8 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
-        spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+        spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
         this.setGender(this.getRandom().nextBoolean());
         final int age = this.getRandom().nextInt(80) + 1;
         this.growDragon(age);
@@ -2119,7 +2118,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                     }
                     this.setDeltaMovement(currentMotion);
 
-                    this.calculateEntityAnimation(this, false);
+                    this.calculateEntityAnimation(false);
                 } else {
                     this.setDeltaMovement(Vec3.ZERO);
                 }
@@ -2909,7 +2908,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     }
 
     @Override
-    public void onRemovedFromWorld() {
+    public void onRemovedFromLevel() {
         if (IafConfig.chunkLoadSummonCrystal) {
             if (this.isBoundToCrystal()) {
                 DragonPosWorldData data = DragonPosWorldData.get(level());
@@ -2918,7 +2917,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                 }
             }
         }
-        super.onRemovedFromWorld();
+        super.onRemovedFromLevel();
     }
 
     @Override

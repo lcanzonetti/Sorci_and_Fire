@@ -9,7 +9,6 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.material.Material;
 
 public class ModelDragonEgg<T extends LivingEntity> extends AdvancedEntityModel<T> {
 

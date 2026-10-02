@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import net.minecraft.core.HolderLookup;
 import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
@@ -42,7 +43,7 @@ public class TileEntityEggInIce extends BlockEntity {
                 dragon.setPos(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
                 dragon.setVariant(entityEggInIce.type.ordinal() - 4);
                 dragon.setGender(ThreadLocalRandom.current().nextBoolean());
-                dragon.setTame(true);
+                dragon.setTame(true, true);
                 dragon.setHunger(50);
                 dragon.setOwnerUUID(entityEggInIce.ownerUUID);
                 level.addFreshEntity(dragon);
@@ -56,7 +57,7 @@ public class TileEntityEggInIce extends BlockEntity {
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag tag) {
+    protected void saveAdditional(@NotNull CompoundTag tag, @NotNull HolderLookup.Provider registries) {
         if (type != null) {
             tag.putByte("Color", (byte) type.ordinal());
         } else {
@@ -71,8 +72,8 @@ public class TileEntityEggInIce extends BlockEntity {
     }
 
     @Override
-    public void load(@NotNull CompoundTag tag) {
-        super.load(tag);
+    protected void loadAdditional(@NotNull CompoundTag tag, @NotNull HolderLookup.Provider registries) {
+        super.loadAdditional(tag, registries);
         type = EnumDragonEgg.values()[tag.getByte("Color")];
         age = tag.getInt("Age");
         UUID s = null;
@@ -92,12 +93,12 @@ public class TileEntityEggInIce extends BlockEntity {
     }
 
     @Override
-    public void handleUpdateTag(CompoundTag parentNBTTagCompound) {
+    public void handleUpdateTag(@NotNull CompoundTag parentNBTTagCompound, @NotNull HolderLookup.Provider registries) {
         this.load(parentNBTTagCompound);
     }
 
     @Override
-    public @NotNull CompoundTag getUpdateTag() {
+    public @NotNull CompoundTag getUpdateTag(@NotNull HolderLookup.Provider registries) {
         CompoundTag nbtTagCompound = new CompoundTag();
         saveAdditional(nbtTagCompound);
         return nbtTagCompound;
@@ -112,8 +113,8 @@ public class TileEntityEggInIce extends BlockEntity {
     }
 
     @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        load(pkt.getTag());   // read from the nbt in the packet
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt, @NotNull HolderLookup.Provider registries) {
+        loadAdditional(pkt.getTag(), registries);   // read from the nbt in the packet
     }
 
     public void spawnEgg() {

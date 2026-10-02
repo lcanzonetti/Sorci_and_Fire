@@ -26,7 +26,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.level.pathfinder.Node;
 import net.minecraft.world.level.pathfinder.Path;
@@ -184,7 +183,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
             passabilityNavigator = (IPassabilityNavigator) entity;
             maxRange = passabilityNavigator.maxSearchNodes();
         }
-        maxJumpHeight = (float) Math.floor(entity.maxUpStep - 0.2F) + 1.3F;
+        maxJumpHeight = (float) Math.floor(entity.maxUpStep() - 0.2F) + 1.3F;
         this.entity = new WeakReference<>(entity);
     }
 
@@ -217,7 +216,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
             passabilityNavigator = (IPassabilityNavigator) entity;
             maxRange = passabilityNavigator.maxSearchNodes();
         }
-        maxJumpHeight = (float) Math.floor(entity.maxUpStep - 0.2F) + 1.3F;
+        maxJumpHeight = (float) Math.floor(entity.maxUpStep() - 0.2F) + 1.3F;
     }
 
     /**
@@ -1312,8 +1311,8 @@ public abstract class AbstractPathJob implements Callable<Path> {
 
                 // TODO: I'd be cool if dragons could squash multiple snow layers when walking over them
                 if (shape.isEmpty() || shape.max(Direction.Axis.Y) <= 0.125 && !isLiquid((block)) && (block.getBlock() != Blocks.SNOW || block.getValue(SnowLayerBlock.LAYERS) == 1)) {
-                    final PathType pathType = block.getBlockPathType(world, pos);
-                    return pathType == null || pathType.getDanger() == null;
+                    final PathType pathType = block.getBlockPathType(world, pos, null);
+                    return pathType == null || !isDangerous(pathType);
                 }
                 return false;
             }
@@ -1415,7 +1414,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
             || block instanceof WallBlock
             || block instanceof FireBlock
             || block instanceof CampfireBlock
-            || block instanceof BambooBlock
+            || block instanceof BambooStalkBlock
             || (blockState.getShape(world, pos).max(Direction.Axis.Y) > 1.0)) {
             return SurfaceType.NOT_PASSABLE;
         }
@@ -1436,7 +1435,7 @@ public abstract class AbstractPathJob implements Callable<Path> {
             || block instanceof WallBlock
             || block instanceof FireBlock
             || block instanceof CampfireBlock
-            || block instanceof BambooBlock
+            || block instanceof BambooStalkBlock
             || (blockState.getShape(world, pos).max(Direction.Axis.Y) > 1.0)) {
             return SurfaceType.NOT_PASSABLE;
         }
@@ -1505,4 +1504,14 @@ public abstract class AbstractPathJob implements Callable<Path> {
         return pos.getY() <= maxY && pos.getY() >= minY;
     }
 
+
+    /**
+     * Replacement for the removed PathType#getDanger.
+     */
+    private static boolean isDangerous(final PathType pathType) {
+        return switch (pathType) {
+            case DAMAGE_FIRE, DANGER_FIRE, DAMAGE_OTHER, DANGER_OTHER, LAVA, DAMAGE_CAUTIOUS, DANGER_POWDER_SNOW, POWDER_SNOW, DANGER_TRAPDOOR -> true;
+            default -> false;
+        };
+    }
 }

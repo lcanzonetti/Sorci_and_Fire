@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -46,14 +47,14 @@ public class TileEntityDreadSpawner extends SpawnerBlockEntity {
     }
 
     @Override
-    public void load(@NotNull CompoundTag p_155760_) {
-        super.load(p_155760_);
+    protected void loadAdditional(@NotNull CompoundTag p_155760_, @NotNull HolderLookup.Provider registries) {
+        super.loadAdditional(p_155760_, registries);
         this.spawner.load(this.level, this.worldPosition, p_155760_);
     }
 
     public CompoundTag save(CompoundTag p_59795_) {
-        super.saveAdditional(p_59795_);
-        this.spawner.save(p_59795_);
+        super.saveAdditional(p_59795_, registries);
+        this.spawner.save(registries, p_59795_);
         return p_59795_;
     }
 
@@ -72,7 +73,7 @@ public class TileEntityDreadSpawner extends SpawnerBlockEntity {
     }
 
     @Override
-    public @NotNull CompoundTag getUpdateTag() {
+    public @NotNull CompoundTag getUpdateTag(@NotNull HolderLookup.Provider registries) {
         CompoundTag compoundtag = this.save(new CompoundTag());
         compoundtag.remove("SpawnPotentials");
         return compoundtag;

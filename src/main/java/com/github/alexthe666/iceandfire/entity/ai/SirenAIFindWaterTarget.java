@@ -4,7 +4,6 @@ import net.minecraft.world.level.block.Blocks;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 

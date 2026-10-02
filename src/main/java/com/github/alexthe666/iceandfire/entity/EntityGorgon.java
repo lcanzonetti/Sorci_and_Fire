@@ -171,7 +171,7 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
     }
 
     @Override
-    protected int getExperienceReward(@NotNull Player player) {
+    protected int getBaseExperienceReward() {
         return 30;
     }
 
@@ -273,11 +273,6 @@ public class EntityGorgon extends Monster implements IAnimatedEntity, IVillagerF
     @Override
     public int getMaxHeadYRot() {
         return 30;
-    }
-
-    @Override
-    public @NotNull MobType getMobType() {
-        return MobType.UNDEAD;
     }
 
     public void forcePreyToLook(LivingEntity mob) {

@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.event;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.common.EventBusSubscriber;
 import com.mojang.math.Axis;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import org.joml.Quaternionf;
@@ -15,6 +18,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 
 import java.util.UUID;
 
+@EventBusSubscriber(modid = IceAndFire.MODID, value = Dist.CLIENT)
 public class PlayerRenderEvents {
     public ResourceLocation redTex = ResourceLocation.fromNamespaceAndPath("iceandfire", "textures/models/misc/cape_fire.png");
     public ResourceLocation redElytraTex = ResourceLocation.fromNamespaceAndPath("iceandfire", "textures/models/misc/elytra_fire.png");
@@ -34,7 +38,7 @@ public class PlayerRenderEvents {
     };
 
     @SubscribeEvent
-    public void playerRender(RenderPlayerEvent.Pre event) {
+    public static void playerRender(RenderPlayerEvent.Pre event) {
         //TODO
         /*
         if (event.getEntity() instanceof AbstractClientPlayerEntity) {
@@ -65,7 +69,7 @@ public class PlayerRenderEvents {
             float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
             event.getPoseStack().mulPose(Axis.YP.rotationDegrees(f4));
             event.getPoseStack().pushPose();
-            Minecraft.getInstance().getItemRenderer().renderStatic(Minecraft.getInstance().player, new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM.get()), ItemDisplayContext.GROUND, false, event.getPoseStack(), event.getMultiBufferSource(), event.getEntity().level, event.getPackedLight(), OverlayTexture.NO_OVERLAY, 0);
+            Minecraft.getInstance().getItemRenderer().renderStatic(Minecraft.getInstance().player, new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM.get()), ItemDisplayContext.GROUND, false, event.getPoseStack(), event.getMultiBufferSource(), event.getEntity().level(), event.getPackedLight(), OverlayTexture.NO_OVERLAY, 0);
             event.getPoseStack().popPose();
             event.getPoseStack().popPose();
 

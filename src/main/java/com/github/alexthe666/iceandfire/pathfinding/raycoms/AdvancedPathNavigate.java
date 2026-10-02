@@ -771,14 +771,14 @@ public class AdvancedPathNavigate extends AbstractAdvancedPathNavigate {
         final Vec3 curr = this.path.getEntityPosAtNode(this.mob, curNode - 1);
         final Vec3 next = this.path.getEntityPosAtNode(this.mob, curNode);
 
-        final Vec3i currI = new Vec3i(curr.x, curr.y, curr.z);
-        final Vec3i nextI = new Vec3i(next.x, next.y, next.z);
+        final Vec3i currI = new Vec3i(Mth.floor(curr.x), Mth.floor(curr.y), Mth.floor(curr.z));
+        final Vec3i nextI = new Vec3i(Mth.floor(next.x), Mth.floor(next.y), Mth.floor(next.z));
 
         if (mob.blockPosition().closerThan(currI, 2.0) && mob.blockPosition().closerThan(nextI, 2.0)) {
             int currentIndex = curNode - 1;
             while (currentIndex > 0) {
                 final Vec3 tempoPos = this.path.getEntityPosAtNode(this.mob, currentIndex);
-                final Vec3i tempoPosI = new Vec3i(tempoPos.x, tempoPos.y, tempoPos.z);
+                final Vec3i tempoPosI = new Vec3i(Mth.floor(tempoPos.x), Mth.floor(tempoPos.y), Mth.floor(tempoPos.z));
                 if (mob.blockPosition().closerThan(tempoPosI, 1.0)) {
                     this.path.setNextNodeIndex(currentIndex);
                 } else if (isTracking) {

@@ -124,7 +124,6 @@ public class CommonProxy {
     }
 
     public void setup() {
-        NeoForge.EVENT_BUS.register(new ServerEvents());
     }
 
     public void clientInit() {

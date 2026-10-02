@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.block;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.fml.common.EventBusSubscriber;
 import com.github.alexthe666.iceandfire.IceAndFire;

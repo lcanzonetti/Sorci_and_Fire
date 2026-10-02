@@ -258,7 +258,7 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
             resetParts();
         }
         onUpdateParts();
-        float partY = 1.0F - animationSpeed * 0.5F;
+        float partY = 1.0F - walkAnimation.speed() * 0.5F;
         for (int i = 0; i < getHeadCount(); i++) {
             headBoxes[i].setPos(headBoxes[i].getX(), this.getY() + partY, headBoxes[i].getZ());
             headBoxes[i].setParent(this);
@@ -373,8 +373,8 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
-        SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+        SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
         this.setVariant(random.nextInt(3));
         return data;
     }

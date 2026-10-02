@@ -154,12 +154,6 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
         this.entityData.set(WAS_FROM_CHEST, moving);
     }
 
-
-    @Override
-    public @NotNull MobType getMobType() {
-        return MobType.UNDEAD;
-    }
-
     @Override
     public boolean isPushable() {
         return false;
@@ -306,8 +300,8 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
-        spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+        spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
         this.setColor(this.random.nextInt(3));
         if (random.nextInt(200) == 0) {
             this.setColor(-1);

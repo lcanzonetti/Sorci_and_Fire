@@ -17,7 +17,7 @@ import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
 import com.github.alexthe666.iceandfire.entity.props.SirenProperties;
 import com.github.alexthe666.iceandfire.entity.util.ICustomMoveController;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
-import com.github.alexthe666.iceandfire.item.IafArmorMaterial;
+import com.github.alexthe666.iceandfire.item.IafArmorItem;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
 import net.minecraft.client.CameraType;
@@ -35,10 +35,11 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.client.event.EntityViewRenderEvent;
-import net.neoforged.neoforge.client.event.RenderLevelLastEvent;
+import net.neoforged.neoforge.client.event.ViewportEvent;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.event.RenderLivingEvent;
-import net.neoforged.neoforge.client.event.ScreenOpenEvent;
+import net.neoforged.neoforge.client.event.ScreenEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.entity.EntityMountEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -53,7 +54,7 @@ public class ClientEvents {
 
     private static final ResourceLocation SIREN_SHADER = ResourceLocation.parse("iceandfire:shaders/post/siren.json");
 
-    private final RandomSource rand = RandomSource.create();
+    private static final RandomSource rand = RandomSource.create();
 
     private static boolean shouldCancelRender(LivingEntity living) {
         if (living.getVehicle() != null && living.getVehicle() instanceof EntityDragonBase) {
@@ -63,14 +64,14 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public void renderWorldLastEvent(RenderLevelLastEvent event) {
-        if (Pathfinding.isDebug()) {
-            RenderPath.debugDraw(event.getPartialTick(), event.getPoseStack());
+    public static void renderWorldLastEvent(RenderLevelStageEvent event) {
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_WEATHER && Pathfinding.isDebug()) {
+            RenderPath.debugDraw(event.getPartialTick().getGameTimeDeltaPartialTick(false), event.getPoseStack());
         }
     }
 
     @SubscribeEvent
-    public void onCameraSetup(EntityViewRenderEvent.CameraSetup event) {
+    public static void onCameraSetup(ViewportEvent.ComputeCameraAngles event) {
         Player player = Minecraft.getInstance().player;
         if (player.getVehicle() != null) {
             if (player.getVehicle() instanceof EntityDragonBase) {
@@ -91,7 +92,10 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
+    public static void onLivingUpdate(EntityTickEvent.Pre event) {
+        if (!(event.getEntity() instanceof LivingEntity) || !event.getEntity().level().isClientSide) {
+            return;
+        }
         Minecraft mc = Minecraft.getInstance();
         if (event.getEntity() instanceof ICustomMoveController) {
             Entity entity = event.getEntity();
@@ -168,13 +172,13 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public void onPreRenderLiving(RenderLivingEvent.Pre event) {
+    public static void onPreRenderLiving(RenderLivingEvent.Pre event) {
         if (shouldCancelRender(event.getEntity())) {
             event.setCanceled(true);
         }
         for (EquipmentSlot slot : List.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET)) {
             ItemStack stack = event.getEntity().getItemBySlot(slot);
-            if (stack.getItem() instanceof ArmorItem armorStack && armorStack.getMaterial() instanceof IafArmorMaterial) {
+            if (stack.getItem() instanceof IafArmorItem) {
                 switch (slot) {
                     case HEAD -> {
                         if (event.getRenderer().getModel() instanceof HumanoidModel<?> humanoidModel) {
@@ -208,10 +212,7 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public void onPostRenderLiving(RenderLivingEvent.Post event) {
-        if (shouldCancelRender(event.getEntity())) {
-            event.setCanceled(true);
-        }
+    public static void onPostRenderLiving(RenderLivingEvent.Post event) {
         LivingEntity entity = event.getEntity();
         MiscProperties.getTargetedBy(entity).forEach(caster -> {
             CockatriceBeamRender.render(entity, caster, event.getPoseStack(), event.getMultiBufferSource(), event.getPartialTick());
@@ -223,19 +224,19 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public void onGuiOpened(ScreenOpenEvent event) {
-        if (IafConfig.customMainMenu && event.getScreen() instanceof TitleScreen && !(event.getScreen() instanceof IceAndFireMainMenu)) {
-            event.setScreen(new IceAndFireMainMenu());
+    public static void onGuiOpened(ScreenEvent.Opening event) {
+        if (IafConfig.customMainMenu && event.getNewScreen() instanceof TitleScreen && !(event.getNewScreen() instanceof IceAndFireMainMenu)) {
+            event.setNewScreen(new IceAndFireMainMenu());
         }
     }
 
     // TODO: add this to client side config
-    public final boolean AUTO_ADAPT_3RD_PERSON = true;
+    public static final boolean AUTO_ADAPT_3RD_PERSON = true;
 
     @SubscribeEvent
-    public void onEntityMount(EntityMountEvent event) {
+    public static void onEntityMount(EntityMountEvent event) {
 
-        if (event.getEntityBeingMounted() instanceof EntityDragonBase && event.getWorldObj().isClientSide && event.getEntityMounting() == Minecraft.getInstance().player) {
+        if (event.getEntityBeingMounted() instanceof EntityDragonBase && event.getLevel().isClientSide && event.getEntityMounting() == Minecraft.getInstance().player) {
             EntityDragonBase dragon = (EntityDragonBase) event.getEntityBeingMounted();
             if (dragon.isTame() && dragon.isOwnedBy(Minecraft.getInstance().player)) {
                 if (AUTO_ADAPT_3RD_PERSON) {

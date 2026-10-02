@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import net.minecraft.core.HolderLookup;
 import com.github.alexthe666.iceandfire.util.IafNbt;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -20,8 +21,8 @@ public class TileEntityDreadPortal extends BlockEntity {
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag compound) {
-        super.saveAdditional(compound);
+    protected void saveAdditional(@NotNull CompoundTag compound, @NotNull HolderLookup.Provider registries) {
+        super.saveAdditional(compound, registries);
         compound.putLong("Age", this.age);
 
         if (this.exitPortal != null) {
@@ -34,8 +35,8 @@ public class TileEntityDreadPortal extends BlockEntity {
     }
 
     @Override
-    public void load(@NotNull CompoundTag compound) {
-        super.load(compound);
+    protected void loadAdditional(@NotNull CompoundTag compound, @NotNull HolderLookup.Provider registries) {
+        super.loadAdditional(compound, registries);
         this.age = compound.getLong("Age");
 
         if (compound.contains("ExitPortal", 10)) {

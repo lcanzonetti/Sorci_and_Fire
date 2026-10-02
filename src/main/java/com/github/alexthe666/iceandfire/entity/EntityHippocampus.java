@@ -46,7 +46,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.NotNull;
@@ -139,7 +138,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     }
 
     @Override
-    protected int getExperienceReward(@NotNull Player player) {
+    protected int getBaseExperienceReward() {
         return 2;
     }
 
@@ -147,11 +146,6 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     public float getWalkTargetValue(BlockPos pos) {
         return this.level().getBlockState(pos.below()).is(Blocks.WATER) ? 10.0F : this.level().getMaxLocalRawBrightness(
                 pos) - 0.5F;
-    }
-
-    @Override
-    public @NotNull MobType getMobType() {
-        return MobType.WATER;
     }
 
     @Override
@@ -283,8 +277,8 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     }
 
     @Override
-    public void positionRider(@NotNull Entity passenger) {
-        super.positionRider(passenger);
+    protected void positionRider(@NotNull Entity passenger, @NotNull Entity.MoveFunction moveFunction) {
+        super.positionRider(passenger, moveFunction);
         if (this.hasPassenger(passenger)) {
             yBodyRot = getYRot();
             this.setYBodyRot(passenger.getYRot());
@@ -514,8 +508,8 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
 
     @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
-        SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn) {
+        SpawnGroupData data = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn);
         this.setVariant(this.getRandom().nextInt(6));
         return data;
     }
@@ -639,7 +633,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
                         }
                         this.setDeltaMovement(currentMotion.scale(0.7D));
 
-                        this.calculateEntityAnimation(this, false);
+                        this.calculateEntityAnimation(false);
 
 
                         // Vanilla travel has a smaller friction factor for Y axis
@@ -690,7 +684,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
                 }
             }
         }
-        this.animationSpeedOld = this.animationSpeed;
+        this.animationSpeedOld = this.walkAnimation.speed();
         double deltaX = this.getX() - this.xo;
         double deltaZ = this.getZ() - this.zo;
         double deltaY = this.getY() - this.yo;
@@ -698,8 +692,8 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
         if (delta > 1.0F) {
             delta = 1.0F;
         }
-        this.animationSpeed += (delta - this.animationSpeed) * 0.4F;
-        this.animationPosition += this.animationSpeed;
+        this.walkAnimation.speed() += (delta - this.walkAnimation.speed()) * 0.4F;
+        this.animationPosition += this.walkAnimation.speed();
 
     }
 

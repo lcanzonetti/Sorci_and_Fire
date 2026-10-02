@@ -5,7 +5,6 @@ package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -233,7 +232,7 @@ public class PathingStuckHandler implements IStuckHandler
             }
         }
         if (takeDamageOnCompleteStuck) {
-            entity.hurt(new EntityDamageSource("Stuck-damage", entity), entity.getMaxHealth() * damagePct);
+            entity.hurt(entity.damageSources().inWall(), entity.getMaxHealth() * damagePct);
         }
 
         if (completeStuckBlockBreakRange > 0)
@@ -458,7 +457,7 @@ public class PathingStuckHandler implements IStuckHandler
         if (state.getBlock() != Blocks.LADDER && !state.canOcclude() && world.getFluidState(pos).isEmpty()) {
             for (final Direction dir : directions) {
                 final BlockState toPlace = Blocks.LADDER.defaultBlockState().setValue(LadderBlock.FACING, dir.getOpposite());
-                if (world.getBlockState(pos.relative(dir)).isSolid() && Blocks.LADDER.canSurvive(toPlace, world, pos)) {
+                if (world.getBlockState(pos.relative(dir)).isSolid() && toPlace.canSurvive(world, pos)) {
                     world.setBlockAndUpdate(pos, toPlace);
                     break;
                 }

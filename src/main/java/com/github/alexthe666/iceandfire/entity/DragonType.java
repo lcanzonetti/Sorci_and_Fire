@@ -12,7 +12,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Material;
 
 public class DragonType {
 
@@ -86,7 +85,7 @@ public class DragonType {
                 if (egg.hasCustomName()) {
                     dragon.setCustomName(egg.getCustomName());
                 }
-                dragon.setTame(true);
+                dragon.setTame(true, true);
                 dragon.setOwnerUUID(egg.getOwnerId());
                 egg.level().playLocalSound(egg.getX(), egg.getY() + egg.getEyeHeight(), egg.getZ(), SoundEvents.FIRE_EXTINGUISH, egg.getSoundSource(), 2.5F, 1.0F, false);
                 egg.level().playLocalSound(egg.getX(), egg.getY() + egg.getEyeHeight(), egg.getZ(), IafSoundRegistry.EGG_HATCH, egg.getSoundSource(), 2.5F, 1.0F, false);
@@ -126,7 +125,7 @@ public class DragonType {
                 if (egg.hasCustomName()) {
                     dragon.setCustomName(egg.getCustomName());
                 }
-                dragon.setTame(true);
+                dragon.setTame(true, true);
                 dragon.setOwnerUUID(egg.getOwnerId());
                 LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(egg.level());
                 lightningboltentity.setPos(egg.getX(), egg.getY(), egg.getZ());

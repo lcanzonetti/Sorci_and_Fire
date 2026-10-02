@@ -53,8 +53,6 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void init() {
         IafKeybindRegistry.init();
-        NeoForge.EVENT_BUS.register(new PlayerRenderEvents());
-        NeoForge.EVENT_BUS.register(new ClientEvents());
     }
 
     @Override

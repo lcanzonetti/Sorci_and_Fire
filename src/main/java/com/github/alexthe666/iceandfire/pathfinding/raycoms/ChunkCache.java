@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.pathfinding.raycoms;
 
+import net.minecraft.world.flag.FeatureFlagSet;
+
 import net.minecraft.core.registries.Registries;/*
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
@@ -21,7 +23,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.chunk.status.ChunkStatus;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -174,6 +176,11 @@ public class ChunkCache implements LevelReader {
             return this.chunkArray[i][j];
         }
         return null;
+    }
+
+    @Override
+    public @NotNull FeatureFlagSet enabledFeatures() {
+        return world.enabledFeatures();
     }
 
     @Override
