@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.api;
 
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.food.FoodProperties;
+
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -21,11 +24,12 @@ public class FoodUtils {
     }
 
     public static int getFoodPoints(ItemStack item, boolean meatOnly, boolean includeFish) {
-        if (item != null && item != ItemStack.EMPTY && item.getItem() != null && item.getItem().getFoodProperties() != null) {
-            int food = item.getItem().getFoodProperties().getNutrition() * 10;
+        FoodProperties properties = item == null ? null : item.getFoodProperties(null);
+        if (item != null && !item.isEmpty() && properties != null) {
+            int food = properties.nutrition() * 10;
             if (!meatOnly) {
                 return food;
-            } else if (item.getItem().getFoodProperties().isMeat()) {
+            } else if (item.is(ItemTags.MEAT)) {
                 return food;
             } else if (includeFish && item.getItem() == Items.COD) {
                 return food;

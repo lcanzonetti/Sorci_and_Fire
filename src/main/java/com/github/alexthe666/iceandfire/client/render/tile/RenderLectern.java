@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
+import net.minecraft.util.FastColor;
 import com.mojang.math.Axis;
 import com.github.alexthe666.iceandfire.block.BlockLectern;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityLectern;
@@ -57,7 +58,7 @@ public class RenderLectern<T extends TileEntityLectern> implements BlockEntityRe
         float f6 = 1.29F;
 
         this.bookModel.setupAnim(partialTicks, Mth.clamp(f4, 0.0F, 1.0F), Mth.clamp(f5, 0.0F, 1.0F), f6);
-        this.bookModel.renderToBuffer(matrixStackIn, bufferIn.getBuffer(ENCHANTMENT_TABLE_BOOK_TEXTURE), combinedLightIn, combinedOverlayIn, 1, 1F, 1, 1);
+        this.bookModel.renderToBuffer(matrixStackIn, bufferIn.getBuffer(ENCHANTMENT_TABLE_BOOK_TEXTURE), combinedLightIn, combinedOverlayIn, FastColor.ARGB32.colorFromFloat(1, 1, 1F, 1));
         matrixStackIn.popPose();
     }
 

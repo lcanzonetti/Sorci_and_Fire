@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.tags.DamageTypeTags;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
@@ -282,7 +283,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
 
     @Override
     public boolean hurt(@NotNull DamageSource source, float damage) {
-        if (!this.isTame() && this.isFlying() && !onGround() && source.isProjectile() && !level().isClientSide) {
+        if (!this.isTame() && this.isFlying() && !onGround() && source.is(DamageTypeTags.IS_PROJECTILE) && !level().isClientSide) {
             this.isFallen = true;
         }
         if (source.getEntity() instanceof LivingEntity && source.getEntity().isPassengerOfSameVehicle(this) && this.isTame() && this.isOwnedBy((LivingEntity) source.getEntity())) {
@@ -303,7 +304,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
             this.setAnimation(ANIMATION_BITE_RIDER);
         }
         if (!this.level().isClientSide && this.getAnimation() == ANIMATION_BITE_RIDER && this.getAnimationTick() == 6 && !this.isTame()) {
-            passenger.hurt(DamageSource.mobAttack(this), 1);
+            passenger.hurt(this.damageSources().mobAttack(this), 1);
         }
         float pitch_forward = 0;
         if (this.getXRot() > 0 && this.isFlying()) {
@@ -651,7 +652,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
             double dist = this.distanceToSqr(target);
             if (dist < 10) {
                 target.knockback(0.6F, Mth.sin(this.getYRot() * 0.017453292F), -Mth.cos(this.getYRot() * 0.017453292F));
-                target.hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                target.hurt(this.damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.getAnimation() == ANIMATION_WING_BLAST && this.getAnimationTick() == 5) {
@@ -664,7 +665,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
 
             double dist = this.distanceToSqr(target);
             if (dist < 25) {
-                target.hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() / 2));
+                target.hurt(this.damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() / 2));
                 target.hasImpulse = true;
                 if (!(this.random.nextDouble() < this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).getValue())) {
                     this.hasImpulse = true;
@@ -683,7 +684,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
         if (this.getAnimation() == ANIMATION_TAIL_WHIP && target != null && this.getAnimationTick() == 7) {
             double dist = this.distanceToSqr(target);
             if (dist < 10) {
-                target.hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                target.hurt(this.damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
                 target.hasImpulse = true;
                 float f = Mth.sqrt((float) (0.5 * 0.5 + 0.5 * 0.5));
                 double d0;
@@ -725,7 +726,7 @@ public class EntityAmphithere extends TamableAnimal implements ISyncMount, IAnim
                 this.setAnimation(ANIMATION_BITE);
             }
             if (riderTarget != null) {
-                riderTarget.hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                riderTarget.hurt(this.damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (target != null && this.isOwnedBy(target)) {

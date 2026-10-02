@@ -14,7 +14,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.neoforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityCockatriceEgg extends ThrowableItemProjectile {
@@ -30,11 +29,6 @@ public class EntityCockatriceEgg extends ThrowableItemProjectile {
     public EntityCockatriceEgg(EntityType<? extends ThrowableItemProjectile> type, double x, double y, double z,
                                Level worldIn) {
         super(type, x, y, z, worldIn);
-    }
-
-    @Override
-    public @NotNull Packet<?> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
@@ -54,7 +48,7 @@ public class EntityCockatriceEgg extends ThrowableItemProjectile {
     protected void onHit(HitResult result) {
         Entity thrower = getOwner();
         if (result.getType() == HitResult.Type.ENTITY) {
-            ((EntityHitResult) result).getEntity().hurt(DamageSource.thrown(this, thrower), 0.0F);
+            ((EntityHitResult) result).getEntity().hurt(this.damageSources().thrown(this, thrower), 0.0F);
         }
 
         if (!this.level().isClientSide) {

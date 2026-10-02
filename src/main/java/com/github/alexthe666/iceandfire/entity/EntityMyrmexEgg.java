@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageTypes;
 import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
@@ -187,10 +189,10 @@ public class EntityMyrmexEgg extends LivingEntity implements IBlacklistedFromSta
 
     @Override
     public boolean hurt(@NotNull DamageSource dmg, float var2) {
-        if (dmg == DamageSource.IN_WALL || dmg == DamageSource.FALL) {
+        if (dmg.is(DamageTypes.IN_WALL) || dmg.is(DamageTypes.FALL)) {
             return false;
         }
-        if (!level().isClientSide && !dmg.isBypassInvul()) {
+        if (!level().isClientSide && !dmg.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             this.spawnAtLocation(this.getItem(), 0);
         }
         this.remove(RemovalReason.KILLED);

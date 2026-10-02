@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.tags.DamageTypeTags;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.entity.util.IDeadMob;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
@@ -146,7 +147,7 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
 
     @Override
     public boolean hurt(@NotNull DamageSource var1, float var2) {
-        if (!level().isClientSide && !var1.isBypassInvul() && !isRemoved()) {
+        if (!level().isClientSide && !var1.is(DamageTypeTags.BYPASSES_INVULNERABILITY) && !isRemoved()) {
             this.spawnAtLocation(this.getItem().getItem(), 1);
         }
         this.remove(RemovalReason.KILLED);

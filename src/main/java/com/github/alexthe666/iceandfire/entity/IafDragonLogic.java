@@ -282,9 +282,9 @@ public class IafDragonLogic {
 
     public void attackTarget(Entity target, Player ridingPlayer, float damage) {
         if (ridingPlayer == null)
-            target.hurt(DamageSource.mobAttack(dragon), damage);
+            target.hurt(dragon.damageSources().mobAttack(dragon), damage);
         else
-            target.hurt(DamageSource.indirectMobAttack(dragon, ridingPlayer), damage);
+            target.hurt(dragon.damageSources().mobProjectile(dragon, ridingPlayer), damage);
     }
 
     /*

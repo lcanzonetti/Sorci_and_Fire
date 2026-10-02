@@ -83,9 +83,7 @@ public class ItemSirenFlute extends Item {
         if (pointedEntity != null) {
             if (pointedEntity instanceof LivingEntity) {
                 MiscProperties.setLoveTicks((LivingEntity) pointedEntity, 600);
-                itemStackIn.hurtAndBreak(2, player, (entity) -> {
-                    entity.broadcastBreakEvent(EquipmentSlot.MAINHAND);
-                });
+                itemStackIn.hurtAndBreak(2, player, EquipmentSlot.MAINHAND);
             }
         }
         player.playSound(IafSoundRegistry.SIREN_SONG, 1, 1);

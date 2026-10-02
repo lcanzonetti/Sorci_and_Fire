@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.world.gen.processor;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
 import com.github.alexthe666.iceandfire.world.IafProcessors;
@@ -14,7 +15,6 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -51,7 +51,7 @@ public class DreadRuinProcessor extends StructureProcessor {
             if (infoIn2.state.getBlock() == IafBlockRegistry.DREAD_SPAWNER.get()) {
                 CompoundTag tag = new CompoundTag();
                 CompoundTag spawnData = new CompoundTag();
-                ResourceLocation spawnerMobId = ForgeRegistries.ENTITIES.getKey(getRandomMobForMobSpawner(random));
+                ResourceLocation spawnerMobId = BuiltInRegistries.ENTITY_TYPE.getKey(getRandomMobForMobSpawner(random));
                 if (spawnerMobId != null) {
                     CompoundTag entity = new CompoundTag();
                     entity.putString("id", spawnerMobId.toString());

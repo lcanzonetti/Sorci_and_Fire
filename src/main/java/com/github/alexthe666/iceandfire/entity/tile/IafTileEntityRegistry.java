@@ -8,14 +8,22 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.ForgeRegistries;
+import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.wrapper.SidedInvWrapper;
 
 import java.util.function.Supplier;
 
+@EventBusSubscriber(modid = IceAndFire.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class IafTileEntityRegistry {
 
     public static final DeferredRegister<BlockEntityType<?>> TYPES = DeferredRegister
-        .create(ForgeRegistries.BLOCK_ENTITIES, IceAndFire.MODID);
+        .create(Registries.BLOCK_ENTITY_TYPE, IceAndFire.MODID);
 
     //@formatter:off
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TileEntityLectern>> IAF_LECTERN = registerTileEntity(() -> BlockEntityType.Builder.of(TileEntityLectern::new, IafBlockRegistry.LECTERN.get()), "lectern");
@@ -35,5 +43,22 @@ public class IafTileEntityRegistry {
     public static <T extends BlockEntity> DeferredHolder<BlockEntityType<?>, BlockEntityType<T>> registerTileEntity(
             Supplier<BlockEntityType.Builder<T>> supplier, String entityName) {
         return TYPES.register(entityName, () -> supplier.get().build(null));
+    }
+
+    @SubscribeEvent
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, DRAGONFORGE_CORE.get(), IafTileEntityRegistry::forgeHandler);
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, DRAGONFORGE_BRICK.get(), (brick, side) -> forgeHandler(brick.getConnectedTileEntity(), side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, DRAGONFORGE_INPUT.get(), (input, side) -> forgeHandler(input.getConnectedTileEntity(), side));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, IAF_LECTERN.get(), (lectern, side) -> side == null ? null : new SidedInvWrapper(lectern, side == Direction.DOWN ? Direction.DOWN : Direction.UP));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PODIUM.get(), (podium, side) -> side == null ? null : new SidedInvWrapper(podium, side == Direction.DOWN ? Direction.DOWN : Direction.UP));
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PIXIE_JAR.get(), (jar, side) -> side == Direction.DOWN ? new PixieJarInvWrapper(jar) : null);
+    }
+
+    private static IItemHandler forgeHandler(TileEntityDragonforge forge, Direction side) {
+        if (forge == null || side == null || forge.isRemoved()) {
+            return null;
+        }
+        return new SidedInvWrapper(forge, side.getAxis() == Direction.Axis.Y ? side : Direction.NORTH);
     }
 }

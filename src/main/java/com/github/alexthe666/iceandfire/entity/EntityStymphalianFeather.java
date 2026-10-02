@@ -16,8 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.neoforged.neoforge.common.ToolActions;
-import net.neoforged.neoforge.network.NetworkHooks;
-import net.neoforged.neoforge.network.PlayMessages;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityStymphalianFeather extends AbstractArrow {
@@ -29,15 +27,6 @@ public class EntityStymphalianFeather extends AbstractArrow {
     public EntityStymphalianFeather(EntityType<? extends AbstractArrow> t, Level worldIn, LivingEntity shooter) {
         super(t, shooter, worldIn);
         this.setBaseDamage(IafConfig.stymphalianBirdFeatherAttackStength);
-    }
-
-    public EntityStymphalianFeather(PlayMessages.SpawnEntity spawnEntity, Level world) {
-        this(IafEntityRegistry.STYMPHALIAN_FEATHER.get(), world);
-    }
-
-    @Override
-    public @NotNull Packet<?> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
@@ -83,12 +72,10 @@ public class EntityStymphalianFeather extends AbstractArrow {
             ItemStack copyBeforeUse = entity.getUseItem().copy();
             int i = 1 + Mth.floor(damage);
             InteractionHand Hand = entity.getUsedItemHand();
-            copyBeforeUse.hurtAndBreak(i, entity, (player1) -> {
-                player1.broadcastBreakEvent(Hand);
-            });
+            copyBeforeUse.hurtAndBreak(i, entity, LivingEntity.getSlotForHand(Hand));
             if (entity.getUseItem().isEmpty()) {
                 if (entity instanceof Player) {
-                    net.neoforged.neoforge.event.ForgeEventFactory.onPlayerDestroyItem((Player) entity, copyBeforeUse, Hand);
+                    net.neoforged.neoforge.event.EventHooks.onPlayerDestroyItem((Player) entity, copyBeforeUse, Hand);
                 }
 
                 if (Hand == net.minecraft.world.InteractionHand.MAIN_HAND) {

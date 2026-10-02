@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.world.damagesource.DamageTypes;
 import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
@@ -182,7 +183,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
 
     @Override
     public boolean hurt(@NotNull DamageSource dmg, float i) {
-        if (dmg == DamageSource.IN_WALL && this.getGrowthStage() < 2) {
+        if (dmg.is(DamageTypes.IN_WALL) && this.getGrowthStage() < 2) {
             return false;
         }
         if (this.getGrowthStage() < 2) {

@@ -50,7 +50,7 @@ public class EntityTideTrident extends ThrownTrident {
         }
 
         Entity entity1 = this.getOwner();
-        DamageSource damagesource = DamageSource.trident(this, entity1 == null ? this : entity1);
+        DamageSource damagesource = this.damageSources().trident(this, entity1 == null ? this : entity1);
         entitiesHit++;
         if (entitiesHit >= getMaxPiercing())
             this.dealtDamage = true;

@@ -17,7 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.neoforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityHippogryphEgg extends ThrownEgg {
@@ -44,11 +43,6 @@ public class EntityHippogryphEgg extends ThrownEgg {
     }
 
     @Override
-    public @NotNull Packet<?> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
-    }
-
-    @Override
     public void handleEntityEvent(byte id) {
         if (id == 3) {
             for (int i = 0; i < 8; ++i) {
@@ -61,7 +55,7 @@ public class EntityHippogryphEgg extends ThrownEgg {
     protected void onHit(HitResult result) {
         Entity thrower = getOwner();
         if (result.getType() == HitResult.Type.ENTITY) {
-            ((EntityHitResult) result).getEntity().hurt(DamageSource.thrown(this, thrower), 0.0F);
+            ((EntityHitResult) result).getEntity().hurt(this.damageSources().thrown(this, thrower), 0.0F);
         }
 
         if (!this.level().isClientSide) {

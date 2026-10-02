@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import net.minecraft.core.component.DataComponents;
 import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
@@ -87,7 +88,7 @@ public class ItemDragonSkull extends Item {
                 yaw = context.getPlayer().getDirection().toYRot();
             }
             skull.setYaw(yaw);
-            if (stack.hasCustomHoverName()) {
+            if (stack.has(DataComponents.CUSTOM_NAME)) {
                 skull.setCustomName(stack.getHoverName());
             }
             if (!context.getLevel().isClientSide) {

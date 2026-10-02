@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.block;
 
+import com.mojang.serialization.MapCodec;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.ItemInteractionResult;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
@@ -27,6 +30,12 @@ import javax.annotation.Nullable;
 
 public class BlockDragonforgeBricks extends BaseEntityBlock implements IDragonProof {
 
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return MapCodec.unit(this);
+    }
+
+
     public static final BooleanProperty GRILL = BooleanProperty.create("grill");
     private final int isFire;
 
@@ -53,7 +62,7 @@ public class BlockDragonforgeBricks extends BaseEntityBlock implements IDragonPr
     }
 
     @Override
-    public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level worldIn, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand handIn, BlockHitResult resultIn) {
+    public @NotNull ItemInteractionResult useItemOn(@NotNull ItemStack heldStack, @NotNull BlockState state, @NotNull Level worldIn, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand handIn, @NotNull BlockHitResult resultIn) {
         if (this.getConnectedTileEntity(worldIn, resultIn.getBlockPos()) != null) {
             TileEntityDragonforge forge = this.getConnectedTileEntity(worldIn, resultIn.getBlockPos());
             if (forge != null && forge.fireType == isFire) {
@@ -65,10 +74,10 @@ public class BlockDragonforgeBricks extends BaseEntityBlock implements IDragonPr
                         player.openMenu(inamedcontainerprovider);
                     }
                 }
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
         }
-        return InteractionResult.FAIL;
+        return ItemInteractionResult.FAIL;
     }
 
     private TileEntityDragonforge getConnectedTileEntity(Level worldIn, BlockPos pos) {

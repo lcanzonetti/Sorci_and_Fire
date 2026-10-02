@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.api.event;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
-import net.neoforged.bus.api.Cancelable;
+import net.neoforged.bus.api.ICancellableEvent;
 
 /**
  * GenericGriefEvent is fired right before a non-Dragon destroys or modifies blocks in some aspect. <br>
@@ -11,7 +11,7 @@ import net.neoforged.bus.api.Cancelable;
  * {@link #targetY} y coordinate being targeted for modification. <br>
  * {@link #targetZ} z coordinate being targeted for modification. <br>
  * <br>
- * This event is {@link Cancelable}.<br>
+ * This event is cancellable.<br>
  * If this event is canceled, no block destruction or explosion will follow.<br>
  * <br>
  * This event does not have a result. {@link HasResult}<br>
@@ -20,8 +20,7 @@ import net.neoforged.bus.api.Cancelable;
  * <br>
  * This event is fired on the {@link MinecraftForge#EVENT_BUS}.
  **/
-@Cancelable
-public class GenericGriefEvent extends LivingEvent {
+public class GenericGriefEvent extends LivingEvent implements ICancellableEvent {
     private final double targetX;
     private final double targetY;
     private final double targetZ;

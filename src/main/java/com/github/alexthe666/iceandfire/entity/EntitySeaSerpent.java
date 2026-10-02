@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.tags.BlockTags;
 import com.github.alexthe666.iceandfire.misc.IafBlockTags;
 import com.github.alexthe666.citadel.animation.Animation;
@@ -48,7 +50,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -108,7 +110,7 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
         switchNavigator(false);
         this.noCulling = true;
         resetParts(1.0F);
-        this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
+        this.setPathfindingMalus(PathType.WATER, 0.0F);
     }
 
     private static BlockPos clampBlockPosToWater(Entity entity, Level world, BlockPos pos) {
@@ -565,7 +567,7 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
         List<Entity> list = level().getEntities(this, this.getBoundingBox().inflate(getWidth, getWidth * 0.5D, getWidth), NOT_SEA_SERPENT);
         for (Entity entity : list) {
             if (entity instanceof LivingEntity && DragonUtils.isAlive((LivingEntity) entity)) {
-                entity.hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                entity.hurt(this.damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
                 destroyBoat(entity);
                 double xRatio = this.getX() - entity.getX();
                 double zRatio = this.getZ() - entity.getZ();
@@ -603,7 +605,7 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
 
     private void hurtMob(LivingEntity entity) {
         if (this.getAnimation() == ANIMATION_BITE && entity != null && this.getAnimationTick() == 6) {
-            this.getTarget().hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+            this.getTarget().hurt(this.damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             EntitySeaSerpent.this.attackDecision = this.getRandom().nextBoolean();
         }
     }
@@ -868,7 +870,7 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
 
     @Override
     public boolean isInvulnerableTo(@NotNull DamageSource source) {
-        return source == DamageSource.FALL || source == DamageSource.DROWN || source == DamageSource.IN_WALL || source == DamageSource.FALLING_BLOCK || source == DamageSource.LAVA || source.isFire() || super.isInvulnerableTo(source);
+        return source.is(DamageTypes.FALL) || source.is(DamageTypes.DROWN) || source.is(DamageTypes.IN_WALL) || source.is(DamageTypes.FALLING_BLOCK) || source.is(DamageTypes.LAVA) || source.is(DamageTypeTags.IS_FIRE) || super.isInvulnerableTo(source);
     }
 
     public class SwimmingMoveHelper extends MoveControl {

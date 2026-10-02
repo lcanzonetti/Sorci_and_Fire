@@ -42,8 +42,6 @@ public class TileEntityJar extends BlockEntity {
     public NonNullList<ItemStack> pixieItems = NonNullList.withSize(1, ItemStack.EMPTY);
     public float rotationYaw;
     public float prevRotationYaw;
-    net.neoforged.neoforge.common.util.LazyOptional<? extends net.neoforged.neoforge.items.IItemHandler> downHandler = PixieJarInvWrapper
-        .create(this);
     private final RandomSource rand;
 
     public TileEntityJar(BlockPos pos, BlockState state) {
@@ -147,11 +145,4 @@ public class TileEntityJar extends BlockEntity {
         }
     }
 
-    @Override
-    public <T> net.neoforged.neoforge.common.util.@NotNull LazyOptional<T> getCapability(net.neoforged.neoforge.common.capabilities.@NotNull Capability<T> capability, @Nullable Direction facing) {
-        if (facing == Direction.DOWN
-            && capability == net.neoforged.neoforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-            return downHandler.cast();
-        return super.getCapability(capability, facing);
-    }
 }

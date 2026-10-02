@@ -1,20 +1,16 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.PlayMessages;
 
 public class EntityCyclopsEye extends EntityMutlipartPart {
 
     public EntityCyclopsEye(EntityType<?> t, Level world) {
         super(t, world);
-    }
-
-    public EntityCyclopsEye(PlayMessages.SpawnEntity spawnEntity, Level worldIn) {
-        this(IafEntityRegistry.CYCLOPS_MULTIPART.get(), worldIn);
     }
 
     public EntityCyclopsEye(LivingEntity parent, float radius, float angleYaw, float offsetY, float sizeX, float sizeY, float damageMultiplier) {
@@ -25,7 +21,7 @@ public class EntityCyclopsEye extends EntityMutlipartPart {
     @Override
     public boolean hurt(DamageSource source, float damage) {
         Entity parent = this.getParent();
-        if (parent instanceof EntityCyclops && source.isProjectile()) {
+        if (parent instanceof EntityCyclops && source.is(DamageTypeTags.IS_PROJECTILE)) {
             ((EntityCyclops) parent).onHitEye(source, damage);
             return true;
         } else {

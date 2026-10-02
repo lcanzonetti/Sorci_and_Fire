@@ -1,6 +1,5 @@
 package com.github.alexthe666.iceandfire.enums;
 
-import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
 import com.github.alexthe666.iceandfire.item.IafArmorMaterial;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemScaleArmor;
@@ -26,14 +25,14 @@ public enum EnumDragonArmor {
     armor_copper(14, EnumDragonEgg.COPPER),
     armor_black(15, EnumDragonEgg.BLACK);
 
-    public CustomArmorMaterial material;
+    public IafArmorMaterial material;
     public int armorId;
     public EnumDragonEgg eggType;
     public DeferredItem<Item> helmet;
     public DeferredItem<Item> chestplate;
     public DeferredItem<Item> leggings;
     public DeferredItem<Item> boots;
-    public CustomArmorMaterial armorMaterial;
+    public IafArmorMaterial armorMaterial;
 
     EnumDragonArmor(int armorId, EnumDragonEgg eggType) {
         this.armorId = armorId;

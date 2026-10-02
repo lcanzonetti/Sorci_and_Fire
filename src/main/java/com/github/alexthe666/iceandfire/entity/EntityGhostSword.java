@@ -21,8 +21,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.NetworkHooks;
-import net.neoforged.neoforge.network.PlayMessages;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -45,10 +43,6 @@ public class EntityGhostSword extends AbstractArrow {
                             double dmg) {
         super(type, shooter, worldIn);
         this.setBaseDamage(dmg);
-    }
-
-    public EntityGhostSword(PlayMessages.SpawnEntity spawnEntity, Level worldIn) {
-        this(IafEntityRegistry.GHOST_SWORD.get(), worldIn);
     }
 
     @Override
@@ -106,7 +100,7 @@ public class EntityGhostSword extends AbstractArrow {
                 }
             }
 
-            if (raytraceresult != null && raytraceresult.getType() != HitResult.Type.MISS && !net.neoforged.neoforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
+            if (raytraceresult != null && raytraceresult.getType() != HitResult.Type.MISS && !net.neoforged.neoforge.event.EventHooks.onProjectileImpact(this, raytraceresult)) {
                 if (raytraceresult.getType() != HitResult.Type.BLOCK) {
                     this.onHit(raytraceresult);
 
@@ -156,11 +150,6 @@ public class EntityGhostSword extends AbstractArrow {
         return ItemStack.EMPTY;
     }
 
-    @Override
-    public @NotNull Packet<?> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
-    }
-
     private IntOpenHashSet piercedEntities;
     private List<Entity> hitEntities;
     private int knockbackStrength;
@@ -197,11 +186,11 @@ public class EntityGhostSword extends AbstractArrow {
         }
 
         Entity entity1 = this.getOwner();
-        DamageSource damagesource = DamageSource.MAGIC;
+        DamageSource damagesource = this.damageSources().magic();
 
         if (entity1 != null) {
             if (entity1 instanceof LivingEntity) {
-                damagesource = DamageSource.arrow(this, entity1);
+                damagesource = this.damageSources().arrow(this, entity1);
                 damagesource.setMagic();
                 ((LivingEntity) entity1).setLastHurtMob(entity);
             }
@@ -210,7 +199,7 @@ public class EntityGhostSword extends AbstractArrow {
         boolean flag = entity.getType() == EntityType.ENDERMAN;
         int j = entity.getRemainingFireTicks();
         if (this.isOnFire() && !flag) {
-            entity.setSecondsOnFire(5);
+            entity.igniteForSeconds(5);
         }
 
         if (entity.hurt(damagesource, i)) {

@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.inventory;
 
+import net.minecraft.core.registries.Registries;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 public class IafContainerRegistry {
 
     public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister
-        .create(ForgeRegistries.CONTAINERS, IceAndFire.MODID);
+        .create(Registries.MENU, IceAndFire.MODID);
 
     public static final DeferredHolder<MenuType<?>, MenuType<ContainerLectern>> IAF_LECTERN_CONTAINER = register(
         () -> new MenuType<>(ContainerLectern::new), "iaf_lectern");

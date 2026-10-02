@@ -24,7 +24,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 
-public class ItemBestiary extends Item {
+public class ItemBestiary extends Item implements IafTabItem {
 
     public ItemBestiary() {
         super(new Item.Properties().stacksTo(1));
@@ -38,8 +38,7 @@ public class ItemBestiary extends Item {
     }
 
     @Override
-    public void fillItemCategory(@NotNull CreativeModeTab group, @NotNull NonNullList<ItemStack> items) {
-        if (this.allowdedIn(group)) {
+    public void fillItemCategory(@NotNull NonNullList<ItemStack> items) {
             items.add(new ItemStack(this));
             ItemStack stack = new ItemStack(IafItemRegistry.BESTIARY.get());
             IafNbt.setTag(stack, new CompoundTag());
@@ -50,7 +49,6 @@ public class ItemBestiary extends Item {
             IafNbt.update(stack, tag -> tag.putIntArray("Pages", pages));
             items.add(stack);
         }
-    }
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, @NotNull InteractionHand handIn) {

@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import com.github.alexthe666.iceandfire.util.IafNbt;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
@@ -71,7 +72,7 @@ public class ItemDragonHorn extends Item {
             target.save(entityTag);
             newTag.put("EntityTag", entityTag);
 
-            newTag.putString("DragonHornEntityID", Registry.ENTITY_TYPE.getKey(target.getType()).toString());
+            newTag.putString("DragonHornEntityID", BuiltInRegistries.ENTITY_TYPE.getKey(target.getType()).toString());
             IafNbt.setTag(trueStack, newTag);
 
             playerIn.swing(hand);

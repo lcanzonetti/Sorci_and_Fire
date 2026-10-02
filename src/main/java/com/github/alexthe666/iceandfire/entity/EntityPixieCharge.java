@@ -19,8 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.NetworkHooks;
-import net.neoforged.neoforge.network.PlayMessages;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityPixieCharge extends Fireball {
@@ -31,11 +29,6 @@ public class EntityPixieCharge extends Fireball {
     public EntityPixieCharge(EntityType<? extends Fireball> t, Level worldIn) {
         super(t, worldIn);
         rgb = EntityPixie.PARTICLE_RGB[random.nextInt(EntityPixie.PARTICLE_RGB.length - 1)];
-    }
-
-
-    public EntityPixieCharge(PlayMessages.SpawnEntity spawnEntity, Level worldIn) {
-        this(IafEntityRegistry.PIXIE_CHARGE.get(), worldIn);
     }
 
     public EntityPixieCharge(EntityType<? extends Fireball> t, Level worldIn, double posX, double posY,
@@ -56,11 +49,6 @@ public class EntityPixieCharge extends Fireball {
         this.yPower = accelY / d0 * 0.07D;
         this.zPower = accelZ / d0 * 0.07D;
         rgb = EntityPixie.PARTICLE_RGB[random.nextInt(EntityPixie.PARTICLE_RGB.length - 1)];
-    }
-
-    @Override
-    public @NotNull Packet<?> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
@@ -88,12 +76,12 @@ public class EntityPixieCharge extends Fireball {
         if (this.level().isClientSide || (shootingEntity == null || shootingEntity.isAlive()) && this.level().hasChunkAt(this.blockPosition())) {
             this.baseTick();
             if (this.shouldBurn()) {
-                this.setSecondsOnFire(1);
+                this.igniteForSeconds(1);
             }
 
             ++this.ticksInAir;
             HitResult raytraceresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
-            if (raytraceresult.getType() != HitResult.Type.MISS && !net.neoforged.neoforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
+            if (raytraceresult.getType() != HitResult.Type.MISS && !net.neoforged.neoforge.event.EventHooks.onProjectileImpact(this, raytraceresult)) {
                 this.onHit(raytraceresult);
             }
 
@@ -134,7 +122,7 @@ public class EntityPixieCharge extends Fireball {
                     if (entity instanceof LivingEntity) {
                         ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.LEVITATION, 100, 0));
                         ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0));
-                        entity.hurt(DamageSource.indirectMagic(shootingEntity, null), 5.0F);
+                        entity.hurt(shootingEntity.damageSources().indirectMagic(shootingEntity, null), 5.0F);
                     }
                     if (this.level().isClientSide) {
                         for (int i = 0; i < 20; ++i) {

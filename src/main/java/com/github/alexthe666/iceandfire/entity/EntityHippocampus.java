@@ -48,11 +48,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.util.LazyOptional;
-import net.neoforged.neoforge.items.CapabilityItemHandler;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
-import net.neoforged.neoforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -95,7 +91,6 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
     private int animationTick;
     private Animation currentAnimation;
     private boolean isLandNavigator;
-    private LazyOptional<?> itemHandler = null;
 
     public EntityHippocampus(EntityType<EntityHippocampus> t, Level worldIn) {
         super(t, worldIn);
@@ -444,7 +439,6 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
 
         this.inventory.addListener(this);
         this.updateContainerEquipment();
-        this.itemHandler = LazyOptional.of(() -> new InvWrapper(this.inventory));
     }
 
     protected void updateContainerEquipment() {
@@ -455,22 +449,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
         }
     }
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (this.isAlive() && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && itemHandler != null)
-            return itemHandler.cast();
-        return super.getCapability(capability, facing);
-    }
 
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        if (itemHandler != null) {
-            LazyOptional<?> oldHandler = itemHandler;
-            itemHandler = null;
-            oldHandler.invalidate();
-        }
-    }
 
     public boolean hasInventoryChanged(Container pInventory) {
         return this.inventory != pInventory;
@@ -822,7 +801,7 @@ public class EntityHippocampus extends TamableAnimal implements ISyncMount, IAni
 
     public void openInventory(Player player) {
         if (!this.level().isClientSide)
-            NetworkHooks.openGui((ServerPlayer) player, getMenuProvider());
+            ((ServerPlayer) player).openMenu( getMenuProvider());
         IceAndFire.PROXY.setReferencedMob(this);
     }
 

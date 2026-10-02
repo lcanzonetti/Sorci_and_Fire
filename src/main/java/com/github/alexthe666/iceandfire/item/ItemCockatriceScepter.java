@@ -51,9 +51,7 @@ public class ItemCockatriceScepter extends Item {
     @Override
     public void releaseUsing(@NotNull ItemStack stack, @NotNull Level worldIn, @NotNull LivingEntity livingEntity, int timeLeft) {
         if (specialWeaponDmg > 0) {
-            stack.hurtAndBreak(specialWeaponDmg, livingEntity, (player) -> {
-                player.broadcastBreakEvent(livingEntity.getUsedItemHand());
-            });
+            stack.hurtAndBreak(specialWeaponDmg, livingEntity, LivingEntity.getSlotForHand(livingEntity.getUsedItemHand()));
             specialWeaponDmg = 0;
         }
         MiscProperties.getTargeting(livingEntity).forEach(target -> {
@@ -139,7 +137,7 @@ public class ItemCockatriceScepter extends Item {
             target.addEffect(new MobEffectInstance(MobEffects.WITHER, 40, 2));
             if (caster.tickCount % 20 == 0) {
                 specialWeaponDmg++;
-                target.hurt(DamageSource.WITHER, 2);
+                target.hurt(target.damageSources().wither(), 2);
             }
             drawParticleBeam(caster, target);
             if (!target.isAlive()) {

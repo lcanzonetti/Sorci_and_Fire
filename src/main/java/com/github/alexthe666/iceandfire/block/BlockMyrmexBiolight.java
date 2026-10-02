@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -17,6 +18,12 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.util.RandomSource;
 
 public class BlockMyrmexBiolight extends BushBlock {
+
+    @Override
+    protected @NotNull MapCodec<? extends BushBlock> codec() {
+        return MapCodec.unit(this);
+    }
+
 
     public static final BooleanProperty CONNECTED_DOWN = BooleanProperty.create("down");
 

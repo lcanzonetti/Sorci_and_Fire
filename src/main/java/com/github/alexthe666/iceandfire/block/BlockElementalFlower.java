@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.block;
 
+import com.mojang.serialization.MapCodec;
 import com.github.alexthe666.iceandfire.misc.IafBlockTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.Item;
@@ -17,6 +18,12 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.util.RandomSource;
 
 public class BlockElementalFlower extends BushBlock {
+
+    @Override
+    protected @NotNull MapCodec<? extends BushBlock> codec() {
+        return MapCodec.unit(this);
+    }
+
     public Item itemBlock;
     protected static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 13.0D, 14.0D);
 
@@ -48,7 +55,7 @@ public class BlockElementalFlower extends BushBlock {
         if (this == IafBlockRegistry.FIRE_LILY.get()) {
             return soil.is(IafBlockTags.MATERIAL_SAND) || soil.getBlock() == Blocks.NETHERRACK;
         } else if (this == IafBlockRegistry.LIGHTNING_LILY.get()) {
-            return soil.is(IafBlockTags.MATERIAL_DIRT) || soil.getBlock() == Blocks.GRASS;
+            return soil.is(IafBlockTags.MATERIAL_DIRT) || soil.getBlock() == Blocks.GRASS_BLOCK;
         } else {
             return soil.is(IafBlockTags.MATERIAL_ICE) || soil.is(IafBlockTags.MATERIAL_ICE);
         }

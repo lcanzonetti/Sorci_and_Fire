@@ -3,6 +3,8 @@ package com.github.alexthe666.iceandfire.misc;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
+import com.github.alexthe666.iceandfire.item.IafTabItem;
+import net.minecraft.core.NonNullList;
 import com.github.alexthe666.iceandfire.item.ItemGeneric;
 import com.github.alexthe666.iceandfire.item.ItemStoneStatue;
 import net.minecraft.core.registries.Registries;
@@ -23,7 +25,11 @@ public class IafCreativeTabs {
         .icon(() -> new ItemStack(IafItemRegistry.DRAGON_SKULL_FIRE.get()))
         .displayItems((parameters, output) -> IafItemRegistry.ITEMS.getEntries().forEach(holder -> {
             Item item = holder.get();
-            if (isVisibleItem(item)) {
+            if (item instanceof IafTabItem tabItem) {
+                NonNullList<ItemStack> variants = NonNullList.create();
+                tabItem.fillItemCategory(variants);
+                output.acceptAll(variants);
+            } else if (isVisibleItem(item)) {
                 output.accept(item);
             }
         }))

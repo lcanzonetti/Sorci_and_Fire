@@ -11,7 +11,7 @@ import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -29,7 +29,7 @@ public class RenderGorgonHead extends BlockEntityWithoutLevelRenderer {
     }
 
     @Override
-    public void renderByItem(ItemStack stack, ItemTransforms.@NotNull TransformType type, @NotNull PoseStack stackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
+    public void renderByItem(ItemStack stack, @NotNull ItemDisplayContext type, @NotNull PoseStack stackIn, @NotNull MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn) {
         boolean active = false;
         if (stack.getItem() == IafItemRegistry.GORGON_HEAD.get()) {
             if (IafNbt.getTag(stack) != null) {
@@ -41,7 +41,7 @@ public class RenderGorgonHead extends BlockEntityWithoutLevelRenderer {
         stackIn.pushPose();
         stackIn.translate(0.5F, active ? 1.5F : 1.25F, 0.5F);
         VertexConsumer ivertexbuilder = bufferIn.getBuffer(active ? ACTIVE_TEXTURE : INACTIVE_TEXTURE);
-        model.renderToBuffer(stackIn, ivertexbuilder, combinedLightIn, combinedOverlayIn, 1.0F, 1.0F, 1.0F, 1.0F);
+        model.renderToBuffer(stackIn, ivertexbuilder, combinedLightIn, combinedOverlayIn, -1);
         stackIn.popPose();
     }
 

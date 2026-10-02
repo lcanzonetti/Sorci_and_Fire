@@ -32,14 +32,14 @@ public class ItemAlchemySword extends SwordItem {
     public boolean hurtEnemy(@NotNull ItemStack stack, @NotNull LivingEntity target, @NotNull LivingEntity attacker) {
         if (this == IafItemRegistry.DRAGONBONE_SWORD_FIRE.get() && IafConfig.dragonWeaponFireAbility) {
             if (target instanceof EntityIceDragon) {
-                target.hurt(DamageSource.IN_FIRE, 13.5F);
+                target.hurt(target.damageSources().inFire(), 13.5F);
             }
-            target.setSecondsOnFire(5);
+            target.igniteForSeconds(5);
             target.knockback(1F, attacker.getX() - target.getX(), attacker.getZ() - target.getZ());
         }
         if (this == IafItemRegistry.DRAGONBONE_SWORD_ICE.get() && IafConfig.dragonWeaponIceAbility) {
             if (target instanceof EntityFireDragon) {
-                target.hurt(DamageSource.DROWN, 13.5F);
+                target.hurt(target.damageSources().drown(), 13.5F);
             }
             FrozenProperties.setFrozenFor(target, 200);
             target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 2));
@@ -63,7 +63,7 @@ public class ItemAlchemySword extends SwordItem {
                 }
             }
             if (target instanceof EntityFireDragon || target instanceof EntityIceDragon) {
-                target.hurt(DamageSource.LIGHTNING_BOLT, 9.5F);
+                target.hurt(target.damageSources().lightningBolt(), 9.5F);
             }
             target.knockback(1F, attacker.getX() - target.getX(), attacker.getZ() - target.getZ());
         }

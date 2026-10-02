@@ -18,8 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.NetworkHooks;
-import net.neoforged.neoforge.network.PlayMessages;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityHydraBreath extends Fireball implements IDragonProjectile {
@@ -33,10 +31,6 @@ public class EntityHydraBreath extends Fireball implements IDragonProjectile {
         super(t, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
     }
 
-    public EntityHydraBreath(PlayMessages.SpawnEntity spawnEntity, Level worldIn) {
-        this(IafEntityRegistry.HYDRA_BREATH.get(), worldIn);
-    }
-
     public EntityHydraBreath(EntityType<? extends Fireball> t, Level worldIn, EntityHydra shooter,
                              double accelX, double accelY, double accelZ) {
         super(t, shooter, accelX, accelY, accelZ, worldIn);
@@ -44,11 +38,6 @@ public class EntityHydraBreath extends Fireball implements IDragonProjectile {
         this.xPower = accelX / d0 * 0.02D;
         this.yPower = accelY / d0 * 0.02D;
         this.zPower = accelZ / d0 * 0.02D;
-    }
-
-    @Override
-    public @NotNull Packet<?> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
@@ -82,11 +71,11 @@ public class EntityHydraBreath extends Fireball implements IDragonProjectile {
         if (this.level().isClientSide || (shootingEntity == null || shootingEntity.isAlive()) && this.level().hasChunkAt(this.blockPosition())) {
             this.baseTick();
             if (this.shouldBurn()) {
-                this.setSecondsOnFire(1);
+                this.igniteForSeconds(1);
             }
 
             HitResult raytraceresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
-            if (raytraceresult.getType() != HitResult.Type.MISS && !net.neoforged.neoforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
+            if (raytraceresult.getType() != HitResult.Type.MISS && !net.neoforged.neoforge.event.EventHooks.onProjectileImpact(this, raytraceresult)) {
                 this.onHit(raytraceresult);
             }
 
@@ -140,7 +129,7 @@ public class EntityHydraBreath extends Fireball implements IDragonProjectile {
                     if (dragon.isAlliedTo(entity) || dragon.is(entity)) {
                         return;
                     }
-                    entity.hurt(DamageSource.mobAttack(dragon), 2.0F);
+                    entity.hurt(dragon.damageSources().mobAttack(dragon), 2.0F);
                     if (entity instanceof LivingEntity) {
                         ((LivingEntity) entity).addEffect(new MobEffectInstance(MobEffects.POISON, 60, 0));
                     }

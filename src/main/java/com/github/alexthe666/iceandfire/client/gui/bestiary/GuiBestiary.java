@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.client.gui.bestiary;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.util.FastColor;
+import net.minecraft.world.item.ItemDisplayContext;
 import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
@@ -28,7 +31,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -82,7 +84,7 @@ public class GuiBestiary extends Screen {
     }
 
     private static Item getItemByRegistryName(String registryName) {
-        return ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(registryName));
+        return BuiltInRegistries.ITEM.get(ResourceLocation.parse(registryName));
     }
 
     @Override
@@ -1000,7 +1002,7 @@ public class GuiBestiary extends Screen {
             Lighting.setupForFlatItems();
         }
 
-        this.itemRenderer.render(stack, ItemTransforms.TransformType.GUI, false, matrixstack, irendertypebuffer$impl, 15728880, OverlayTexture.NO_OVERLAY, bakedmodel);
+        this.itemRenderer.render(stack, ItemDisplayContext.GUI, false, matrixstack, FastColor.ARGB32.colorFromFloat(bakedmodel, irendertypebuffer$impl, 15728880, OverlayTexture.NO_OVERLAY));
         irendertypebuffer$impl.endBatch();
         RenderSystem.enableDepthTest();
         if (flag) {

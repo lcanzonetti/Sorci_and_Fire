@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -31,7 +32,7 @@ public class ItemDragonArmor extends Item {
 
     @Override
     public @NotNull String getDescriptionId() {
-        String fullName = this.getRegistryName().getPath();
+        String fullName = BuiltInRegistries.ITEM.getKey(this).getPath();
         Matcher matcher = baseName.matcher(fullName);
         name = matcher.find() ? matcher.group() : fullName;
         return "item.iceandfire." + name;

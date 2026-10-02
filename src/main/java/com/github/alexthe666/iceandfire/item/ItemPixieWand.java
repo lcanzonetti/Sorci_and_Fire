@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.util.IafEnchantmentHelper;
+
+import net.minecraft.world.entity.LivingEntity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityPixieCharge;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
@@ -31,12 +34,12 @@ public class ItemPixieWand extends Item {
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level worldIn, Player playerIn, @NotNull InteractionHand hand) {
         ItemStack itemStackIn = playerIn.getItemInHand(hand);
-        boolean flag = playerIn.isCreative() || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, itemStackIn) > 0;
+        boolean flag = playerIn.isCreative() || IafEnchantmentHelper.getLevel(worldIn, Enchantments.INFINITY, itemStackIn) > 0;
         ItemStack itemstack = this.findAmmo(playerIn);
         playerIn.startUsingItem(hand);
         playerIn.swing(hand);
         if (!itemstack.isEmpty() || flag) {
-            boolean flag1 = playerIn.isCreative() || this.isInfinite(itemstack, itemStackIn, playerIn);
+            boolean flag1 = playerIn.isCreative() || this.isInfinite(worldIn, itemstack, itemStackIn);
             if (!flag1) {
                 itemstack.shrink(1);
                 if (itemstack.isEmpty()) {
@@ -57,16 +60,14 @@ public class ItemPixieWand extends Item {
                 worldIn.addFreshEntity(charge);
             }
             playerIn.playSound(IafSoundRegistry.PIXIE_WAND, 1F, 0.75F + 0.5F * playerIn.getRandom().nextFloat());
-            itemstack.hurtAndBreak(1, playerIn, (player) -> {
-                player.broadcastBreakEvent(playerIn.getUsedItemHand());
-            });
+            itemstack.hurtAndBreak(1, playerIn, LivingEntity.getSlotForHand(playerIn.getUsedItemHand()));
             playerIn.getCooldowns().addCooldown(this, 5);
         }
         return new InteractionResultHolder<ItemStack>(InteractionResult.PASS, itemStackIn);
     }
 
-    public boolean isInfinite(ItemStack stack, ItemStack bow, net.minecraft.world.entity.player.Player player) {
-        int enchant = net.minecraft.world.item.enchantment.EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, bow);
+    public boolean isInfinite(Level level, ItemStack stack, ItemStack bow) {
+        int enchant = IafEnchantmentHelper.getLevel(level, Enchantments.INFINITY, bow);
         return enchant > 0 && stack.getItem() == IafItemRegistry.PIXIE_DUST.get();
     }
 

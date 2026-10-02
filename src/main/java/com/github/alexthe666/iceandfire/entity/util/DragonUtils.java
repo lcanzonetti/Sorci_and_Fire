@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.util;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.core.registries.Registries;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.*;
@@ -25,7 +28,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -287,7 +289,7 @@ public class DragonUtils {
     }
 
     public static boolean canTameDragonAttack(TamableAnimal dragon, Entity entity) {
-        if (entity.getType().is(Objects.requireNonNull(ForgeRegistries.ENTITIES.tags()).createTagKey(IafTagRegistry.VILLAGERS))) {
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, IafTagRegistry.VILLAGERS))) {
             return false;
         }
         if (entity instanceof AbstractVillager || entity instanceof AbstractGolem || entity instanceof Player) {
@@ -300,7 +302,7 @@ public class DragonUtils {
     }
 
     public static boolean isVillager(Entity entity) {
-        return entity.getType().is(ForgeRegistries.ENTITIES.tags().createTagKey(IafTagRegistry.VILLAGERS));
+        return entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, IafTagRegistry.VILLAGERS));
     }
 
     public static boolean isAnimaniaMob(Entity entity) {
@@ -308,7 +310,7 @@ public class DragonUtils {
     }
 
     public static boolean isDragonTargetable(Entity entity, ResourceLocation tag) {
-        return entity.getType().is(ForgeRegistries.ENTITIES.tags().createTagKey(tag));
+        return entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, tag));
     }
 
     public static String getDimensionName(Level world) {
@@ -367,14 +369,14 @@ public class DragonUtils {
     public static boolean isBlacklistedBlock(Block block) {
         if (IafConfig.blacklistBreakBlocksIsWhiteList) {
             for (String name : IafConfig.blacklistedBreakBlocks) {
-                if (name.equalsIgnoreCase(block.getRegistryName().toString())) {
+                if (name.equalsIgnoreCase(BuiltInRegistries.BLOCK.getKey(block).toString())) {
                     return false;
                 }
             }
             return true;
         } else {
             for (String name : IafConfig.blacklistedBreakBlocks) {
-                if (name.equalsIgnoreCase(block.getRegistryName().toString())) {
+                if (name.equalsIgnoreCase(BuiltInRegistries.BLOCK.getKey(block).toString())) {
                     return true;
                 }
             }
@@ -423,7 +425,7 @@ public class DragonUtils {
 
     public static boolean canDropFromDragonBlockBreak(BlockState state) {
         for (String name : IafConfig.noDropBreakBlocks) {
-            if (name.equalsIgnoreCase(state.getBlock().getRegistryName().toString())) {
+            if (name.equalsIgnoreCase(BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString())) {
                 return false;
             }
         }

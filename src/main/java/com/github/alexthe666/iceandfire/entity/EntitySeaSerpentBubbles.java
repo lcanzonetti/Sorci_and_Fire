@@ -16,8 +16,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.NetworkHooks;
-import net.neoforged.neoforge.network.PlayMessages;
 import org.jetbrains.annotations.NotNull;
 
 public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjectile {
@@ -29,10 +27,6 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
     public EntitySeaSerpentBubbles(EntityType<? extends Fireball> t, Level worldIn, double posX,
                                    double posY, double posZ, double accelX, double accelY, double accelZ) {
         super(t, posX, posY, posZ, accelX, accelY, accelZ, worldIn);
-    }
-
-    public EntitySeaSerpentBubbles(PlayMessages.SpawnEntity spawnEntity, Level world) {
-        this(IafEntityRegistry.SEA_SERPENT_BUBBLES.get(), world);
     }
 
 
@@ -48,11 +42,6 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
     @Override
     public boolean isPickable() {
         return false;
-    }
-
-    @Override
-    public @NotNull Packet<?> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
@@ -75,7 +64,7 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
         if (this.level().isClientSide || (shootingEntity == null || !shootingEntity.isAlive()) && this.level().hasChunkAt(this.blockPosition())) {
             this.baseTick();
             HitResult raytraceresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
-            if (raytraceresult.getType() != HitResult.Type.MISS && !net.neoforged.neoforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
+            if (raytraceresult.getType() != HitResult.Type.MISS && !net.neoforged.neoforge.event.EventHooks.onProjectileImpact(this, raytraceresult)) {
                 this.onHit(raytraceresult);
             }
 
@@ -160,7 +149,7 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
                     if (dragon.isAlliedTo(entity) || dragon.is(entity)) {
                         return;
                     }
-                    entity.hurt(DamageSource.mobAttack(dragon), 6.0F);
+                    entity.hurt(dragon.damageSources().mobAttack(dragon), 6.0F);
 
                 }
             }

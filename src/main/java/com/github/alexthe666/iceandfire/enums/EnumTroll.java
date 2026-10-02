@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.enums;
 
-import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
+import com.github.alexthe666.iceandfire.item.IafArmorMaterial;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
@@ -27,14 +27,14 @@ public enum EnumTroll {
     public ResourceLocation TEXTURE;
     public ResourceLocation TEXTURE_STONE;
     public ResourceLocation TEXTURE_EYES;
-    public CustomArmorMaterial material;
+    public IafArmorMaterial material;
     public Supplier<Item> leather;
     public Supplier<Item> helmet;
     public Supplier<Item> chestplate;
     public Supplier<Item> leggings;
     public Supplier<Item> boots;
 
-    EnumTroll(CustomArmorMaterial material, Weapon... weapons) {
+    EnumTroll(IafArmorMaterial material, Weapon... weapons) {
         this.weapons = weapons;
         this.material = material;
         TEXTURE = ResourceLocation.parse("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase(Locale.ROOT) + ".png");

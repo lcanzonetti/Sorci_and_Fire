@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.block;
 
+import net.minecraft.core.particles.ParticleTypes;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumParticles;
 import net.minecraft.core.BlockPos;
@@ -17,6 +19,7 @@ public class BlockDreadTorchWall extends WallTorchBlock implements IDreadBlock {
 
     public BlockDreadTorchWall() {
         super(
+            ParticleTypes.SMOKE,
             IafMaterial.WOOD.properties()
                 
                 .lightLevel((state) -> {
@@ -26,8 +29,7 @@ public class BlockDreadTorchWall extends WallTorchBlock implements IDreadBlock {
                 .noOcclusion()
                 .dynamicShape()
                 .noCollission()
-                .dropsLike(IafBlockRegistry.DREAD_TORCH.get()),
-            DustParticleOptions.REDSTONE
+                .dropsLike(IafBlockRegistry.DREAD_TORCH.get())
         );
     }
 

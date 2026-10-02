@@ -1,9 +1,8 @@
 package com.github.alexthe666.iceandfire.enums;
 
-import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
+import com.github.alexthe666.iceandfire.item.IafArmorMaterial;
 import com.github.alexthe666.iceandfire.block.BlockSeaSerpentScales;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.item.IafArmorMaterial;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentScales;
@@ -29,7 +28,7 @@ public enum EnumSeaSerpent {
 
     public String resourceName;
     public ChatFormatting color;
-    public CustomArmorMaterial armorMaterial;
+    public IafArmorMaterial armorMaterial;
     public DeferredItem<Item> scale;
     public DeferredItem<Item> helmet;
     public DeferredItem<Item> chestplate;

@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.common.util.LazyOptional;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
@@ -16,9 +15,6 @@ public class PixieJarInvWrapper implements IItemHandlerModifiable {
         this.tile = tile;
     }
 
-    public static LazyOptional<IItemHandler> create(TileEntityJar trashCan) {
-        return LazyOptional.of(() -> new PixieJarInvWrapper(trashCan));
-    }
 
     @Override
     public void setStackInSlot(int slot, @Nonnull ItemStack stack) {

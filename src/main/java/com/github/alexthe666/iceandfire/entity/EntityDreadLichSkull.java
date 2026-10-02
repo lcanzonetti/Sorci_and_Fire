@@ -17,8 +17,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.common.ToolActions;
-import net.neoforged.neoforge.network.NetworkHooks;
-import net.neoforged.neoforge.network.PlayMessages;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -48,10 +46,6 @@ public class EntityDreadLichSkull extends AbstractArrow {
                                 double dmg) {
         super(type, shooter, worldIn);
         this.setBaseDamage(dmg);
-    }
-
-    public EntityDreadLichSkull(PlayMessages.SpawnEntity spawnEntity, Level worldIn) {
-        this(IafEntityRegistry.DREAD_LICH_SKULL.get(), worldIn);
     }
 
     @Override
@@ -164,13 +158,11 @@ public class EntityDreadLichSkull extends AbstractArrow {
         if (damage >= 3.0F && player.getUseItem().getItem().canPerformAction(player.getUseItem(), ToolActions.SHIELD_BLOCK)) {
             ItemStack copyBeforeUse = player.getUseItem().copy();
             int i = 1 + Mth.floor(damage);
-            player.getUseItem().hurtAndBreak(i, player, (playerSheild) -> {
-                playerSheild.broadcastBreakEvent(playerSheild.getUsedItemHand());
-            });
+            player.getUseItem().hurtAndBreak(i, player, LivingEntity.getSlotForHand(player.getUsedItemHand()));
 
             if (player.getUseItem().isEmpty()) {
                 InteractionHand Hand = player.getUsedItemHand();
-                net.neoforged.neoforge.event.ForgeEventFactory.onPlayerDestroyItem(player, copyBeforeUse, Hand);
+                net.neoforged.neoforge.event.EventHooks.onPlayerDestroyItem(player, copyBeforeUse, Hand);
 
                 if (Hand == net.minecraft.world.InteractionHand.MAIN_HAND) {
                     this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
@@ -200,11 +192,6 @@ public class EntityDreadLichSkull extends AbstractArrow {
     @Override
     protected @NotNull ItemStack getPickupItem() {
         return ItemStack.EMPTY;
-    }
-
-    @Override
-    public @NotNull Packet<?> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 
 }

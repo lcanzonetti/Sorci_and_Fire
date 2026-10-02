@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import net.minecraft.util.FastColor;
 import com.mojang.math.Axis;
 import com.github.alexthe666.iceandfire.client.model.ModelGhost;
 import com.github.alexthe666.iceandfire.client.render.IafRenderType;
@@ -147,7 +148,7 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
                 matrixStackIn.popPose();
 
             } else {
-                this.model.renderToBuffer(matrixStackIn, ivertexbuilder, 240, i, 1.0F, 1.0F, 1.0F, alphaForRender);
+                this.model.renderToBuffer(matrixStackIn, ivertexbuilder, 240, i, FastColor.ARGB32.colorFromFloat(alphaForRender, 1.0F, 1.0F, 1.0F));
             }
         }
 
@@ -197,6 +198,6 @@ public class RenderGhost extends MobRenderer<EntityGhost, ModelGhost> {
     }
 
     public void drawVertex(Matrix4f stack, Matrix3f normal, VertexConsumer builder, int packedRed, int alphaInt, int x, int y, int z, float u, float v, int lightmap, int lightmap3, int lightmap2, int lightmap4) {
-        builder.vertex(stack, (float) x, (float) y, (float) z).color(255, 255, 255, alphaInt).uv(u, v).overlayCoords(packedRed).uv2(lightmap4).normal(normal, (float) lightmap, (float) lightmap2, (float) lightmap3).endVertex();
+        builder.addVertex(stack, (float) x, (float) y, (float) z).setColor(255, 255, 255, alphaInt).setUv(u, v).setOverlay(packedRed).setLight(lightmap4).setNormal(normal, (float) lightmap, (float) lightmap2, (float) lightmap3);
     }
 }

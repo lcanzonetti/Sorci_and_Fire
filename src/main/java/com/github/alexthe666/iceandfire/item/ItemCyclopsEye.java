@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import net.minecraft.world.entity.EquipmentSlot;
 import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.ChatFormatting;
@@ -29,7 +30,7 @@ public class ItemCyclopsEye extends Item {
 
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        return !oldStack.sameItem(newStack);
+        return !ItemStack.isSameItem(oldStack, newStack);
     }
 
     @Override
@@ -53,8 +54,7 @@ public class ItemCyclopsEye extends Item {
                     }
                 }
                 if (IafNbt.getTag(stack).getInt("HurtingTicks") > 120) {
-                    stack.hurtAndBreak(1, (LivingEntity) entity, (p_220017_1_) -> {
-                    });
+                    stack.hurtAndBreak(1, (LivingEntity) entity, EquipmentSlot.MAINHAND);
                     IafNbt.update(stack, tag -> tag.putInt("HurtingTicks", 0));
                 }
             }

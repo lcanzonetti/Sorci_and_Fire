@@ -158,7 +158,7 @@ public class TileEntityDragonforgeInput extends BlockEntity {
         return level.getBlockState(worldPosition).getBlock() instanceof BlockDragonforgeInput && level.getBlockState(worldPosition).getValue(BlockDragonforgeInput.ACTIVE);
     }
 
-    private TileEntityDragonforge getConnectedTileEntity() {
+    public TileEntityDragonforge getConnectedTileEntity() {
         for (Direction facing : HORIZONTALS) {
             if (level.getBlockEntity(worldPosition.relative(facing)) instanceof TileEntityDragonforge) {
                 return (TileEntityDragonforge) level.getBlockEntity(worldPosition.relative(facing));
@@ -167,13 +167,5 @@ public class TileEntityDragonforgeInput extends BlockEntity {
         return null;
     }
 
-    @Override
-    @javax.annotation.Nonnull
-    public <T> net.neoforged.neoforge.common.util.LazyOptional<T> getCapability(net.neoforged.neoforge.common.capabilities.@NotNull Capability<T> capability, @Nullable Direction facing) {
-        if (core != null && capability == net.neoforged.neoforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return core.getCapability(capability, facing);
-        }
-        return super.getCapability(capability, facing);
-    }
 
 }

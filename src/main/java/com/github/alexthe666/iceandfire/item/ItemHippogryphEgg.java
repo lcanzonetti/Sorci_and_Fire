@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class ItemHippogryphEgg extends Item {
+public class ItemHippogryphEgg extends Item implements IafTabItem {
 
     public ItemHippogryphEgg() {
         super(new Item.Properties().stacksTo(1));
@@ -42,10 +42,8 @@ public class ItemHippogryphEgg extends Item {
         return stack;
     }
 
-
     @Override
-    public void fillItemCategory(@NotNull CreativeModeTab group, @NotNull NonNullList<ItemStack> items) {
-        if (this.allowdedIn(group)) {
+    public void fillItemCategory(@NotNull NonNullList<ItemStack> items) {
             for (EnumHippogryphTypes type : EnumHippogryphTypes.values()) {
                 ItemStack stack = new ItemStack(this);
                 CompoundTag tag = new CompoundTag();
@@ -55,8 +53,6 @@ public class ItemHippogryphEgg extends Item {
 
             }
         }
-
-    }
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level worldIn, Player playerIn, @NotNull InteractionHand handIn) {

@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.world;
 
+import net.minecraft.core.registries.Registries;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.world.gen.processor.DreadRuinProcessor;
 import com.github.alexthe666.iceandfire.world.gen.processor.GorgonTempleProcessor;
@@ -16,7 +17,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import java.util.function.Supplier;
 
 public class IafProcessors {
-    public static final DeferredRegister<StructureProcessorType<?>> PROCESSORS = DeferredRegister.create(Registry.STRUCTURE_PROCESSOR_REGISTRY, IceAndFire.MODID);
+    public static final DeferredRegister<StructureProcessorType<?>> PROCESSORS = DeferredRegister.create(Registries.STRUCTURE_PROCESSOR, IceAndFire.MODID);
 
     public static final DeferredHolder<StructureProcessorType<?>, StructureProcessorType<DreadRuinProcessor>> DREADRUINPROCESSOR = registerProcessor("dread_mausoleum_processor", () -> () -> DreadRuinProcessor.CODEC);
     public static final DeferredHolder<StructureProcessorType<?>, StructureProcessorType<GorgonTempleProcessor>> GORGONTEMPLEPROCESSOR = registerProcessor("gorgon_temple_processor", () -> () -> GorgonTempleProcessor.CODEC);

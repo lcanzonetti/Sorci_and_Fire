@@ -69,7 +69,7 @@ public class BlockIceSpikes extends Block {
     @Override
     public void stepOn(Level worldIn, BlockPos pos, BlockState pState, Entity entityIn) {
         if (!(entityIn instanceof EntityIceDragon)) {
-            entityIn.hurt(DamageSource.CACTUS, 1);
+            entityIn.hurt(worldIn.damageSources().cactus(), 1);
             if (entityIn instanceof LivingEntity && entityIn.getDeltaMovement().x != 0 && entityIn.getDeltaMovement().z != 0) {
                 ((LivingEntity) entityIn).knockback(0.5F, entityIn.getDeltaMovement().x, entityIn.getDeltaMovement().z);
             }

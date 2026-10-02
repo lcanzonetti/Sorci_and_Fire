@@ -65,7 +65,7 @@ public class MessageMultipartInteract implements CustomPacketPayload {
                         LivingEntity mob = (LivingEntity) entity;
                         if (dist < 100) {
                             if (message.dmg > 0F) {
-                                mob.hurt(DamageSource.mobAttack(player), message.dmg);
+                                mob.hurt(player.damageSources().mobAttack(player), message.dmg);
                             } else {
                                 mob.interact(player, InteractionHand.MAIN_HAND);
                             }

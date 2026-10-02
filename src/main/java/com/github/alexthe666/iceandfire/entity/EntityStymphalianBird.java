@@ -266,7 +266,7 @@ public class EntityStymphalianBird extends Monster implements IAnimatedEntity, E
             double dist = this.distanceToSqr(this.getTarget());
             if (this.getAnimation() == ANIMATION_PECK && this.getAnimationTick() == 7) {
                 if (dist < 1.5F) {
-                    this.getTarget().hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                    this.getTarget().hurt(this.damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
                 }
                 if (onGround()) {
                     this.setFlying(false);

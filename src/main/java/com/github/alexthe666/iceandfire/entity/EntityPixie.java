@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.world.damagesource.DamageTypes;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.ai.*;
@@ -143,7 +144,7 @@ public class EntityPixie extends TamableAnimal {
             this.stealCooldown = STEAL_COOLDOWN;
             return true;
         }
-        if (this.isOwnerClose() && (source == DamageSource.FALLING_BLOCK || source == DamageSource.IN_WALL || this.getOwner() != null && source.getEntity() == this.getOwner())) {
+        if (this.isOwnerClose() && (source.is(DamageTypes.FALLING_BLOCK) || source.is(DamageTypes.IN_WALL) || this.getOwner() != null && source.getEntity() == this.getOwner())) {
             return false;
         }
         return super.hurt(source, amount);

@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.world.damagesource.DamageTypes;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
@@ -205,7 +206,7 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
         if (source.getEntity() != null && ServerEvents.doesScareCockatrice(source.getEntity())) {
             damage *= 5;
         }
-        if (source == DamageSource.IN_WALL) {
+        if (source.is(DamageTypes.IN_WALL)) {
             return false;
         }
         return super.hurt(source, damage);
@@ -514,7 +515,7 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
         if (this.getAnimation() == ANIMATION_BITE && attackTarget != null && this.getAnimationTick() == 7) {
             double dist = this.distanceToSqr(attackTarget);
             if (dist < 8) {
-                attackTarget.hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                attackTarget.hurt(this.damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.getAnimation() == ANIMATION_JUMPAT && attackTarget != null) {
@@ -530,7 +531,7 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
                 }
             }
             if (dist < 4 && this.getAnimationTick() > 10) {
-                attackTarget.hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                attackTarget.hurt(this.damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
                 if ((double) leap >= 1.0E-4D) {
                     attackTarget.setDeltaMovement(attackTarget.getDeltaMovement().add(d0 / (double) leap * 0.800000011920929D + this.getDeltaMovement().x * 0.20000000298023224D, 0, d1 / (double) leap * 0.800000011920929D + this.getDeltaMovement().z * 0.20000000298023224D));
                 }
@@ -582,7 +583,7 @@ public class EntityCockatrice extends TamableAnimal implements IAnimatedEntity, 
                     attackTarget.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, Math.min(4, attackStrength)));
                     attackTarget.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
                     if (attackStrength >= 2 && attackTarget.tickCount % 40 == 0) {
-                        attackTarget.hurt(DamageSource.WITHER, attackStrength - 1);
+                        attackTarget.hurt(attackTarget.damageSources().wither(), attackStrength - 1);
                     }
                     attackTarget.setLastHurtByMob(this);
                     if (!this.isTame() && attackTarget instanceof Player) {

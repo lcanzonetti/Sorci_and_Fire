@@ -24,7 +24,8 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.util.NonNullLazy;
+import com.google.common.base.Suppliers;
+import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -45,7 +46,7 @@ public class ItemDeathwormGauntlet extends Item {
     public void initializeClient(Consumer<net.neoforged.neoforge.client.extensions.common.IClientItemExtensions> consumer) {
 
         consumer.accept(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
-            static final NonNullLazy<BlockEntityWithoutLevelRenderer> renderer = NonNullLazy.of(() -> new RenderDeathWormGauntlet(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
+            static final Supplier<BlockEntityWithoutLevelRenderer> renderer = Suppliers.memoize(() -> new RenderDeathWormGauntlet(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
 
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
@@ -95,9 +96,7 @@ public class ItemDeathwormGauntlet extends Item {
     @Override
     public void releaseUsing(@NotNull ItemStack stack, @NotNull Level worldIn, @NotNull LivingEntity LivingEntity, int timeLeft) {
         if (specialDamage > 0) {
-            stack.hurtAndBreak(specialDamage, LivingEntity, (player) -> {
-                player.broadcastBreakEvent(LivingEntity.getUsedItemHand());
-            });
+            stack.hurtAndBreak(specialDamage, LivingEntity, LivingEntity.getSlotForHand(LivingEntity.getUsedItemHand()));
             specialDamage = 0;
         }
         if (IafNbt.getTag(stack).getInt("HolderID") != -1) {
@@ -107,7 +106,7 @@ public class ItemDeathwormGauntlet extends Item {
 
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        return !oldStack.sameItem(newStack);
+        return !ItemStack.isSameItem(oldStack, newStack);
     }
 
     @Override
@@ -151,7 +150,7 @@ public class ItemDeathwormGauntlet extends Item {
                         boolean canSee = d1 > 1.0D - 0.5D / d0 && player.hasLineOfSight(livingEntity);
                         if (canSee) {
                             specialDamage++;
-                            livingEntity.hurt(DamageSource.playerAttack((Player) entity), 3F);
+                            livingEntity.hurt((Player) entity.damageSources().playerAttack((Player) entity), 3F);
                             livingEntity.knockback(0.5F, livingEntity.getX() - player.getX(), livingEntity.getZ() - player.getZ());
                         }
                     }

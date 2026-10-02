@@ -87,40 +87,40 @@ public class RenderPath {
 
         final Matrix4f matrix4f = matrixStack.last().pose();
         //  X+
-        vertexBuffer.vertex(matrix4f, 1.0f, 0.0f, 0.0f).color(r, g, b, 1.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, 1.0f, 1.0f, 0.0f).color(r, g, b, 1.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, 1.0f, 1.0f, 1.0f).color(r, g, b, 1.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, 1.0f, 0.0f, 1.0f).color(r, g, b, 1.0f).endVertex();
+        vertexBuffer.addVertex(matrix4f, 1.0f, 0.0f, 0.0f).setColor(r, g, b, 1.0f);
+        vertexBuffer.addVertex(matrix4f, 1.0f, 1.0f, 0.0f).setColor(r, g, b, 1.0f);
+        vertexBuffer.addVertex(matrix4f, 1.0f, 1.0f, 1.0f).setColor(r, g, b, 1.0f);
+        vertexBuffer.addVertex(matrix4f, 1.0f, 0.0f, 1.0f).setColor(r, g, b, 1.0f);
 
         //  X-
-        vertexBuffer.vertex(matrix4f, 0.0f, 0.0f, 1.0f).color(r, g, b, 1.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, 0.0f, 1.0f, 1.0f).color(r, g, b, 1.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, 0.0f, 1.0f, 0.0f).color(r, g, b, 1.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, 0.0f, 0.0f, 0.0f).color(r, g, b, 1.0f).endVertex();
+        vertexBuffer.addVertex(matrix4f, 0.0f, 0.0f, 1.0f).setColor(r, g, b, 1.0f);
+        vertexBuffer.addVertex(matrix4f, 0.0f, 1.0f, 1.0f).setColor(r, g, b, 1.0f);
+        vertexBuffer.addVertex(matrix4f, 0.0f, 1.0f, 0.0f).setColor(r, g, b, 1.0f);
+        vertexBuffer.addVertex(matrix4f, 0.0f, 0.0f, 0.0f).setColor(r, g, b, 1.0f);
 
         //  Z-
-        vertexBuffer.vertex(matrix4f, 0.0f, 0.0f, 0.0f).color(r, g, b, 1.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, 0.0f, 1.0f, 0.0f).color(r, g, b, 1.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, 1.0f, 1.0f, 0.0f).color(r, g, b, 1.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, 1.0f, 0.0f, 0.0f).color(r, g, b, 1.0f).endVertex();
+        vertexBuffer.addVertex(matrix4f, 0.0f, 0.0f, 0.0f).setColor(r, g, b, 1.0f);
+        vertexBuffer.addVertex(matrix4f, 0.0f, 1.0f, 0.0f).setColor(r, g, b, 1.0f);
+        vertexBuffer.addVertex(matrix4f, 1.0f, 1.0f, 0.0f).setColor(r, g, b, 1.0f);
+        vertexBuffer.addVertex(matrix4f, 1.0f, 0.0f, 0.0f).setColor(r, g, b, 1.0f);
 
         //  Z+
-        vertexBuffer.vertex(matrix4f, 1.0f, 0.0f, 1.0f).color(r, g, b, 1.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, 1.0f, 1.0f, 1.0f).color(r, g, b, 1.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, 0.0f, 1.0f, 1.0f).color(r, g, b, 1.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, 0.0f, 0.0f, 1.0f).color(r, g, b, 1.0f).endVertex();
+        vertexBuffer.addVertex(matrix4f, 1.0f, 0.0f, 1.0f).setColor(r, g, b, 1.0f);
+        vertexBuffer.addVertex(matrix4f, 1.0f, 1.0f, 1.0f).setColor(r, g, b, 1.0f);
+        vertexBuffer.addVertex(matrix4f, 0.0f, 1.0f, 1.0f).setColor(r, g, b, 1.0f);
+        vertexBuffer.addVertex(matrix4f, 0.0f, 0.0f, 1.0f).setColor(r, g, b, 1.0f);
 
         //  Y+
-        vertexBuffer.vertex(matrix4f, 1.0f, 1.0f, 1.0f).color(r, g, b, 1.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, 1.0f, 1.0f, 0.0f).color(r, g, b, 1.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, 0.0f, 1.0f, 0.0f).color(r, g, b, 1.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, 0.0f, 1.0f, 1.0f).color(r, g, b, 1.0f).endVertex();
+        vertexBuffer.addVertex(matrix4f, 1.0f, 1.0f, 1.0f).setColor(r, g, b, 1.0f);
+        vertexBuffer.addVertex(matrix4f, 1.0f, 1.0f, 0.0f).setColor(r, g, b, 1.0f);
+        vertexBuffer.addVertex(matrix4f, 0.0f, 1.0f, 0.0f).setColor(r, g, b, 1.0f);
+        vertexBuffer.addVertex(matrix4f, 0.0f, 1.0f, 1.0f).setColor(r, g, b, 1.0f);
 
         //  Y-
-        vertexBuffer.vertex(matrix4f, 0.0f, 0.0f, 1.0f).color(r, g, b, 1.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, 0.0f, 0.0f, 0.0f).color(r, g, b, 1.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, 1.0f, 0.0f, 0.0f).color(r, g, b, 1.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, 1.0f, 0.0f, 1.0f).color(r, g, b, 1.0f).endVertex();
+        vertexBuffer.addVertex(matrix4f, 0.0f, 0.0f, 1.0f).setColor(r, g, b, 1.0f);
+        vertexBuffer.addVertex(matrix4f, 0.0f, 0.0f, 0.0f).setColor(r, g, b, 1.0f);
+        vertexBuffer.addVertex(matrix4f, 1.0f, 0.0f, 0.0f).setColor(r, g, b, 1.0f);
+        vertexBuffer.addVertex(matrix4f, 1.0f, 0.0f, 1.0f).setColor(r, g, b, 1.0f);
 
         if (n.parent != null) {
             matrixStack.pushPose();
@@ -132,8 +132,8 @@ public class RenderPath {
 
             final VertexConsumer buffer = BORDER_LINE_RENDERER.get();
 
-            buffer.vertex(lineMatrix, 0.5f, 0.5f, 0.5f).color(0.75F, 0.75F, 0.75F, 1.0F).endVertex();
-            buffer.vertex(lineMatrix, pdx / 0.25f, pdy / 0.25f, pdz / 0.25f).color(0.75F, 0.75F, 0.75F, 1.0F).endVertex();
+            buffer.addVertex(lineMatrix, 0.5f, 0.5f, 0.5f).setColor(0.75F, 0.75F, 0.75F, 1.0F);
+            buffer.addVertex(lineMatrix, pdx / 0.25f, pdy / 0.25f, pdz / 0.25f).setColor(0.75F, 0.75F, 0.75F, 1.0F);
             matrixStack.popPose();
         }
 
@@ -158,10 +158,10 @@ public class RenderPath {
         final Matrix4f matrix4f = matrixStack.last().pose();
 
         final VertexConsumer vertexBuffer = PATH_TEXT_RENDERER.get();
-        vertexBuffer.vertex(matrix4f, (-i - 1), -5.0f, 0.0f).color(0.0F, 0.0F, 0.0F, 0.7F).normal(0.0f, 1.0f, 0.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, (-i - 1), 12.0f, 0.0f).color(0.0F, 0.0F, 0.0F, 0.7F).normal(0.0f, 1.0f, 0.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, (i + 1), 12.0f, 0.0f).color(0.0F, 0.0F, 0.0F, 0.7F).normal(0.0f, 1.0f, 0.0f).endVertex();
-        vertexBuffer.vertex(matrix4f, (i + 1), -5.0f, 0.0f).color(0.0F, 0.0F, 0.0F, 0.7F).normal(0.0f, 1.0f, 0.0f).endVertex();
+        vertexBuffer.addVertex(matrix4f, (-i - 1), -5.0f, 0.0f).setColor(0.0F, 0.0F, 0.0F, 0.7F).setNormal(0.0f, 1.0f, 0.0f);
+        vertexBuffer.addVertex(matrix4f, (-i - 1), 12.0f, 0.0f).setColor(0.0F, 0.0F, 0.0F, 0.7F).setNormal(0.0f, 1.0f, 0.0f);
+        vertexBuffer.addVertex(matrix4f, (i + 1), 12.0f, 0.0f).setColor(0.0F, 0.0F, 0.0F, 0.7F).setNormal(0.0f, 1.0f, 0.0f);
+        vertexBuffer.addVertex(matrix4f, (i + 1), -5.0f, 0.0f).setColor(0.0F, 0.0F, 0.0F, 0.7F).setNormal(0.0f, 1.0f, 0.0f);
 
         matrixStack.pushPose();
 

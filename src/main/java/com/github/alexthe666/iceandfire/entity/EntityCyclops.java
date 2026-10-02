@@ -1,5 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.tags.TagKey;
+import net.minecraft.core.registries.Registries;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
@@ -47,10 +49,9 @@ import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -71,8 +72,8 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
         super(type, worldIn);
         IHasCustomizableAttributes.applyAttributesForEntity(type, this);
         this.maxUpStep = 2.5F;
-        this.setPathfindingMalus(BlockPathTypes.WATER, -1.0F);
-        this.setPathfindingMalus(BlockPathTypes.FENCE, 0.0F);
+        this.setPathfindingMalus(PathType.WATER, -1.0F);
+        this.setPathfindingMalus(PathType.FENCE, 0.0F);
         ANIMATION_STOMP = Animation.create(27);
         ANIMATION_EATPLAYER = Animation.create(40);
         ANIMATION_KICK = Animation.create(20);
@@ -170,7 +171,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
             if (!entityIn.hasPassenger(this)
                 && entityIn.getBbWidth() < 1.95F
                 && !(entityIn instanceof EntityDragonBase)
-                && !entityIn.getType().is((ForgeRegistries.ENTITIES.tags().createTagKey(IafTagRegistry.CYCLOPS_UNLIFTABLES)))) {
+                && !entityIn.getType().is((TagKey.create(Registries.ENTITY_TYPE, IafTagRegistry.CYCLOPS_UNLIFTABLES)))) {
                 this.setAnimation(ANIMATION_EATPLAYER);
                 entityIn.stopRiding();
                 entityIn.startRiding(this, true);
@@ -238,7 +239,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
             double extraY = raiseUp;
             passenger.setPos(this.getX() + extraX, this.getY() + extraY, this.getZ() + extraZ);
             if (this.getAnimationTick() == 32) {
-                passenger.hurt(DamageSource.mobAttack(this), (float) IafConfig.cyclopsBiteStrength);
+                passenger.hurt(this.damageSources().mobAttack(this), (float) IafConfig.cyclopsBiteStrength);
                 passenger.stopRiding();
             }
         }
@@ -289,10 +290,10 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
             this.playSound(IafSoundRegistry.CYCLOPS_BITE, 1, 1);
         }
         if (this.getAnimation() == ANIMATION_STOMP && this.getTarget() != null && this.distanceToSqr(this.getTarget()) < 12D && this.getAnimationTick() == 14) {
-            this.getTarget().hurt(DamageSource.mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+            this.getTarget().hurt(this.damageSources().mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
         }
         if (this.getAnimation() == ANIMATION_KICK && this.getTarget() != null && this.distanceToSqr(this.getTarget()) < 14D && this.getAnimationTick() == 12) {
-            this.getTarget().hurt(DamageSource.mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+            this.getTarget().hurt(this.damageSources().mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
             // After calling hurt the target can become null due to forge hooks
             if (this.getTarget() != null)
                 this.getTarget().knockback(2, this.getX() - this.getTarget().getX(), this.getZ() - this.getTarget().getZ());
@@ -355,7 +356,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
                         Block block = state.getBlock();
                         if (!state.isAir() && !state.getShape(level(), pos).isEmpty() && !(block instanceof BushBlock) && block != Blocks.BEDROCK && (state.getBlock() instanceof LeavesBlock || state.is(BlockTags.LOGS))) {
                             this.getDeltaMovement().scale(0.6D);
-                            if (NeoForge.EVENT_BUS.post(new GenericGriefEvent(this, a, b, c))) continue;
+                            if (NeoForge.EVENT_BUS.post(new GenericGriefEvent(this, a, b, c)).isCanceled()) continue;
                             if (block != Blocks.AIR) {
                                 if (!level().isClientSide) {
                                     level().destroyBlock(pos, true);

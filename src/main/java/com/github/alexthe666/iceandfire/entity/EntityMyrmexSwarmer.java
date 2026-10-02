@@ -202,14 +202,14 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
             this.playBiteSound();
             double dist = this.distanceToSqr(this.getTarget());
             if (dist < attackDistance()) {
-                this.getTarget().hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+                this.getTarget().hurt(this.damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
             }
         }
         if (this.getAnimation() == ANIMATION_STING && this.getTarget() != null && this.getAnimationTick() == 6) {
             this.playStingSound();
             double dist = this.distanceToSqr(this.getTarget());
             if (dist < attackDistance()) {
-                this.getTarget().hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 2));
+                this.getTarget().hurt(this.damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 2));
                 // After calling hurt the target can become null due to forge hooks
                 if (this.getTarget() != null)
                     this.getTarget().addEffect(new MobEffectInstance(MobEffects.POISON, 70, 1));

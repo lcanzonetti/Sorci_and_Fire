@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.pathfinding.raycoms;
-/*
+
+import net.minecraft.core.registries.Registries;/*
     All of this code is used with permission from Raycoms, one of the developers of the minecolonies project.
  */
 
@@ -29,7 +30,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -143,7 +143,7 @@ public class ChunkCache implements LevelReader {
 
     @Override
     public @NotNull Holder<Biome> getBiome(@NotNull BlockPos pos) {
-        var plains = ForgeRegistries.BIOMES.getHolder(Biomes.PLAINS);
+        var plains = world.registryAccess().registryOrThrow(Registries.BIOME).getHolder(Biomes.PLAINS);
         if (world.isClientSide() && plains.isPresent())
             return plains.get();
         return this.getBiomeManager().getBiome(pos);

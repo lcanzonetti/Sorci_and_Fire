@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.world.damagesource.DamageTypes;
 import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
@@ -80,11 +81,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.capabilities.Capability;
-import net.neoforged.neoforge.common.util.LazyOptional;
-import net.neoforged.neoforge.items.CapabilityItemHandler;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
-import net.neoforged.neoforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -219,8 +216,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     private EntityDragonPart tail3Part;
     private EntityDragonPart tail4Part;
     private boolean isOverAir;
-
-    private LazyOptional<?> itemHandler = null;
 
     public EntityDragonBase(EntityType t, Level world, DragonType type, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(t, world);
@@ -556,7 +551,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     public void openInventory(Player player) {
         if (!this.level().isClientSide)
-            NetworkHooks.openGui((ServerPlayer) player, getMenuProvider());
+            ((ServerPlayer) player).openMenu( getMenuProvider());
         IceAndFire.PROXY.setReferencedMob(this);
     }
 
@@ -854,7 +849,6 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
         this.dragonInventory.addListener(this);
         this.updateContainerEquipment();
-        this.itemHandler = LazyOptional.of(() -> new InvWrapper(this.dragonInventory));
     }
 
     protected void updateContainerEquipment() {
@@ -863,22 +857,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
         }
     }
 
-    @Override
-    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-        if (this.isAlive() && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && itemHandler != null)
-            return itemHandler.cast();
-        return super.getCapability(capability, facing);
-    }
 
-    @Override
-    public void invalidateCaps() {
-        super.invalidateCaps();
-        if (itemHandler != null) {
-            LazyOptional<?> oldHandler = itemHandler;
-            itemHandler = null;
-            oldHandler.invalidate();
-        }
-    }
 
     public boolean hasInventoryChanged(Container pInventory) {
         return this.dragonInventory != pInventory;
@@ -1363,7 +1342,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     public ItemStack getItemFromLootTable() {
         LootTable loottable = this.level().getServer().getLootTables().get(getDeadLootTable());
-        LootContext.Builder lootcontext$builder = this.createLootContext(false, DamageSource.GENERIC);
+        LootContext.Builder lootcontext$builder = this.createLootContext(false, this.damageSources().generic());
         for (ItemStack itemstack : loottable.getRandomItems(lootcontext$builder.create(LootContextParamSets.ENTITY))) {
             return itemstack;
         }
@@ -1466,7 +1445,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     public void breakBlock() {
         if (this.blockBreakCounter > 0 || IafConfig.dragonBreakBlockCooldown == 0) {
             --this.blockBreakCounter;
-            if (!this.isIceInWater() && (this.blockBreakCounter == 0 || IafConfig.dragonBreakBlockCooldown == 0) && net.neoforged.neoforge.event.ForgeEventFactory.getMobGriefingEvent(this.level(), this)) {
+            if (!this.isIceInWater() && (this.blockBreakCounter == 0 || IafConfig.dragonBreakBlockCooldown == 0) && net.neoforged.neoforge.event.EventHooks.getMobGriefingEvent(this.level(), this)) {
                 if (IafConfig.dragonGriefing != 2 && (!this.isTame() || IafConfig.tamedDragonGriefing)) {
                     if (!isModelDead() && this.getDragonStage() >= 3 && (this.canMove() || this.getControllingPassenger() != null)) {
                         final int bounds = 1;//(int)Math.ceil(this.getRenderSize() * 0.1);
@@ -1480,7 +1459,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
                             (int) Math.floor(this.getBoundingBox().maxY) + bounds + flightModifier,
                             (int) Math.floor(this.getBoundingBox().maxZ) + bounds
                         ).forEach(pos -> {
-                            if (NeoForge.EVENT_BUS.post(new GenericGriefEvent(this, pos.getX(), pos.getY(), pos.getZ())))
+                            if (NeoForge.EVENT_BUS.post(new GenericGriefEvent(this, pos.getX(), pos.getY(), pos.getZ())).isCanceled())
                                 return;
                             final BlockState state = level().getBlockState(pos);
                             final float hardness = IafConfig.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 2.0F : 5.0F;
@@ -1608,7 +1587,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             this.setAnimation(ANIMATION_SHAKEPREY);
         }
         if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null) {
-            prey.hurt(DamageSource.mobAttack(this), prey instanceof Player ? 17F : (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 4);
+            prey.hurt(this.damageSources().mobAttack(this), prey instanceof Player ? 17F : (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * 4);
             prey.stopRiding();
         }
         yBodyRot = getYRot();
@@ -1671,18 +1650,18 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
 
     @Override
     public boolean hurt(@NotNull DamageSource dmg, float i) {
-        if (this.isModelDead() && dmg != DamageSource.OUT_OF_WORLD) {
+        if (this.isModelDead() && !dmg.is(DamageTypes.OUT_OF_WORLD)) {
             return false;
         }
         if (this.isVehicle() && dmg.getEntity() != null && this.getControllingPassenger() != null && dmg.getEntity() == this.getControllingPassenger()) {
             return false;
         }
 
-        if ((dmg.msgId.contains("arrow") || getVehicle() != null && dmg.getEntity() != null && dmg.getEntity().is(this.getVehicle())) && this.isPassenger()) {
+        if ((dmg.getMsgId().contains("arrow") || getVehicle() != null && dmg.getEntity() != null && dmg.getEntity().is(this.getVehicle())) && this.isPassenger()) {
             return false;
         }
 
-        if (dmg == DamageSource.IN_WALL || dmg == DamageSource.FALLING_BLOCK || dmg == DamageSource.CRAMMING) {
+        if (dmg.is(DamageTypes.IN_WALL) || dmg.is(DamageTypes.FALLING_BLOCK) || dmg.is(DamageTypes.CRAMMING)) {
             return false;
         }
         if (!level().isClientSide && dmg.getEntity() != null && this.getRandom().nextInt(4) == 0) {
@@ -1828,7 +1807,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
             return false;
         }
 
-        final boolean flag = entityIn.hurt(DamageSource.mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
+        final boolean flag = entityIn.hurt(this.damageSources().mobAttack(this), ((int) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()));
 
         if (flag) {
             this.doEnchantDamageEffects(this, entityIn);

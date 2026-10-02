@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import net.minecraft.core.component.DataComponents;
 import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexEgg;
@@ -21,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemMyrmexEgg extends Item {
+public class ItemMyrmexEgg extends Item implements IafTabItem {
 
     boolean isJungle;
 
@@ -31,8 +32,7 @@ public class ItemMyrmexEgg extends Item {
     }
 
     @Override
-    public void fillItemCategory(@NotNull CreativeModeTab group, @NotNull NonNullList<ItemStack> items) {
-        if (this.allowdedIn(group)) {
+    public void fillItemCategory(@NotNull NonNullList<ItemStack> items) {
             for (int i = 0; i < 5; i++) {
                 ItemStack stack = new ItemStack(this);
                 CompoundTag tag = new CompoundTag();
@@ -41,8 +41,6 @@ public class ItemMyrmexEgg extends Item {
                 items.add(stack);
             }
         }
-
-    }
 
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
@@ -89,7 +87,7 @@ public class ItemMyrmexEgg extends Item {
         egg.setMyrmexCaste(eggOrdinal);
         egg.moveTo(offset.getX() + 0.5, offset.getY(), offset.getZ() + 0.5, 0, 0);
         egg.onPlayerPlace(context.getPlayer());
-        if (itemstack.hasCustomHoverName()) {
+        if (itemstack.has(DataComponents.CUSTOM_NAME)) {
             egg.setCustomName(itemstack.getHoverName());
         }
         if (!context.getLevel().isClientSide) {

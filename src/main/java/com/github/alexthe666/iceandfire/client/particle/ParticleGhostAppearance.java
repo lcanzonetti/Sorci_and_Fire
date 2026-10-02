@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.particle;
 
+import net.minecraft.util.FastColor;
 import com.mojang.math.Axis;
 import com.github.alexthe666.iceandfire.client.model.ModelGhost;
 import com.github.alexthe666.iceandfire.client.render.IafRenderType;
@@ -62,7 +63,7 @@ public class ParticleGhostAppearance extends Particle {
 
             VertexConsumer ivertexbuilder = irendertypebuffer$impl.getBuffer(IafRenderType.getGhost(RenderGhost.getGhostOverlayForType(ghostEntity.getColor())));
             this.model.setupAnim(ghostEntity, 0, 0, entity.tickCount + partialTicks, 0, 0);
-            this.model.renderToBuffer(matrixstack, ivertexbuilder, 240, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, f1);
+            this.model.renderToBuffer(matrixstack, ivertexbuilder, 240, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.colorFromFloat(f1, 1.0F, 1.0F, 1.0F));
             irendertypebuffer$impl.endBatch();
         }
 

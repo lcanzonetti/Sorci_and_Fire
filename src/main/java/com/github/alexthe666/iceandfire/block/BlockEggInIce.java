@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.block;
 
+import com.mojang.serialization.MapCodec;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import net.minecraft.core.BlockPos;
 import net.minecraft.stats.Stats;
@@ -21,6 +22,12 @@ import javax.annotation.Nullable;
 import static com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry.EGG_IN_ICE;
 
 public class BlockEggInIce extends BaseEntityBlock {
+
+    @Override
+    protected @NotNull MapCodec<? extends BaseEntityBlock> codec() {
+        return MapCodec.unit(this);
+    }
+
     public Item itemBlock;
 
     @SuppressWarnings("deprecation")
@@ -59,13 +66,14 @@ public class BlockEggInIce extends BaseEntityBlock {
     }
 
     @Override
-    public void playerWillDestroy(Level worldIn, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
+    public @NotNull BlockState playerWillDestroy(@NotNull Level worldIn, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player) {
         if (worldIn.getBlockEntity(pos) != null) {
             if (worldIn.getBlockEntity(pos) instanceof TileEntityEggInIce) {
                 TileEntityEggInIce tile = (TileEntityEggInIce) worldIn.getBlockEntity(pos);
                 tile.spawnEgg();
             }
         }
+        return super.playerWillDestroy(worldIn, pos, state, player);
     }
 
 }

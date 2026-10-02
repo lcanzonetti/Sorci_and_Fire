@@ -30,7 +30,8 @@ import net.minecraft.world.item.enchantment.ArrowPiercingEnchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.util.NonNullLazy;
+import com.google.common.base.Suppliers;
+import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -47,7 +48,7 @@ public class ItemTideTrident extends TridentItem {
     public void initializeClient(Consumer<net.neoforged.neoforge.client.extensions.common.IClientItemExtensions> consumer) {
 
         consumer.accept(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
-            static final NonNullLazy<BlockEntityWithoutLevelRenderer> renderer = NonNullLazy.of(() -> new RenderTideTridentItem(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
+            static final Supplier<BlockEntityWithoutLevelRenderer> renderer = Suppliers.memoize(() -> new RenderTideTridentItem(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
 
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
@@ -65,9 +66,7 @@ public class ItemTideTrident extends TridentItem {
                 int lvt_7_1_ = EnchantmentHelper.getRiptide(stack);
                 if (lvt_7_1_ <= 0 || lvt_5_1_.isInWaterOrRain()) {
                     if (!worldIn.isClientSide) {
-                        stack.hurtAndBreak(1, lvt_5_1_, (player) -> {
-                            player.broadcastBreakEvent(entityLiving.getUsedItemHand());
-                        });
+                        stack.hurtAndBreak(1, lvt_5_1_, LivingEntity.getSlotForHand(entityLiving.getUsedItemHand()));
                         if (lvt_7_1_ == 0) {
                             EntityTideTrident lvt_8_1_ = new EntityTideTrident(worldIn, lvt_5_1_, stack);
                             lvt_8_1_.shootFromRotation(lvt_5_1_, lvt_5_1_.getXRot(), lvt_5_1_.getYRot(), 0.0F, 2.5F + (float) lvt_7_1_ * 0.5F, 1.0F);

@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -15,18 +14,12 @@ public class TileEntityDragonforgeBrick extends BlockEntity {
         super(IafTileEntityRegistry.DRAGONFORGE_BRICK.get(), pos, state);
     }
 
-    @Override
-    public <T> net.neoforged.neoforge.common.util.@NotNull LazyOptional<T> getCapability(net.neoforged.neoforge.common.capabilities.@NotNull Capability<T> capability, @Nullable Direction facing) {
-        if (getConnectedTileEntity() != null && capability == net.neoforged.neoforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return getConnectedTileEntity().getCapability(capability, facing);
-        }
-        return super.getCapability(capability, facing);
-    }
 
-    private ICapabilityProvider getConnectedTileEntity() {
+    @Nullable
+    public TileEntityDragonforge getConnectedTileEntity() {
         for (Direction facing : Direction.values()) {
             if (level.getBlockEntity(worldPosition.relative(facing)) instanceof TileEntityDragonforge) {
-                return level.getBlockEntity(worldPosition.relative(facing));
+                return (TileEntityDragonforge) level.getBlockEntity(worldPosition.relative(facing));
             }
         }
         return null;

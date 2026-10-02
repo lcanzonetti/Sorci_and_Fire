@@ -50,8 +50,6 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     public int fireType;
     public int cookTime;
     public int lastDragonFlameTimer = 0;
-    net.neoforged.neoforge.common.util.LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper
-            .create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
     private NonNullList<ItemStack> forgeItemStacks = NonNullList.withSize(3, ItemStack.EMPTY);
     private boolean prevAssembled;
     private boolean canAddFlameAgain = true;
@@ -189,7 +187,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
     @Override
     public void setItem(int index, ItemStack stack) {
         ItemStack itemstack = this.forgeItemStacks.get(index);
-        boolean flag = !stack.isEmpty() && stack.sameItem(itemstack)
+        boolean flag = !stack.isEmpty() && ItemStack.isSameItem(stack, itemstack)
                 && ItemStack.tagMatches(stack, itemstack);
         this.forgeItemStacks.set(index, stack);
 
@@ -289,7 +287,7 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
             return false;
 
         ItemStack outputStack = this.forgeItemStacks.get(2);
-        if (!outputStack.isEmpty() && !outputStack.sameItem(forgeRecipeOutput))
+        if (!outputStack.isEmpty() && !ItemStack.isSameItem(outputStack, forgeRecipeOutput))
             return false;
 
         int calculatedOutputCount = outputStack.getCount() + forgeRecipeOutput.getCount();
@@ -369,20 +367,6 @@ public class TileEntityDragonforge extends BaseContainerBlockEntity implements W
         this.forgeItemStacks.clear();
     }
 
-    @Override
-    public <T> net.neoforged.neoforge.common.util.@NotNull LazyOptional<T> getCapability(
-            net.neoforged.neoforge.common.capabilities.@NotNull Capability<T> capability, @Nullable Direction facing) {
-        if (!this.remove && facing != null
-                && capability == net.neoforged.neoforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            if (facing == Direction.UP)
-                return handlers[0].cast();
-            if (facing == Direction.DOWN)
-                return handlers[1].cast();
-            else
-                return handlers[2].cast();
-        }
-        return super.getCapability(capability, facing);
-    }
 
     @Override
     protected @NotNull Component getDefaultName() {

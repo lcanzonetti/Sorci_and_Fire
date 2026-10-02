@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.util;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import com.google.common.collect.ImmutableMap;
@@ -263,7 +264,7 @@ public class MyrmexTrades {
         @Override
         public MerchantOffer getOffer(@NotNull Entity trader, RandomSource rand) {
             ItemStack lvt_3_1_ = new ItemStack(IafItemRegistry.MYRMEX_DESERT_RESIN.get(), this.emeraldCount);
-            List<Potion> lvt_4_1_ = Registry.POTION.stream().filter((potion) -> {
+            List<Potion> lvt_4_1_ = BuiltInRegistries.POTION.stream().filter((potion) -> {
                 return !potion.getEffects().isEmpty() && PotionBrewing.isBrewablePotion(potion);
             }).collect(Collectors.toList());
             Potion lvt_5_1_ = lvt_4_1_.get(rand.nextInt(lvt_4_1_.size()));
@@ -443,7 +444,7 @@ public class MyrmexTrades {
         @Override
         public MerchantOffer getOffer(@NotNull Entity trader, RandomSource rand) {
             ItemStack lvt_3_1_ = new ItemStack(IafItemRegistry.MYRMEX_JUNGLE_RESIN.get(), this.emeraldCount);
-            List<Potion> lvt_4_1_ = Registry.POTION.stream().filter((potion) -> {
+            List<Potion> lvt_4_1_ = BuiltInRegistries.POTION.stream().filter((potion) -> {
                 return !potion.getEffects().isEmpty() && PotionBrewing.isBrewablePotion(potion);
             }).collect(Collectors.toList());
             Potion lvt_5_1_ = lvt_4_1_.get(rand.nextInt(lvt_4_1_.size()));

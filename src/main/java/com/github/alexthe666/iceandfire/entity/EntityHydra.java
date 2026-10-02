@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import net.minecraft.tags.DamageTypeTags;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
 import com.github.alexthe666.iceandfire.IafConfig;
@@ -148,7 +149,7 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
             if (striking && strikingProgress[i] > 9) {
                 isStriking[i] = false;
                 if (attackTarget != null && this.distanceTo(attackTarget) < 6) {
-                    attackTarget.hurt(DamageSource.mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
+                    attackTarget.hurt(this.damageSources().mobAttack(this), (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
                     attackTarget.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 3, false, false));
                     attackTarget.knockback(0.25F, this.getX() - attackTarget.getX(), this.getZ() - attackTarget.getZ());
                 }
@@ -364,7 +365,7 @@ public class EntityHydra extends Monster implements IAnimatedEntity, IMultipartE
             this.setSeveredHead(headIndex);
             this.playSound(SoundEvents.GUARDIAN_FLOP, this.getSoundVolume(), this.getVoicePitch());
         }
-        if (this.getHealth() <= amount + 5 && this.getHeadCount() > 1 && !source.isBypassInvul()) {
+        if (this.getHealth() <= amount + 5 && this.getHeadCount() > 1 && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             amount = 0;
         }
         return super.hurt(source, amount);
