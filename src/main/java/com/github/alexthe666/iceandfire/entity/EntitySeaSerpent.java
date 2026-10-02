@@ -840,6 +840,7 @@ public class EntitySeaSerpent extends Animal implements IAnimatedEntity, IMultip
     @Override
     public boolean killedEntity(@NotNull ServerLevel world, @NotNull LivingEntity entity) {
         this.attackDecision = this.getRandom().nextBoolean();
+        return super.killedEntity(world, entity);
     }
 
     @Override

@@ -527,6 +527,7 @@ public class EntityDeathWorm extends TamableAnimal implements ISyncMount, ICusto
         if (this.isTame()) {
             this.heal(14);
         }
+        return super.killedEntity(world, entity);
     }
 
     @Override

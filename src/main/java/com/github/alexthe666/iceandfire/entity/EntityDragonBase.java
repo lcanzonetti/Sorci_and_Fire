@@ -1076,6 +1076,7 @@ public abstract class EntityDragonBase extends TamableAnimal implements IPassabi
     @Override
     public boolean killedEntity(@NotNull ServerLevel world, @NotNull LivingEntity entity) {
         this.setHunger(this.getHunger() + FoodUtils.getFoodPoints(entity));
+        return super.killedEntity(world, entity);
     }
 
     private double calculateArmorModifier() {
