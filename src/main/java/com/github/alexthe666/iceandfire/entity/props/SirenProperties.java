@@ -13,14 +13,14 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.Nullable;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class SirenProperties {
     private static final String SIREN_DATA = "SirenDataIaf";
     private static final String SIREN_CHARMED = "IsCharmed";
     private static final String SIREN_ID = "CharmedBy";
     private static final String SIREN_TIME = "CharmeTime";
-    private static final Random rand = new Random();
+    private static final RandomSource rand = RandomSource.create();
 
     private static CompoundTag getOrCreateCharmData(LivingEntity entity) {
         return getOrCreateCharmData(CitadelEntityData.getCitadelTag(entity));
@@ -56,7 +56,7 @@ public class SirenProperties {
 
     private static void updateData(LivingEntity entity, CompoundTag nbt) {
         CitadelEntityData.setCitadelTag(entity, nbt);
-        if (!entity.level.isClientSide()) {
+        if (!entity.level().isClientSide()) {
             Citadel.sendMSGToAll(new PropertiesMessage("CitadelPatreonConfig", nbt, entity.getId()));
         }
     }
@@ -65,7 +65,7 @@ public class SirenProperties {
         CompoundTag entityData = CitadelEntityData.getOrCreateCitadelTag(entity);
         entityData.put(SIREN_DATA, nbt);
         CitadelEntityData.setCitadelTag(entity, entityData);
-        if (!entity.level.isClientSide()) {
+        if (!entity.level().isClientSide()) {
             Citadel.sendMSGToAll(new PropertiesMessage("CitadelPatreonConfig", entityData, entity.getId()));
         }
     }
@@ -95,7 +95,7 @@ public class SirenProperties {
 
     @Nullable
     public static EntitySiren getSiren(LivingEntity entity) {
-        Entity siren = entity.level.getEntity(getCharmedBy(entity));
+        Entity siren = entity.level().getEntity(getCharmedBy(entity));
         if (siren instanceof EntitySiren) {
             return (EntitySiren) siren;
         }
@@ -138,7 +138,7 @@ public class SirenProperties {
 
                 if (rand.nextInt(7) == 0) {
                     for (int i = 0; i < 5; i++) {
-                        entity.level.addParticle(ParticleTypes.HEART,
+                        entity.level().addParticle(ParticleTypes.HEART,
                             entity.getX() + ((rand.nextDouble() - 0.5D) * 3),
                             entity.getY() + ((rand.nextDouble() - 0.5D) * 3),
                             entity.getZ() + ((rand.nextDouble() - 0.5D) * 3),

@@ -101,7 +101,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
 
     @Override
     protected @NotNull PathNavigation createNavigation(@NotNull Level worldIn) {
-        return new PathNavigateCyclops(this, level);
+        return new PathNavigateCyclops(this, level());
     }
 
     @Override
@@ -185,10 +185,10 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(BLINDED, Boolean.FALSE);
-        this.entityData.define(VARIANT, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(BLINDED, Boolean.FALSE);
+        builder.define(VARIANT, 0);
     }
 
     @Override
@@ -276,7 +276,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
             eyeEntity = new EntityCyclopsEye(this, 0.2F, 0, 7.4F, 1.2F, 0.6F, 1);
             eyeEntity.copyPosition(this);
         }
-        if (level.getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof Player) {
+        if (level().getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof Player) {
             this.setTarget(null);
         }
         if (this.isBlinded() && this.getTarget() != null && this.distanceToSqr(this.getTarget()) > 6) {
@@ -315,10 +315,10 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
                 double extraY = 0.8F;
                 double extraZ = radius * Mth.cos(angle);
 
-                BlockState BlockState = this.level.getBlockState(new BlockPos(Mth.floor(this.getX() + extraX), Mth.floor(this.getY() + extraY) - 1, Mth.floor(this.getZ() + extraZ)));
-                if (BlockState.getMaterial() != Material.AIR) {
-                    if (level.isClientSide) {
-                        level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, BlockState), this.getX() + extraX, this.getY() + extraY, this.getZ() + extraZ, motionX, motionY, motionZ);
+                BlockState BlockState = this.level().getBlockState(new BlockPos(Mth.floor(this.getX() + extraX), Mth.floor(this.getY() + extraY) - 1, Mth.floor(this.getZ() + extraZ)));
+                if (!BlockState.isAir()) {
+                    if (level().isClientSide) {
+                        level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, BlockState), this.getX() + extraX, this.getY() + extraY, this.getZ() + extraZ, motionX, motionY, motionZ);
                     }
                 }
             }
@@ -331,7 +331,7 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
 
         }
         if (!eyeEntity.shouldContinuePersisting()) {
-            level.addFreshEntity(eyeEntity);
+            level().addFreshEntity(eyeEntity);
         }
         eyeEntity.setParent(this);
         breakBlock();
@@ -351,14 +351,14 @@ public class EntityCyclops extends Monster implements IAnimatedEntity, IBlacklis
                 for (int b = (int) Math.round(this.getBoundingBox().minY) + 1; (b <= (int) Math.round(this.getBoundingBox().maxY) + 2) && (b <= 127); b++) {
                     for (int c = (int) Math.round(this.getBoundingBox().minZ) - 1; c <= (int) Math.round(this.getBoundingBox().maxZ) + 1; c++) {
                         BlockPos pos = new BlockPos(a, b, c);
-                        BlockState state = level.getBlockState(pos);
+                        BlockState state = level().getBlockState(pos);
                         Block block = state.getBlock();
-                        if (!state.isAir() && !state.getShape(level, pos).isEmpty() && !(block instanceof BushBlock) && block != Blocks.BEDROCK && (state.getBlock() instanceof LeavesBlock || state.is(BlockTags.LOGS))) {
+                        if (!state.isAir() && !state.getShape(level(), pos).isEmpty() && !(block instanceof BushBlock) && block != Blocks.BEDROCK && (state.getBlock() instanceof LeavesBlock || state.is(BlockTags.LOGS))) {
                             this.getDeltaMovement().scale(0.6D);
                             if (NeoForge.EVENT_BUS.post(new GenericGriefEvent(this, a, b, c))) continue;
                             if (block != Blocks.AIR) {
-                                if (!level.isClientSide) {
-                                    level.destroyBlock(pos, true);
+                                if (!level().isClientSide) {
+                                    level().destroyBlock(pos, true);
                                 }
                             }
                         }

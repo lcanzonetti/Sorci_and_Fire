@@ -14,23 +14,29 @@ import java.util.List;
 
 public class ItemGeneric extends Item {
     int description = 0;
+    private boolean hidden = false;
 
     public ItemGeneric() {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+        super(new Item.Properties());
     }
 
     public ItemGeneric(int textLength) {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+        super(new Item.Properties());
         this.description = textLength;
     }
 
     public ItemGeneric(int textLength, boolean hide) {
         super(new Item.Properties());
         this.description = textLength;
+        this.hidden = hide;
+    }
+
+    public boolean isHidden() {
+        return hidden;
     }
 
     public ItemGeneric(int textLength, int stacksize) {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
+        super(new Item.Properties().stacksTo(1));
         this.description = textLength;
     }
 
@@ -44,7 +50,7 @@ public class ItemGeneric extends Item {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if (description > 0) {
             for (int i = 0; i < description; i++) {
                 tooltip.add(Component.translatable(this.getDescriptionId() + ".desc_" + i).withStyle(ChatFormatting.GRAY));

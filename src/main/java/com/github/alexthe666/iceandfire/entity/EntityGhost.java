@@ -212,7 +212,7 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
     public void aiStep() {
         super.aiStep();
         this.noPhysics = true;
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             boolean day = isSunBurnTick() && !this.wasFromChest();
             if (day) {
                 if (!this.isDaytimeMode()) {
@@ -236,7 +236,7 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
         } else {
             if (this.getAnimation() == ANIMATION_SCARE && this.getAnimationTick() == 3 && !this.isHauntedShoppingList() && random.nextInt(3) == 0) {
                 this.playSound(IafSoundRegistry.GHOST_JUMPSCARE, this.getSoundVolume(), this.getVoicePitch());
-                if (level.isClientSide) {
+                if (level().isClientSide) {
                     IceAndFire.PROXY.spawnParticle(EnumParticles.Ghost_Appearance, this.getX(), this.getY(), this.getZ(), this.getId(), 0, 0);
                 }
             }
@@ -262,10 +262,10 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
 
     @Override
     protected boolean isSunBurnTick() {
-        if (this.level.isDay() && !this.level.isClientSide) {
+        if (this.level().isDay() && !this.level().isClientSide) {
             float f = this.getBrightness();
             BlockPos blockpos = this.getVehicle() instanceof Boat ? (new BlockPos(this.getX(), (double) Math.round(this.getY()), this.getZ())).above() : new BlockPos(this.getX(), (double) Math.round(this.getY() + 4), this.getZ());
-            return f > 0.5F && this.level.canSeeSky(blockpos);
+            return f > 0.5F && this.level().canSeeSky(blockpos);
         }
 
         return false;
@@ -314,8 +314,8 @@ public class EntityGhost extends Monster implements IAnimatedEntity, IVillagerFe
 
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
         this.getEntityData().define(COLOR, 0);
         this.getEntityData().define(CHARGING, false);
         this.getEntityData().define(IS_DAYTIME_MODE, false);

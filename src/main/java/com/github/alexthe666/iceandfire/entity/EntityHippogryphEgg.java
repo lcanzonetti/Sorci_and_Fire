@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -51,7 +52,7 @@ public class EntityHippogryphEgg extends ThrownEgg {
     public void handleEntityEvent(byte id) {
         if (id == 3) {
             for (int i = 0; i < 8; ++i) {
-                this.level.addParticle(new ItemParticleOption(ParticleTypes.ITEM, this.getItem()), this.getX(), this.getY(), this.getZ(), (this.random.nextFloat() - 0.5D) * 0.08D, (this.random.nextFloat() - 0.5D) * 0.08D, (this.random.nextFloat() - 0.5D) * 0.08D);
+                this.level().addParticle(new ItemParticleOption(ParticleTypes.ITEM, this.getItem()), this.getX(), this.getY(), this.getZ(), (this.random.nextFloat() - 0.5D) * 0.08D, (this.random.nextFloat() - 0.5D) * 0.08D, (this.random.nextFloat() - 0.5D) * 0.08D);
             }
         }
     }
@@ -63,13 +64,13 @@ public class EntityHippogryphEgg extends ThrownEgg {
             ((EntityHitResult) result).getEntity().hurt(DamageSource.thrown(this, thrower), 0.0F);
         }
 
-        if (!this.level.isClientSide) {
-            EntityHippogryph hippogryph = new EntityHippogryph(IafEntityRegistry.HIPPOGRYPH.get(), this.level);
+        if (!this.level().isClientSide) {
+            EntityHippogryph hippogryph = new EntityHippogryph(IafEntityRegistry.HIPPOGRYPH.get(), this.level());
             hippogryph.setAge(-24000);
             hippogryph.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
             if (itemstack != null) {
                 int variant = 0;
-                CompoundTag tag = itemstack.getTag();
+                CompoundTag tag = IafNbt.getTag(itemstack);
                 if (tag != null) {
                     variant = tag.getInt("EggOrdinal");
                 }
@@ -80,10 +81,10 @@ public class EntityHippogryphEgg extends ThrownEgg {
                 hippogryph.tame((Player) thrower);
             }
 
-            this.level.addFreshEntity(hippogryph);
+            this.level().addFreshEntity(hippogryph);
         }
 
-        this.level.broadcastEntityEvent(this, (byte) 3);
+        this.level().broadcastEntityEvent(this, (byte) 3);
         this.remove(RemovalReason.DISCARDED);
     }
 

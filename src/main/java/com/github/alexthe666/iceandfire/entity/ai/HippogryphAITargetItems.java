@@ -59,8 +59,8 @@ public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
     }
 
     private boolean updateList() {
-        if (this.mob.level.getGameTime() % 4 == 0) // only update the list every 4 ticks
-            list = this.mob.level.getEntitiesOfClass(ItemEntity.class, this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector);
+        if (this.mob.level().getGameTime() % 4 == 0) // only update the list every 4 ticks
+            list = this.mob.level().getEntitiesOfClass(ItemEntity.class, this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector);
 
         if (list.isEmpty()) {
             return false;
@@ -93,8 +93,8 @@ public class HippogryphAITargetItems<T extends ItemEntity> extends TargetGoal {
             hippo.setAnimation(EntityHippogryph.ANIMATION_EAT);
             hippo.feedings++;
             hippo.heal(4);
-            if (hippo.feedings > 3 && (hippo.feedings > 7 || hippo.getRandom().nextInt(3) == 0) && !hippo.isTame() && this.targetEntity.getThrower() != null && this.mob.level.getPlayerByUUID(this.targetEntity.getThrower()) != null) {
-                Player owner = this.mob.level.getPlayerByUUID(this.targetEntity.getThrower());
+            if (hippo.feedings > 3 && (hippo.feedings > 7 || hippo.getRandom().nextInt(3) == 0) && !hippo.isTame() && this.targetEntity.getThrower() != null && this.mob.level().getPlayerByUUID(this.targetEntity.getThrower()) != null) {
+                Player owner = this.mob.level().getPlayerByUUID(this.targetEntity.getThrower());
                 if (owner != null) {
                     hippo.tame(owner);
                     hippo.setTarget(null);

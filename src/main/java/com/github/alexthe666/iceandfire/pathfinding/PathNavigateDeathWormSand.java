@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
+import com.github.alexthe666.iceandfire.misc.IafBlockTags;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
@@ -60,7 +61,7 @@ public class PathNavigateDeathWormSand extends WaterBoundPathNavigation {
 
         if (raytraceresult.getType() == HitResult.Type.BLOCK) {
             Vec3 vec3i = raytraceresult.getLocation();
-            return mob.level.getBlockState(new BlockPos(vec3i)).is(BlockTags.SAND);
+            return mob.level().getBlockState(new BlockPos(vec3i)).is(BlockTags.SAND);
         }
 
         return raytraceresult.getType() == HitResult.Type.MISS;
@@ -84,7 +85,7 @@ public class PathNavigateDeathWormSand extends WaterBoundPathNavigation {
 
         @Override
         public @NotNull VoxelShape getBlockShape(BlockState blockState, @NotNull BlockGetter world, @NotNull BlockPos pos) {
-            if (blockState.getMaterial() == Material.SAND)
+            if (blockState.is(IafBlockTags.MATERIAL_SAND))
                 return Shapes.empty();
             return this.blockMode.get(blockState, world, pos, this.context);
         }

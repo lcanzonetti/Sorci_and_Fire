@@ -24,7 +24,7 @@ public class PixieAIFollowOwner extends Goal {
 
     public PixieAIFollowOwner(EntityPixie tameableIn, double followSpeedIn, float minDistIn, float maxDistIn) {
         this.tameable = tameableIn;
-        this.world = tameableIn.level;
+        this.world = tameableIn.level();
         this.minDist = minDistIn;
         this.maxDist = maxDistIn;
         this.setFlags(EnumSet.of(Flag.MOVE));
@@ -70,7 +70,7 @@ public class PixieAIFollowOwner extends Goal {
 
     private boolean isEmptyBlock(BlockPos pos) {
         BlockState BlockState = this.world.getBlockState(pos);
-        return BlockState.getMaterial() == Material.AIR || !BlockState.canOcclude();
+        return BlockState.isAir() || !BlockState.canOcclude();
     }
 
     @Override

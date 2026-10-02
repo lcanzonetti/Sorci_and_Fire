@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
@@ -31,12 +32,12 @@ public class ItemSummoningCrystal extends Item {
 
 
     public ItemSummoningCrystal() {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
+        super(new Item.Properties().stacksTo(1));
     }
 
     public static boolean hasDragon(ItemStack stack) {
-        if (stack.getItem() instanceof ItemSummoningCrystal && stack.getTag() != null) {
-            for (String tagInfo : stack.getTag().getAllKeys()) {
+        if (stack.getItem() instanceof ItemSummoningCrystal && IafNbt.getTag(stack) != null) {
+            for (String tagInfo : IafNbt.getTag(stack).getAllKeys()) {
                 if (tagInfo.contains("Dragon")) {
                     return true;
                 }
@@ -47,7 +48,7 @@ public class ItemSummoningCrystal extends Item {
 
     @Override
     public void onCraftedBy(ItemStack itemStack, @NotNull Level world, @NotNull Player player) {
-        itemStack.setTag(new CompoundTag());
+        IafNbt.setTag(itemStack, new CompoundTag());
     }
 
     public ItemStack onItemUseFinish(Level worldIn, LivingEntity LivingEntity) {
@@ -55,7 +56,7 @@ public class ItemSummoningCrystal extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
 
         boolean flag = false;
         String desc = "entity.iceandfire.fire_dragon";
@@ -65,10 +66,10 @@ public class ItemSummoningCrystal extends Item {
         if (stack.getItem() == IafItemRegistry.SUMMONING_CRYSTAL_LIGHTNING.get()) {
             desc = "entity.iceandfire.lightning_dragon";
         }
-        if (stack.getTag() != null) {
-            for (String tagInfo : stack.getTag().getAllKeys()) {
+        if (IafNbt.getTag(stack) != null) {
+            for (String tagInfo : IafNbt.getTag(stack).getAllKeys()) {
                 if (tagInfo.contains("Dragon")) {
-                    CompoundTag dragonTag = stack.getTag().getCompound(tagInfo);
+                    CompoundTag dragonTag = IafNbt.getTag(stack).getCompound(tagInfo);
                     String dragonName = I18n.get(desc);
                     if (!dragonTag.getString("CustomName").isEmpty()) {
                         dragonName = dragonTag.getString("CustomName");
@@ -95,16 +96,16 @@ public class ItemSummoningCrystal extends Item {
         boolean displayError = false;
         if (stack.getItem() == this && hasDragon(stack)) {
             int dragonCount = 0;
-            if (stack.getTag() != null) {
-                for (String tagInfo : stack.getTag().getAllKeys()) {
+            if (IafNbt.getTag(stack) != null) {
+                for (String tagInfo : IafNbt.getTag(stack).getAllKeys()) {
                     if (tagInfo.contains("Dragon")) {
                         dragonCount++;
-                        CompoundTag dragonTag = stack.getTag().getCompound(tagInfo);
+                        CompoundTag dragonTag = IafNbt.getTag(stack).getCompound(tagInfo);
                         UUID id = dragonTag.getUUID("DragonUUID");
                         if (id != null) {
                             if (!context.getLevel().isClientSide) {
                                 try {
-                                    Entity entity = context.getLevel().getServer().getLevel(context.getPlayer().level.dimension()).getEntity(id);
+                                    Entity entity = context.getLevel().getServer().getLevel(context.getPlayer().level().dimension()).getEntity(id);
                                     if (entity != null) {
                                         flag = true;
                                         summonEntity(entity, context.getLevel(), offsetPos, yaw);
@@ -143,7 +144,7 @@ public class ItemSummoningCrystal extends Item {
                                         }
                                         if (flag2) {
                                             try {
-                                                Entity entity = context.getLevel().getServer().getLevel(context.getPlayer().level.dimension()).getEntity(id);
+                                                Entity entity = context.getLevel().getServer().getLevel(context.getPlayer().level().dimension()).getEntity(id);
                                                 if (entity != null) {
                                                     flag = true;
                                                     summonEntity(entity, context.getLevel(), offsetPos, yaw);
@@ -171,7 +172,7 @@ public class ItemSummoningCrystal extends Item {
                 context.getPlayer().playSound(SoundEvents.GLASS_BREAK, 1, 1);
                 context.getPlayer().swing(context.getHand());
                 context.getPlayer().displayClientMessage(Component.translatable("message.iceandfire.dragonTeleport"), true);
-                stack.setTag(new CompoundTag());
+                IafNbt.setTag(stack, new CompoundTag());
             } else if (displayError) {
                 context.getPlayer().displayClientMessage(Component.translatable("message.iceandfire.noDragonTeleport"), true);
 

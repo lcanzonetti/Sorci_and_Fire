@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
@@ -23,7 +24,7 @@ public class ItemDragonEgg extends Item {
     public EnumDragonEgg type;
 
     public ItemDragonEgg(EnumDragonEgg type) {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
+        super(new Item.Properties().stacksTo(1));
         this.type = type;
     }
 
@@ -34,11 +35,11 @@ public class ItemDragonEgg extends Item {
 
     @Override
     public void onCraftedBy(ItemStack itemStack, @NotNull Level world, @NotNull Player player) {
-        itemStack.setTag(new CompoundTag());
+        IafNbt.setTag(itemStack, new CompoundTag());
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(Component.translatable("dragon." + type.toString().toLowerCase()).withStyle(type.color));
     }
 

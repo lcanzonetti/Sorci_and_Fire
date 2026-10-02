@@ -44,7 +44,7 @@ public class EntityStymphalianFeather extends AbstractArrow {
     public void remove(@NotNull RemovalReason reason) {
         super.remove(reason);
         if (IafConfig.stymphalianBirdFeatherDropChance > 0) {
-            if (!level.isClientSide && this.random.nextInt(IafConfig.stymphalianBirdFeatherDropChance) == 0) {
+            if (!level().isClientSide && this.random.nextInt(IafConfig.stymphalianBirdFeatherDropChance) == 0) {
                 this.spawnAtLocation(getPickupItem(), 0.1F);
             }
         }
@@ -96,7 +96,7 @@ public class EntityStymphalianFeather extends AbstractArrow {
                 } else {
                     this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
                 }
-                this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level.random.nextFloat() * 0.4F);
+                this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level().random.nextFloat() * 0.4F);
             }
         }
     }

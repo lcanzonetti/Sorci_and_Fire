@@ -10,20 +10,18 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class BlockFallingReturningState extends FallingBlock {
     public static final BooleanProperty REVERTS = BooleanProperty.create("revert");
     public Item itemBlock;
     private final BlockState returnState;
 
-    public BlockFallingReturningState(Material materialIn, float hardness, float resistance, SoundType sound, BlockState revertState) {
+    public BlockFallingReturningState(IafMaterial materialIn, float hardness, float resistance, SoundType sound, BlockState revertState) {
         super(
-            BlockBehaviour.Properties
-                .of(materialIn)
+            materialIn.properties()
                 .sound(sound)
                 .strength(hardness, resistance)
                 .randomTicks()
@@ -34,10 +32,9 @@ public class BlockFallingReturningState extends FallingBlock {
     }
 
     @SuppressWarnings("deprecation")
-    public BlockFallingReturningState(Material materialIn, float hardness, float resistance, SoundType sound, boolean slippery, BlockState revertState) {
+    public BlockFallingReturningState(IafMaterial materialIn, float hardness, float resistance, SoundType sound, boolean slippery, BlockState revertState) {
         super(
-            BlockBehaviour.Properties
-                .of(materialIn)
+            materialIn.properties()
                 .sound(sound)
                 .strength(hardness, resistance)
                 .randomTicks()
@@ -48,7 +45,7 @@ public class BlockFallingReturningState extends FallingBlock {
     }
 
     @Override
-    public void tick(@NotNull BlockState state, @NotNull ServerLevel worldIn, @NotNull BlockPos pos, @NotNull Random rand) {
+    public void tick(@NotNull BlockState state, @NotNull ServerLevel worldIn, @NotNull BlockPos pos, @NotNull RandomSource rand) {
         super.tick(state, worldIn, pos, rand);
         if (!worldIn.isClientSide) {
             if (!worldIn.isAreaLoaded(pos, 3))

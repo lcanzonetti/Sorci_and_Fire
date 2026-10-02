@@ -26,7 +26,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 import java.util.stream.Collectors;
 
 public class WorldGenHydraCave extends Feature<NoneFeatureConfiguration> implements TypedFeature {
@@ -42,7 +42,7 @@ public class WorldGenHydraCave extends Feature<NoneFeatureConfiguration> impleme
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         WorldGenLevel worldIn = context.level();
-        Random rand = context.random();
+        RandomSource rand = context.random();
         BlockPos position = context.origin();
         ChunkGenerator generator = context.chunkGenerator();
 
@@ -112,7 +112,7 @@ public class WorldGenHydraCave extends Feature<NoneFeatureConfiguration> impleme
             for (BlockPos blockpos : BlockPos.betweenClosedStream(position.offset(-j, -k, -l), position.offset(j, k + 8, l)).map(BlockPos::immutable).collect(Collectors.toSet())) {
                 if (blockpos.distSqr(position) <= f * f && blockpos.getY() == position.getY()) {
                     if (rand.nextInt(30) == 0 && isTouchingAir(worldIn, blockpos.above())) {
-                        worldIn.setBlock(blockpos.above(1), Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, HORIZONTALS[new Random().nextInt(3)]), 2);
+                        worldIn.setBlock(blockpos.above(1), Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, HORIZONTALS[RandomSource.create().nextInt(3)]), 2);
                         if (worldIn.getBlockState(blockpos.above(1)).getBlock() instanceof ChestBlock) {
                             BlockEntity tileentity1 = worldIn.getBlockEntity(blockpos.above(1));
                             if (tileentity1 instanceof ChestBlockEntity) {

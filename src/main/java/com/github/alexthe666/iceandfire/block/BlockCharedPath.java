@@ -12,10 +12,9 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class BlockCharedPath extends DirtPathBlock {
     public static final BooleanProperty REVERTS = BooleanProperty.create("revert");
@@ -25,8 +24,7 @@ public class BlockCharedPath extends DirtPathBlock {
     @SuppressWarnings("deprecation")
     public BlockCharedPath(int dragonType) {
         super(
-            BlockBehaviour.Properties
-                .of(Material.PLANT)
+            IafMaterial.PLANT.properties()
                 .sound(dragonType != 1 ? SoundType.GRAVEL : SoundType.GLASS)
                 .strength(0.6F)
                 .friction(dragonType != 1 ? 0.6F : 0.98F)
@@ -61,7 +59,7 @@ public class BlockCharedPath extends DirtPathBlock {
     }
 
     @Override
-    public void tick(@NotNull BlockState state, @NotNull ServerLevel worldIn, @NotNull BlockPos pos, @NotNull Random rand) {
+    public void tick(@NotNull BlockState state, @NotNull ServerLevel worldIn, @NotNull BlockPos pos, @NotNull RandomSource rand) {
         super.tick(state, worldIn, pos, rand);
         if (!worldIn.isClientSide) {
             if (!worldIn.isAreaLoaded(pos, 3))
@@ -70,14 +68,14 @@ public class BlockCharedPath extends DirtPathBlock {
                 worldIn.setBlockAndUpdate(pos, Blocks.DIRT_PATH.defaultBlockState());
             }
         }
-        if (worldIn.getBlockState(pos.above()).getMaterial().isSolid()) {
+        if (worldIn.getBlockState(pos.above()).isSolid()) {
             worldIn.setBlockAndUpdate(pos, getSmushedState(dragonType));
         }
         updateBlockState(worldIn, pos);
     }
 
     private void updateBlockState(Level worldIn, BlockPos pos) {
-        if (worldIn.getBlockState(pos.above()).getMaterial().isSolid()) {
+        if (worldIn.getBlockState(pos.above()).isSolid()) {
             worldIn.setBlockAndUpdate(pos, getSmushedState(dragonType));
         }
     }

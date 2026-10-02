@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.block.BlockDragonforgeInput;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.DragonType;

@@ -20,7 +20,7 @@ import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.AABB;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -284,7 +284,7 @@ public class WorldUtil {
         return containing(position.x(), position.y(), position.z());
     }
 
-    public static boolean canGenerate(int configChance, final WorldGenLevel level, final Random random, final BlockPos origin, final String id, boolean checkFluid) {
+    public static boolean canGenerate(int configChance, final WorldGenLevel level, final RandomSource random, final BlockPos origin, final String id, boolean checkFluid) {
         boolean canGenerate = random.nextInt(configChance) == 0 && IafWorldRegistry.isFarEnoughFromSpawn(level, origin) && IafWorldRegistry.isFarEnoughFromDangerousGen(level, origin, id);
 
         if (canGenerate && checkFluid) {

@@ -89,23 +89,23 @@ public class EntityDreadThrall extends EntityDreadMob implements IAnimatedEntity
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(CUSTOM_ARMOR_INDEX, Integer.valueOf(0));
-        this.entityData.define(CUSTOM_ARMOR_HEAD, Boolean.valueOf(false));
-        this.entityData.define(CUSTOM_ARMOR_CHEST, Boolean.valueOf(false));
-        this.entityData.define(CUSTOM_ARMOR_LEGS, Boolean.valueOf(false));
-        this.entityData.define(CUSTOM_ARMOR_FEET, Boolean.valueOf(false));
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(CUSTOM_ARMOR_INDEX, Integer.valueOf(0));
+        builder.define(CUSTOM_ARMOR_HEAD, Boolean.valueOf(false));
+        builder.define(CUSTOM_ARMOR_CHEST, Boolean.valueOf(false));
+        builder.define(CUSTOM_ARMOR_LEGS, Boolean.valueOf(false));
+        builder.define(CUSTOM_ARMOR_FEET, Boolean.valueOf(false));
     }
 
     @Override
     public void aiStep() {
         super.aiStep();
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
-            BlockState belowBlock = level.getBlockState(this.blockPosition().below());
+            BlockState belowBlock = level().getBlockState(this.blockPosition().below());
             if (belowBlock.getBlock() != Blocks.AIR) {
                 for (int i = 0; i < 5; i++) {
-                    this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, belowBlock), this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getBoundingBox().minY, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D);
+                    this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, belowBlock), this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getBoundingBox().minY, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D);
                 }
             }
             this.setDeltaMovement(0, this.getDeltaMovement().y, 0);

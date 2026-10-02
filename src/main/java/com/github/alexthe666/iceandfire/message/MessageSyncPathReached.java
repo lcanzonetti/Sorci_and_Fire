@@ -1,12 +1,17 @@
 package com.github.alexthe666.iceandfire.message;
 
+import org.jetbrains.annotations.NotNull;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.network.codec.StreamCodec;
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.MNode;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.network.NetworkDirection;
-import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,8 +20,16 @@ import java.util.function.Supplier;
 /**
  * Message to sync the reached positions over to the client for rendering.
  */
-public class MessageSyncPathReached
-{
+public class MessageSyncPathReached implements CustomPacketPayload {
+
+    public static final CustomPacketPayload.Type<MessageSyncPathReached> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "sync_path_reached"));
+    public static final StreamCodec<FriendlyByteBuf, MessageSyncPathReached> CODEC = StreamCodec.of((buf, msg) -> msg.write(buf), MessageSyncPathReached::read);
+
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+
     /**
      * Set of reached positions.
      */
@@ -54,11 +67,10 @@ public class MessageSyncPathReached
         return LogicalSide.CLIENT;
     }
 
-    public boolean handle(Supplier<NetworkEvent.Context> contextSupplier) {
-        contextSupplier.get().enqueueWork(() -> {
-            contextSupplier.get().setPacketHandled(true);
+    public boolean handle(IPayloadContext context) {
+        context.enqueueWork(() -> {
 
-            if (contextSupplier.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
+            if (context.flow() == PacketFlow.CLIENTBOUND) {
                 for (final MNode node : Pathfinding.lastDebugNodesPath) {
                     if (reached.contains(node.pos)) {
                         node.setReachedByWorker(true);

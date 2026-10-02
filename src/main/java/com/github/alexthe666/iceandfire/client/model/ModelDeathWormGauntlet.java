@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
 import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
@@ -107,8 +108,8 @@ public class ModelDeathWormGauntlet extends ModelDragonBase {
 
     public void animate(ItemStack stack, float partialTick) {
         this.resetToDefaultPose();
-        if (stack.getTag() != null) {
-            Entity holder = Minecraft.getInstance().level.getEntity(stack.getTag().getInt("HolderID"));
+        if (IafNbt.getTag(stack) != null) {
+            Entity holder = Minecraft.getInstance().level.getEntity(IafNbt.getTag(stack).getInt("HolderID"));
             if (!(holder instanceof LivingEntity))
                 return;
             float lungeTicks = MiscProperties.getLungeTicks((LivingEntity) holder) + partialTick;

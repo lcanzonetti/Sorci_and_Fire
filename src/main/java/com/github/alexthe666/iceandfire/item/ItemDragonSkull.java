@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonSkull;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
@@ -25,7 +26,7 @@ public class ItemDragonSkull extends Item {
     private final int dragonType;
 
     public ItemDragonSkull(int dragonType) {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
+        super(new Item.Properties().stacksTo(1));
         this.dragonType = dragonType;
     }
 
@@ -45,24 +46,24 @@ public class ItemDragonSkull extends Item {
 
     @Override
     public void onCraftedBy(ItemStack itemStack, @NotNull Level world, @NotNull Player player) {
-        itemStack.setTag(new CompoundTag());
+        IafNbt.setTag(itemStack, new CompoundTag());
     }
 
     @Override
     public void inventoryTick(ItemStack stack, @NotNull Level worldIn, @NotNull Entity entityIn, int itemSlot, boolean isSelected) {
-        if (stack.getTag() == null) {
-            stack.setTag(new CompoundTag());
-            stack.getTag().putInt("Stage", 4);
-            stack.getTag().putInt("DragonAge", 75);
+        if (IafNbt.getTag(stack) == null) {
+            IafNbt.setTag(stack, new CompoundTag());
+            IafNbt.update(stack, tag -> tag.putInt("Stage", 4));
+            IafNbt.update(stack, tag -> tag.putInt("DragonAge", 75));
         }
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         String iceorfire = "dragon." + getType(dragonType);
         tooltip.add(Component.translatable(iceorfire).withStyle(ChatFormatting.GRAY));
-        if (stack.getTag() != null) {
-            tooltip.add(Component.translatable("dragon.stage").withStyle(ChatFormatting.GRAY).append(Component.literal(" " + stack.getTag().getInt("Stage"))));
+        if (IafNbt.getTag(stack) != null) {
+            tooltip.add(Component.translatable("dragon.stage").withStyle(ChatFormatting.GRAY).append(Component.literal(" " + IafNbt.getTag(stack).getInt("Stage"))));
         }
     }
 
@@ -74,11 +75,11 @@ public class ItemDragonSkull extends Item {
          * egg.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() +
          * 0.5); if(!worldIn.isRemote){ worldIn.spawnEntityInWorld(egg); }
          */
-        if (stack.getTag() != null) {
+        if (IafNbt.getTag(stack) != null) {
             EntityDragonSkull skull = new EntityDragonSkull(IafEntityRegistry.DRAGON_SKULL.get(), context.getLevel());
             skull.setDragonType(dragonType);
-            skull.setStage(stack.getTag().getInt("Stage"));
-            skull.setDragonAge(stack.getTag().getInt("DragonAge"));
+            skull.setStage(IafNbt.getTag(stack).getInt("Stage"));
+            skull.setDragonAge(IafNbt.getTag(stack).getInt("DragonAge"));
             BlockPos offset = context.getClickedPos().relative(context.getClickedFace(), 1);
             skull.moveTo(offset.getX() + 0.5, offset.getY(), offset.getZ() + 0.5, 0, 0);
             float yaw = context.getPlayer().getYRot();

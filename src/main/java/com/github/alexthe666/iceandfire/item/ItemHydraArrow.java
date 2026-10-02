@@ -20,7 +20,7 @@ import java.util.List;
 public class ItemHydraArrow extends ArrowItem {
 
     public ItemHydraArrow() {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+        super(new Item.Properties());
     }
 
     @Override
@@ -29,7 +29,7 @@ public class ItemHydraArrow extends ArrowItem {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(Component.translatable("item.iceandfire.hydra_arrow.desc").withStyle(ChatFormatting.GRAY));
     }
 }

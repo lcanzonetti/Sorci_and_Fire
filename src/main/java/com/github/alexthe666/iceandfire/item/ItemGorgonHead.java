@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderGorgonHead;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
@@ -38,17 +39,17 @@ import java.util.function.Consumer;
 public class ItemGorgonHead extends Item {
 
     public ItemGorgonHead() {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(1));
+        super(new Item.Properties().durability(1));
     }
 
     @Override
-    public void initializeClient(Consumer<net.neoforged.neoforge.client.IItemRenderProperties> consumer) {
+    public void initializeClient(Consumer<net.neoforged.neoforge.client.extensions.common.IClientItemExtensions> consumer) {
 
-        consumer.accept(new net.neoforged.neoforge.client.IItemRenderProperties() {
+        consumer.accept(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
             static final NonNullLazy<BlockEntityWithoutLevelRenderer> renderer = NonNullLazy.of(() -> new RenderGorgonHead(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
 
             @Override
-            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 return renderer.get();
             }
         });
@@ -56,7 +57,7 @@ public class ItemGorgonHead extends Item {
 
     @Override
     public void onCraftedBy(ItemStack itemStack, @NotNull Level world, @NotNull Player player) {
-        itemStack.setTag(new CompoundTag());
+        IafNbt.setTag(itemStack, new CompoundTag());
     }
 
     @Override
@@ -130,14 +131,14 @@ public class ItemGorgonHead extends Item {
                 }
             }
         }
-        stack.getTag().putBoolean("Active", false);
+        IafNbt.update(stack, tag -> tag.putBoolean("Active", false));
     }
 
     @Override
     public @NotNull InteractionResultHolder<ItemStack> use(@NotNull Level worldIn, Player playerIn, @NotNull InteractionHand hand) {
         ItemStack itemStackIn = playerIn.getItemInHand(hand);
         playerIn.startUsingItem(hand);
-        itemStackIn.getTag().putBoolean("Active", true);
+        IafNbt.update(itemStackIn, tag -> tag.putBoolean("Active", true));
         return new InteractionResultHolder<ItemStack>(InteractionResult.SUCCESS, itemStackIn);
     }
 
@@ -146,7 +147,7 @@ public class ItemGorgonHead extends Item {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(Component.translatable("item.iceandfire.legendary_weapon.desc").withStyle(ChatFormatting.GRAY));
     }
 }

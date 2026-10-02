@@ -19,14 +19,13 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 import static com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry.IAF_LECTERN;
 
@@ -36,8 +35,8 @@ public class BlockLectern extends BaseEntityBlock {
 
     public BlockLectern() {
         super(
-            Properties
-                .of(Material.WOOD)
+            IafMaterial.WOOD.properties()
+                
                 .noOcclusion()
                 .dynamicShape()
                 .strength(2, 5)
@@ -86,7 +85,7 @@ public class BlockLectern extends BaseEntityBlock {
     }
 
 
-    public void updateTick(Level worldIn, BlockPos pos, BlockState state, Random rand) {
+    public void updateTick(Level worldIn, BlockPos pos, BlockState state, RandomSource rand) {
         this.checkFall(worldIn, pos);
     }
 

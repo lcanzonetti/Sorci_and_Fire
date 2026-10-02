@@ -94,10 +94,10 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
 
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(CLIMBING, Byte.valueOf((byte) 0));
-        this.entityData.define(SCALE, Float.valueOf(1F));
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(CLIMBING, Byte.valueOf((byte) 0));
+        builder.define(SCALE, Float.valueOf(1F));
     }
 
     public float getSize() {
@@ -136,14 +136,14 @@ public class EntityDreadScuttler extends EntityDreadMob implements IAnimatedEnti
             firstWidth = INITIAL_WIDTH * getSize();
             firstHeight = INITIAL_HEIGHT * getSize();
         }
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             this.setBesideClimbableBlock(this.horizontalCollision);
         }
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
-            BlockState belowBlock = level.getBlockState(this.blockPosition().below());
+            BlockState belowBlock = level().getBlockState(this.blockPosition().below());
             if (belowBlock.getBlock() != Blocks.AIR) {
                 for (int i = 0; i < 5; i++) {
-                    this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, belowBlock), this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getBoundingBox().minY, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D);
+                    this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, belowBlock), this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getBoundingBox().minY, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D);
                 }
             }
             this.setDeltaMovement(0, this.getDeltaMovement().y, 0);

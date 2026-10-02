@@ -22,7 +22,7 @@ public class ItemDragonArmor extends Item {
     private Pattern baseName = Pattern.compile("[a-z]+_[a-z]+");
 
     public ItemDragonArmor(DragonArmorType type, int dragonSlot) {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
+        super(new Item.Properties().stacksTo(1));
         this.type = type;
         this.dragonSlot = dragonSlot;
         if (type == DragonArmorType.FIRE || type == DragonArmorType.ICE || type == DragonArmorType.LIGHTNING)
@@ -48,7 +48,7 @@ public class ItemDragonArmor extends Item {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         String words = switch (dragonSlot) {
             case 1 -> "dragon.armor_neck";
             case 2 -> "dragon.armor_body";

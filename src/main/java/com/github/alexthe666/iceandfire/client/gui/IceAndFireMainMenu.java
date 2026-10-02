@@ -26,7 +26,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class IceAndFireMainMenu extends TitleScreen {
@@ -105,7 +105,7 @@ public class IceAndFireMainMenu extends TitleScreen {
 
     private void resetDrawnImages() {
         globalAlpha = 0;
-        Random random = java.util.concurrent.ThreadLocalRandom.current();
+        RandomSource random = java.util.concurrent.ThreadLocalRandom.current();
         drawnPictures = new Picture[1 + random.nextInt(2)];
         boolean left = random.nextBoolean();
         for (int i = 0; i < drawnPictures.length; i++) {

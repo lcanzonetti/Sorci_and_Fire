@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client;
 
+import net.neoforged.fml.common.EventBusSubscriber;
 import com.github.alexthe666.iceandfire.CommonProxy;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.gui.GuiMyrmexAddRoom;
@@ -30,7 +31,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Mod.EventBusSubscriber(modid = IceAndFire.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = IceAndFire.MODID, value = Dist.CLIENT)
 public class ClientProxy extends CommonProxy {
 
     public static Set<UUID> currentDragonRiders = new HashSet<UUID>();

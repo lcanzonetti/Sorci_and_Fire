@@ -27,18 +27,18 @@ public class ItemTrollWeapon extends SwordItem {
     public EnumTroll.Weapon weapon = EnumTroll.Weapon.AXE;
 
     public ItemTrollWeapon(EnumTroll.Weapon weapon) {
-        super(IafItemRegistry.TROLL_WEAPON_TOOL_MATERIAL, 15, -3.5F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+        super(IafItemRegistry.TROLL_WEAPON_TOOL_MATERIAL, new Item.Properties().attributes(SwordItem.createAttributes(IafItemRegistry.TROLL_WEAPON_TOOL_MATERIAL, 15, -3.5F)));
         this.weapon = weapon;
     }
 
     @Override
-    public void initializeClient(Consumer<net.neoforged.neoforge.client.IItemRenderProperties> consumer) {
+    public void initializeClient(Consumer<net.neoforged.neoforge.client.extensions.common.IClientItemExtensions> consumer) {
 
-        consumer.accept(new net.neoforged.neoforge.client.IItemRenderProperties() {
+        consumer.accept(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
             static final NonNullLazy<BlockEntityWithoutLevelRenderer> renderer = NonNullLazy.of(() -> new RenderTrollWeapon(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
 
             @Override
-            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 return renderer.get();
             }
         });
@@ -71,7 +71,7 @@ public class ItemTrollWeapon extends SwordItem {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(Component.translatable("item.iceandfire.legendary_weapon.desc").withStyle(ChatFormatting.GRAY));
     }
 

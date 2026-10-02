@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.world.gen.mixin;
 
 import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.LakeFeature;
@@ -25,8 +26,12 @@ public class NoLakesInStructuresMixin {
         if (!(context.level() instanceof WorldGenRegion))
             return;
 
-        for (var structure : List.of(IafWorldRegistry.MAUSOLEUM_CF, IafWorldRegistry.GORGON_TEMPLE_CF, IafWorldRegistry.GRAVEYARD_CF)) {
-            var structureStart = context.level().getChunk(context.origin()).getStartForFeature(structure.value());
+        var structures = context.level().registryAccess().registryOrThrow(Registries.STRUCTURE);
+        for (var key : List.of(IafWorldRegistry.MAUSOLEUM_CF, IafWorldRegistry.GORGON_TEMPLE_CF, IafWorldRegistry.GRAVEYARD_CF)) {
+            var structure = structures.get(key);
+            if (structure == null)
+                continue;
+            var structureStart = context.level().getChunk(context.origin()).getStartForStructure(structure);
             if (structureStart != null && structureStart.isValid())
                 cir.setReturnValue(false);
         }

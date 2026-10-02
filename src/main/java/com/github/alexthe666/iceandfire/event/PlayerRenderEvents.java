@@ -37,35 +37,35 @@ public class PlayerRenderEvents {
     public void playerRender(RenderPlayerEvent.Pre event) {
         //TODO
         /*
-        if (event.getEntityLiving() instanceof AbstractClientPlayerEntity) {
-                NetworkPlayerInfo info = ((AbstractClientPlayerEntity)event.getEntityLiving()).getPlayerInfo();
+        if (event.getEntity() instanceof AbstractClientPlayerEntity) {
+                NetworkPlayerInfo info = ((AbstractClientPlayerEntity)event.getEntity()).getPlayerInfo();
             if (info != null) {
                 Map<Type, ResourceLocation> textureMap = info.playerTextures;
                 if (textureMap != null) {
-                    if (hasBetaCape(event.getEntityLiving().getUniqueID())) {
+                    if (hasBetaCape(event.getEntity().getUniqueID())) {
                         textureMap.put(Type.CAPE, betaTex);
                         textureMap.put(Type.ELYTRA, betaElytraTex);
                     }
-                    if (hasRedCape(event.getEntityLiving().getUniqueID())) {
+                    if (hasRedCape(event.getEntity().getUniqueID())) {
                         textureMap.put(Type.CAPE, redTex);
                         textureMap.put(Type.ELYTRA, redElytraTex);
                     }
-                    if (hasBlueCape(event.getEntityLiving().getUniqueID())) {
+                    if (hasBlueCape(event.getEntity().getUniqueID())) {
                         textureMap.put(Type.CAPE, blueTex);
                         textureMap.put(Type.ELYTRA, blueElytraTex);
                     }
                 }
             }
         }*/
-        if (event.getEntityLiving().getUUID().equals(ServerEvents.ALEX_UUID)) {
+        if (event.getEntity().getUUID().equals(ServerEvents.ALEX_UUID)) {
             event.getPoseStack().pushPose();
-            float f2 = ((float) event.getEntityLiving().tickCount - 1 + event.getPartialTick());
+            float f2 = ((float) event.getEntity().tickCount - 1 + event.getPartialTick());
             float f3 = Mth.sin(f2 / 10.0F) * 0.1F + 0.1F;
-            event.getPoseStack().translate((float) 0, event.getEntityLiving().getBbHeight() * 1.25F, (float) 0);
+            event.getPoseStack().translate((float) 0, event.getEntity().getBbHeight() * 1.25F, (float) 0);
             float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
             event.getPoseStack().mulPose(Axis.YP.rotationDegrees(f4));
             event.getPoseStack().pushPose();
-            Minecraft.getInstance().getItemRenderer().renderStatic(Minecraft.getInstance().player, new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM.get()), ItemTransforms.TransformType.GROUND, false, event.getPoseStack(), event.getMultiBufferSource(), event.getEntityLiving().level, event.getPackedLight(), OverlayTexture.NO_OVERLAY, 0);
+            Minecraft.getInstance().getItemRenderer().renderStatic(Minecraft.getInstance().player, new ItemStack(IafItemRegistry.WEEZER_BLUE_ALBUM.get()), ItemTransforms.TransformType.GROUND, false, event.getPoseStack(), event.getMultiBufferSource(), event.getEntity().level, event.getPackedLight(), OverlayTexture.NO_OVERLAY, 0);
             event.getPoseStack().popPose();
             event.getPoseStack().popPose();
 

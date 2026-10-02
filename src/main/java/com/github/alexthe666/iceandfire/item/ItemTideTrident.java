@@ -40,17 +40,17 @@ import java.util.function.Consumer;
 public class ItemTideTrident extends TridentItem {
 
     public ItemTideTrident() {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(400));
+        super(new Item.Properties().durability(400));
     }
 
     @Override
-    public void initializeClient(Consumer<net.neoforged.neoforge.client.IItemRenderProperties> consumer) {
+    public void initializeClient(Consumer<net.neoforged.neoforge.client.extensions.common.IClientItemExtensions> consumer) {
 
-        consumer.accept(new net.neoforged.neoforge.client.IItemRenderProperties() {
+        consumer.accept(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
             static final NonNullLazy<BlockEntityWithoutLevelRenderer> renderer = NonNullLazy.of(() -> new RenderTideTridentItem(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
 
             @Override
-            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 return renderer.get();
             }
         });
@@ -97,7 +97,7 @@ public class ItemTideTrident extends TridentItem {
                         lvt_12_1_ *= lvt_14_1_ / lvt_13_1_;
                         lvt_5_1_.push(lvt_10_1_, lvt_11_1_, lvt_12_1_);
                         lvt_5_1_.startAutoSpinAttack(20);
-                        if (lvt_5_1_.isOnGround()) {
+                        if (lvt_5_1_.onGround()) {
                             float lvt_15_1_ = 1.1999999F;
                             lvt_5_1_.move(MoverType.SELF, new Vec3(0.0D, 1.1999999284744263D, 0.0D));
                         }
@@ -139,7 +139,7 @@ public class ItemTideTrident extends TridentItem {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
 
         tooltip.add(Component.translatable("item.iceandfire.legendary_weapon.desc").withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("item.iceandfire.tide_trident.desc_0").withStyle(ChatFormatting.GRAY));

@@ -2,12 +2,11 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
@@ -19,30 +18,28 @@ import java.util.List;
 
 public class ItemModHoe extends HoeItem implements DragonSteelOverrides<ItemModHoe> {
 
-    private Multimap<Attribute, AttributeModifier> dragonsteelModifiers;
+    private ItemAttributeModifiers dragonsteelModifiers;
+    private double bakedDamage;
 
     public ItemModHoe(Tier toolmaterial) {
-        super(toolmaterial, 5, -3.0F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+        super(toolmaterial, new Item.Properties().attributes(DiggerItem.createAttributes(toolmaterial, 5, -3.0F)));
     }
 
     @Override
-    @Deprecated
-    public @NotNull Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(@NotNull EquipmentSlot equipmentSlot) {
-        return equipmentSlot == EquipmentSlot.MAINHAND && isDragonsteel(getTier()) ? this.bakeDragonsteel() : super.getDefaultAttributeModifiers(equipmentSlot);
+    public @NotNull ItemAttributeModifiers getDefaultAttributeModifiers(@NotNull ItemStack stack) {
+        return isDragonsteel(getTier()) ? this.bakeDragonsteel() : super.getDefaultAttributeModifiers(stack);
     }
 
     @Override
-    @Deprecated
-    public Multimap<Attribute, AttributeModifier> bakeDragonsteel() {
-        if (getTier().getAttackDamageBonus() != IafConfig.dragonsteelBaseDamage || dragonsteelModifiers == null) {
-            ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-            builder.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", 1F, AttributeModifier.Operation.ADDITION));
-            builder.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", -3F, AttributeModifier.Operation.ADDITION));
-            this.dragonsteelModifiers = builder.build();
-            return this.dragonsteelModifiers;
-        } else {
-            return dragonsteelModifiers;
+    public ItemAttributeModifiers bakeDragonsteel() {
+        if (dragonsteelModifiers == null || bakedDamage != IafConfig.dragonsteelBaseDamage) {
+            bakedDamage = IafConfig.dragonsteelBaseDamage;
+            dragonsteelModifiers = ItemAttributeModifiers.builder()
+                .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_ID, 1F, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+                .add(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_ID, -3F, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+                .build();
         }
+        return dragonsteelModifiers;
     }
 
     @Override
@@ -57,7 +54,7 @@ public class ItemModHoe extends HoeItem implements DragonSteelOverrides<ItemModH
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         appendHoverText(getTier(), stack, worldIn, tooltip, flagIn);
     }

@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.animation.AnimationHandler;
 import com.github.alexthe666.citadel.animation.IAnimatedEntity;
@@ -62,7 +63,7 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
         ListTag listnbt = (new BannerPattern.Builder()).addPattern(BannerPattern.BASE, DyeColor.CYAN).addPattern(IafItemRegistry.PATTERN_DREAD.get().getBannerPattern(), DyeColor.WHITE).toListTag();
         compoundnbt.put("Patterns", listnbt);
         ItemStack shield = new ItemStack(Items.SHIELD, 1);
-        shield.setTag(itemstack.getTag());
+        IafNbt.setTag(shield, IafNbt.getTag(itemstack));
         return shield;
     }
 
@@ -104,19 +105,19 @@ public class EntityDreadKnight extends EntityDreadMob implements IAnimatedEntity
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(VARIANT, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(VARIANT, 0);
     }
 
     @Override
     public void aiStep() {
         super.aiStep();
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
-            BlockState belowBlock = level.getBlockState(this.blockPosition().below());
+            BlockState belowBlock = level().getBlockState(this.blockPosition().below());
             if (belowBlock.getBlock() != Blocks.AIR) {
                 for (int i = 0; i < 5; i++) {
-                    this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, belowBlock), this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getBoundingBox().minY, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D);
+                    this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, belowBlock), this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getBoundingBox().minY, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D);
                 }
             }
             this.setDeltaMovement(0, this.getDeltaMovement().y, this.getDeltaMovement().z);

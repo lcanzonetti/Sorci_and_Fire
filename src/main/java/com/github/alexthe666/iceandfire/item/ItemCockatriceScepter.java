@@ -29,20 +29,20 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 import java.util.function.Predicate;
 
 public class ItemCockatriceScepter extends Item {
 
-    private final Random rand = new Random();
+    private final RandomSource rand = RandomSource.create();
     private int specialWeaponDmg;
 
     public ItemCockatriceScepter() {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(700));
+        super(new Item.Properties().durability(700));
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(Component.translatable("item.iceandfire.legendary_weapon.desc").withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("item.iceandfire.cockatrice_scepter.desc_0").withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("item.iceandfire.cockatrice_scepter.desc_1").withStyle(ChatFormatting.GRAY));
@@ -87,7 +87,7 @@ public class ItemCockatriceScepter extends Item {
             Vec3 playerLook = player.getViewVector(1.0F);
             Vec3 Vector3d2 = playerEyePosition.add(playerLook.x * dist, playerLook.y * dist, playerLook.z * dist);
             Entity pointedEntity = null;
-            List<Entity> nearbyEntities = player.level.getEntities(player, player.getBoundingBox().expandTowards(playerLook.x * dist, playerLook.y * dist, playerLook.z * dist).inflate(1.0D, 1.0D, 1.0D), new Predicate<Entity>() {
+            List<Entity> nearbyEntities = player.level().getEntities(player, player.getBoundingBox().expandTowards(playerLook.x * dist, playerLook.y * dist, playerLook.z * dist).inflate(1.0D, 1.0D, 1.0D), new Predicate<Entity>() {
                 @Override
                 public boolean test(Entity entity) {
                     boolean blindness = entity instanceof LivingEntity && ((LivingEntity) entity).hasEffect(MobEffects.BLINDNESS) || (entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entity).canBeTurnedToStone());
@@ -162,7 +162,7 @@ public class ItemCockatriceScepter extends Item {
         double d4 = this.rand.nextDouble();
         while (d4 < d3) {
             d4 += 1.0D;
-            origin.level.addParticle(ParticleTypes.ENTITY_EFFECT, origin.getX() + d0 * d4, origin.getY() + d1 * d4 + (double) origin.getEyeHeight() * 0.5D, origin.getZ() + d2 * d4, 0.0D, 0.0D, 0.0D);
+            origin.level().addParticle(ParticleTypes.ENTITY_EFFECT, origin.getX() + d0 * d4, origin.getY() + d1 * d4 + (double) origin.getEyeHeight() * 0.5D, origin.getZ() + d2 * d4, 0.0D, 0.0D, 0.0D);
         }
     }
 

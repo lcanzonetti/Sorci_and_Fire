@@ -1,6 +1,8 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ArmorMaterial;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.armor.ModelSeaSerpentArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
@@ -23,12 +25,12 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemSeaSerpentArmor extends ArmorItem {
+public class ItemSeaSerpentArmor extends IafArmorItem {
 
     public EnumSeaSerpent armor_type;
 
-    public ItemSeaSerpentArmor(EnumSeaSerpent armorType, CustomArmorMaterial material, EquipmentSlot slot) {
-        super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+    public ItemSeaSerpentArmor(EnumSeaSerpent armorType, IafArmorMaterial material, EquipmentSlot slot) {
+        super(material, slot, new Item.Properties());
         this.armor_type = armorType;
     }
 
@@ -48,19 +50,19 @@ public class ItemSeaSerpentArmor extends ArmorItem {
     }
 
     @Override
-    public void initializeClient(java.util.function.Consumer<net.neoforged.neoforge.client.IItemRenderProperties> consumer) {
-        consumer.accept(new net.neoforged.neoforge.client.IItemRenderProperties() {
+    public void initializeClient(java.util.function.Consumer<net.neoforged.neoforge.client.extensions.common.IClientItemExtensions> consumer) {
+        consumer.accept(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
             @Override
             @Nullable
-            public HumanoidModel<?> getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
+            public HumanoidModel<?> getHumanoidArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
                 return new ModelSeaSerpentArmor(armorSlot == EquipmentSlot.LEGS || armorSlot == EquipmentSlot.HEAD);
             }
         });
     }
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return "iceandfire:textures/models/armor/armor_tide_" + armor_type.resourceName + (slot == EquipmentSlot.LEGS ? "_legs.png" : ".png");
+    public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
+        return ResourceLocation.parse("iceandfire:textures/models/armor/armor_tide_" + armor_type.resourceName + (slot == EquipmentSlot.LEGS ? "_legs.png" : ".png"));
     }
 
     @Override
@@ -77,7 +79,7 @@ public class ItemSeaSerpentArmor extends ArmorItem {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
 
         tooltip.add(Component.translatable("sea_serpent." + armor_type.resourceName).withStyle(armor_type.color));
         tooltip.add(Component.translatable("item.iceandfire.sea_serpent_armor.desc_0").withStyle(ChatFormatting.GRAY));

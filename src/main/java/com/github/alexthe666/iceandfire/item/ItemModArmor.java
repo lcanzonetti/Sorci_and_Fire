@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.item;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ArmorMaterial;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -14,10 +17,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class ItemModArmor extends ArmorItem {
+public class ItemModArmor extends IafArmorItem {
 
-    public ItemModArmor(ArmorMaterial material, EquipmentSlot slot) {
-        super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+    public ItemModArmor(IafArmorMaterial material, EquipmentSlot slot) {
+        super(material, slot, new Item.Properties());
     }
 
     @Override
@@ -34,24 +37,24 @@ public class ItemModArmor extends ArmorItem {
 
     @Override
     @Nullable
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        if (this.material == IafItemRegistry.MYRMEX_DESERT_ARMOR_MATERIAL) {
-            return "iceandfire:textures/models/armor/" + (slot == EquipmentSlot.LEGS ? "myrmex_desert_layer_2" : "myrmex_desert_layer_1") + ".png";
+    public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
+        if (this.iafMaterial == IafItemRegistry.MYRMEX_DESERT_ARMOR_MATERIAL) {
+            return ResourceLocation.parse("iceandfire:textures/models/armor/" + (slot == EquipmentSlot.LEGS ? "myrmex_desert_layer_2" : "myrmex_desert_layer_1") + ".png");
         }
-        if (this.material == IafItemRegistry.MYRMEX_JUNGLE_ARMOR_MATERIAL) {
-            return "iceandfire:textures/models/armor/" + (slot == EquipmentSlot.LEGS ? "myrmex_jungle_layer_2" : "myrmex_jungle_layer_1") + ".png";
+        if (this.iafMaterial == IafItemRegistry.MYRMEX_JUNGLE_ARMOR_MATERIAL) {
+            return ResourceLocation.parse("iceandfire:textures/models/armor/" + (slot == EquipmentSlot.LEGS ? "myrmex_jungle_layer_2" : "myrmex_jungle_layer_1") + ".png");
         }
-        if (this.material == IafItemRegistry.SHEEP_ARMOR_MATERIAL) {
-            return "iceandfire:textures/models/armor/" + (slot == EquipmentSlot.LEGS ? "sheep_disguise_layer_2" : "sheep_disguise_layer_1") + ".png";
+        if (this.iafMaterial == IafItemRegistry.SHEEP_ARMOR_MATERIAL) {
+            return ResourceLocation.parse("iceandfire:textures/models/armor/" + (slot == EquipmentSlot.LEGS ? "sheep_disguise_layer_2" : "sheep_disguise_layer_1") + ".png");
         }
-        if (this.material == IafItemRegistry.EARPLUGS_ARMOR_MATERIAL) {
-            return "iceandfire:textures/models/armor/earplugs_layer_1.png";
+        if (this.iafMaterial == IafItemRegistry.EARPLUGS_ARMOR_MATERIAL) {
+            return ResourceLocation.parse("iceandfire:textures/models/armor/earplugs_layer_1.png");
         }
         return null;
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         if (this == IafItemRegistry.EARPLUGS.get()) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());

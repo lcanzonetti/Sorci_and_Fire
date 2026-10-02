@@ -1,15 +1,11 @@
 package com.github.alexthe666.iceandfire.config.biome;
 
 
-import com.github.alexthe666.citadel.Citadel;
 import com.google.gson.*;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.biome.Biome;
-import net.neoforged.neoforge.common.BiomeDictionary;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Type;
@@ -18,7 +14,8 @@ import java.util.*;
 public class IafSpawnBiomeData extends com.github.alexthe666.citadel.config.biome.SpawnBiomeData {
 
     private List<List<SpawnBiomeEntry>> biomes = new ArrayList<>();
-    private static final int CITADEL_FORMAT = 0;
+    // Bumped to 1 for 1.21: 1.18 files reference forge: biome tags that no longer exist
+    private static final int CITADEL_FORMAT = 1;
     private static final String CITADEL_FORMAT_STRING = "citadel_format";
     private int citadelFormat = CITADEL_FORMAT;
 
@@ -42,26 +39,6 @@ public class IafSpawnBiomeData extends com.github.alexthe666.citadel.config.biom
         }
         biomes.get(pool).add(new SpawnBiomeEntry(type, negate, value));
         return this;
-    }
-
-    @Deprecated
-    public boolean matches(Biome biomeIn) {
-        return this.matches(Biome.BiomeCategory.NONE, biomeIn.getRegistryName());
-    }
-
-    public boolean matches(Biome.BiomeCategory category, ResourceLocation registryName) {
-        for (List<SpawnBiomeEntry> all : biomes) {
-            boolean overall = true;
-            for (SpawnBiomeEntry cond : all) {
-                if (!cond.matches(category, registryName)) {
-                    overall = false;
-                }
-            }
-            if (overall) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public boolean matches(@Nullable Holder<Biome> biomeHolder, ResourceLocation registryName) {
@@ -114,56 +91,16 @@ public class IafSpawnBiomeData extends com.github.alexthe666.citadel.config.biom
         }
 
         public boolean matches(@Nullable Holder<Biome> biomeHolder, ResourceLocation registryName) {
-            if(type.isDepreciated()){
-                // TODO: 1.19
-                Citadel.LOGGER.debug("biome config: BIOME_DICT is no longer fully supported in 1.18+. They will only work for structures.");
-                return false;
-            }else{
-                if(type == BiomeEntryType.BIOME_TAG){
-                    if(biomeHolder.getTagKeys().anyMatch((biomeTagKey -> biomeTagKey.location() != null && biomeTagKey.location().toString().equals(value)))){
-                        return !negate;
-                    }
-                    return negate;
-                }
-                else if (type == BiomeEntryType.BIOME_CATEGORY)
-                {
-                    if (Biome.getBiomeCategory(biomeHolder).getName().toLowerCase(Locale.ROOT).equals(this.value)) {
-                        return !this.negate;
-                    } else {
-                        return this.negate;
-                    }
-                }
-                else {
-                    if (registryName.toString().equals(value)) {
-                        return !negate;
-                    }
-                    return negate;
-                }
+            if (type == BiomeEntryType.REGISTRY_NAME) {
+                return registryName.toString().equals(value) != negate;
             }
-        }
-        public boolean matches(Biome.BiomeCategory category, ResourceLocation registryName) {
-            if (this.type == BiomeEntryType.BIOME_DICT) {
-                ResourceKey<Biome> biomeKey = ResourceKey.create(Registry.BIOME_REGISTRY, registryName);
-                List<? extends String> biomeTypes = BiomeDictionary.getTypes(biomeKey).stream().map((t) -> {
-                    return t.toString().toLowerCase(Locale.ROOT);
-                }).toList();
-                if (biomeTypes.contains(this.value)) {
-                    return !this.negate;
-                } else {
-                    return this.negate;
-                }
+            if (biomeHolder == null) {
+                return negate;
             }
-            else if (this.type == BiomeEntryType.BIOME_CATEGORY) {
-                if (category.getName().toLowerCase(Locale.ROOT).equals(this.value)) {
-                    return !this.negate;
-                } else {
-                    return this.negate;
-                }
-            } else if (registryName.toString().equals(this.value)) {
-                return !this.negate;
-            } else {
-                return this.negate;
-            }
+            // Biome categories and the biome dictionary no longer exist; they map onto the "c:is_<name>" convention tags.
+            String tagName = type == BiomeEntryType.BIOME_TAG ? value : "c:is_" + value.toLowerCase(Locale.ROOT);
+            boolean found = biomeHolder.tags().anyMatch(biomeTagKey -> biomeTagKey.location().toString().equals(tagName));
+            return found != negate;
         }
     }
 

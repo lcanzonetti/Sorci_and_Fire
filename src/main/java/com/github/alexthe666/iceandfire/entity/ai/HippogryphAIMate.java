@@ -12,7 +12,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class HippogryphAIMate extends Goal {
 
@@ -28,7 +28,7 @@ public class HippogryphAIMate extends Goal {
 
     public HippogryphAIMate(EntityHippogryph hippogryph, double speed, Class<? extends Animal> mate) {
         this.hippo = hippogryph;
-        this.world = hippogryph.level;
+        this.world = hippogryph.level();
         this.moveSpeed = speed;
         this.setFlags(EnumSet.of(Flag.MOVE));
     }
@@ -93,7 +93,7 @@ public class HippogryphAIMate extends Goal {
         if (!world.isClientSide) {
             this.world.addFreshEntity(egg);
         }
-        Random random = this.hippo.getRandom();
+        RandomSource random = this.hippo.getRandom();
 
         for (int i = 0; i < 7; ++i) {
             final double d0 = random.nextGaussian() * 0.02D;

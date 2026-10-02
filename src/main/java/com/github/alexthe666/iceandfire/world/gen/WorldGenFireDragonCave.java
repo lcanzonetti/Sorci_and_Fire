@@ -14,7 +14,7 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class WorldGenFireDragonCave extends WorldGenDragonCave{
 
@@ -35,7 +35,7 @@ public class WorldGenFireDragonCave extends WorldGenDragonCave{
     }
 
     @Override
-    EntityDragonBase createDragon(WorldGenLevel worldIn, Random rand, BlockPos position, int dragonAge) {
+    EntityDragonBase createDragon(WorldGenLevel worldIn, RandomSource rand, BlockPos position, int dragonAge) {
         EntityFireDragon dragon = new EntityFireDragon(IafEntityRegistry.FIRE_DRAGON.get(), worldIn.getLevel());
         dragon.setGender(isMale);
         dragon.growDragon(dragonAge);

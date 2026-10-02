@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.inventory.ContainerLectern;
@@ -30,13 +31,13 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class TileEntityLectern extends BaseContainerBlockEntity implements WorldlyContainer {
     private static final int[] slotsTop = new int[]{0};
     private static final int[] slotsSides = new int[]{1};
     private static final int[] slotsBottom = new int[]{0};
-    private static final Random RANDOM = new Random();
+    private static final RandomSource RANDOM = RandomSource.create();
     private static final ArrayList<EnumBestiaryPages> EMPTY_LIST = new ArrayList<>();
     public final ContainerData furnaceData = new ContainerData() {
         @Override
@@ -61,7 +62,7 @@ public class TileEntityLectern extends BaseContainerBlockEntity implements World
     public EnumBestiaryPages[] selectedPages = new EnumBestiaryPages[3];
     net.neoforged.neoforge.common.util.LazyOptional<? extends net.neoforged.neoforge.items.IItemHandler>[] handlers =
         net.neoforged.neoforge.items.wrapper.SidedInvWrapper.create(this, Direction.UP, Direction.DOWN);
-    private final Random localRand = new Random();
+    private final RandomSource localRand = RandomSource.create();
     private NonNullList<ItemStack> stacks = NonNullList.withSize(3, ItemStack.EMPTY);
 
     public TileEntityLectern(BlockPos pos, BlockState state) {

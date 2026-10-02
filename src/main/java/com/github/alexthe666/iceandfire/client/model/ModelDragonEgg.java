@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import net.minecraft.tags.BlockTags;
 import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.github.alexthe666.citadel.client.model.AdvancedModelBox;
 import com.github.alexthe666.citadel.client.model.basic.BasicModelPart;
@@ -57,9 +58,9 @@ public class ModelDragonEgg<T extends LivingEntity> extends AdvancedEntityModel<
             EntityDragonEgg dragon = (EntityDragonEgg) entity;
             boolean flag = false;
             if (dragon.getEggType().dragonType == DragonType.FIRE) {
-                flag = dragon.level.getBlockState(dragon.blockPosition()).getMaterial() == Material.FIRE;
+                flag = dragon.level().getBlockState(dragon.blockPosition()).is(BlockTags.FIRE);
             } else if (dragon.getEggType().dragonType == DragonType.LIGHTNING) {
-                flag = dragon.level.isRainingAt(dragon.blockPosition());
+                flag = dragon.level().isRainingAt(dragon.blockPosition());
             }
             if (flag) {
                 this.walk(Egg1, 0.3F, 0.3F, true, 1, 0, f2, 1);

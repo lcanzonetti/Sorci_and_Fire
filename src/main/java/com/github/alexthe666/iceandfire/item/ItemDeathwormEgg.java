@@ -18,7 +18,7 @@ public class ItemDeathwormEgg extends Item {
     private final boolean gigantic;
 
     public ItemDeathwormEgg(boolean gigantic) {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
+        super(new Item.Properties().stacksTo(1));
         this.gigantic = gigantic;
     }
 

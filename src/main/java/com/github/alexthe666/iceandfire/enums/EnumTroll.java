@@ -49,7 +49,7 @@ public enum EnumTroll {
 
         //leather = IafItemRegistry.deferredRegister.register("troll_leather_" + name().toLowerCase(Locale.ROOT), () -> new ItemTrollLeather(this));
 
-        //Function<EquipmentSlot, RegistryObject<Item>> genArmor = (slot) ->
+        //Function<EquipmentSlot, DeferredItem<Item>> genArmor = (slot) ->
         //        IafItemRegistry.deferredRegister.register(ItemTrollArmor.getName(this, slot), () -> new ItemTrollArmor(this, material, slot));
         //helmet = genArmor.apply(EquipmentSlot.HEAD);
         //chestplate = genArmor.apply(EquipmentSlot.CHEST);

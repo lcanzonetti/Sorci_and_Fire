@@ -8,7 +8,7 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class TrollAIFleeSun extends Goal {
     private final EntityTroll troll;
@@ -21,7 +21,7 @@ public class TrollAIFleeSun extends Goal {
     public TrollAIFleeSun(EntityTroll theCreatureIn, double movementSpeedIn) {
         this.troll = theCreatureIn;
         this.movementSpeed = movementSpeedIn;
-        this.world = theCreatureIn.level;
+        this.world = theCreatureIn.level();
         this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
@@ -63,7 +63,7 @@ public class TrollAIFleeSun extends Goal {
 
     @Nullable
     private Vec3 findPossibleShelter() {
-        Random random = this.troll.getRandom();
+        RandomSource random = this.troll.getRandom();
         BlockPos blockpos = new BlockPos(this.troll.getX(), this.troll.getBoundingBox().minY, this.troll.getZ());
 
         for (int i = 0; i < 10; ++i) {

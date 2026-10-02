@@ -25,7 +25,7 @@ import java.util.List;
 public class ItemAlchemySword extends SwordItem {
 
     public ItemAlchemySword(Tier toolmaterial) {
-        super(toolmaterial, 3, -2.4F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+        super(toolmaterial, new Item.Properties().attributes(SwordItem.createAttributes(toolmaterial, 3, -2.4F)));
     }
 
     @Override
@@ -53,13 +53,13 @@ public class ItemAlchemySword extends SwordItem {
                     flag = false;
                 }
             }
-            if (!attacker.level.isClientSide && flag) {
-                LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(target.level);
+            if (!attacker.level().isClientSide && flag) {
+                LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(target.level());
                 lightningboltentity.getTags().add(ServerEvents.BOLT_DONT_DESTROY_LOOT);
                 lightningboltentity.getTags().add(attacker.getStringUUID());
                 lightningboltentity.moveTo(target.position());
-                if (!target.level.isClientSide) {
-                    target.level.addFreshEntity(lightningboltentity);
+                if (!target.level().isClientSide) {
+                    target.level().addFreshEntity(lightningboltentity);
                 }
             }
             if (target instanceof EntityFireDragon || target instanceof EntityIceDragon) {
@@ -71,7 +71,7 @@ public class ItemAlchemySword extends SwordItem {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(Component.translatable("item.iceandfire.legendary_weapon.desc").withStyle(ChatFormatting.GRAY));
         if (this == IafItemRegistry.DRAGONBONE_SWORD_FIRE.get()) {
             tooltip.add(Component.translatable("dragon_sword_fire.hurt1").withStyle(ChatFormatting.GREEN));

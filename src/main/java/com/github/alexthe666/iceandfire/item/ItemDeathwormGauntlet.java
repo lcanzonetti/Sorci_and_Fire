@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.render.tile.RenderDeathWormGauntlet;
 import com.github.alexthe666.iceandfire.entity.props.MiscProperties;
@@ -37,17 +38,17 @@ public class ItemDeathwormGauntlet extends Item {
     private int specialDamage = 0;
 
     public ItemDeathwormGauntlet() {
-        super(new Item.Properties().durability(500).tab(IceAndFire.TAB_ITEMS));
+        super(new Item.Properties().durability(500));
     }
 
     @Override
-    public void initializeClient(Consumer<net.neoforged.neoforge.client.IItemRenderProperties> consumer) {
+    public void initializeClient(Consumer<net.neoforged.neoforge.client.extensions.common.IClientItemExtensions> consumer) {
 
-        consumer.accept(new net.neoforged.neoforge.client.IItemRenderProperties() {
+        consumer.accept(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
             static final NonNullLazy<BlockEntityWithoutLevelRenderer> renderer = NonNullLazy.of(() -> new RenderDeathWormGauntlet(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels()));
 
             @Override
-            public BlockEntityWithoutLevelRenderer getItemStackRenderer() {
+            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 return renderer.get();
             }
         });
@@ -72,13 +73,13 @@ public class ItemDeathwormGauntlet extends Item {
 
     @Override
     public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
-        if (stack.getTag() != null) {
+        if (IafNbt.getTag(stack) != null) {
             if (deathwormReceded || deathwormLaunched) {
                 return;
             } else {
                 if (player instanceof Player) {
-                    if (stack.getTag().getInt("HolderID") != player.getId()) {
-                        stack.getTag().putInt("HolderID", player.getId());
+                    if (IafNbt.getTag(stack).getInt("HolderID") != player.getId()) {
+                        IafNbt.update(stack, tag -> tag.putInt("HolderID", player.getId()));
                     }
                     if (((Player) player).getCooldowns().getCooldownPercent(this, 0.0F) == 0) {
                         ((Player) player).getCooldowns().addCooldown(this, 10);
@@ -99,8 +100,8 @@ public class ItemDeathwormGauntlet extends Item {
             });
             specialDamage = 0;
         }
-        if (stack.getTag().getInt("HolderID") != -1) {
-            stack.getTag().putInt("HolderID", -1);
+        if (IafNbt.getTag(stack).getInt("HolderID") != -1) {
+            IafNbt.update(stack, tag -> tag.putInt("HolderID", -1));
         }
     }
 
@@ -112,8 +113,8 @@ public class ItemDeathwormGauntlet extends Item {
     @Override
     public void inventoryTick(ItemStack stack, @NotNull Level world, @NotNull Entity entity, int itemSlot, boolean isSelected) {
         boolean hitMob = false;
-        if (stack.getTag() == null) {
-            stack.setTag(new CompoundTag());
+        if (IafNbt.getTag(stack) == null) {
+            IafNbt.setTag(stack, new CompoundTag());
         } else {
             if (!(entity instanceof LivingEntity))
                 return;
@@ -161,7 +162,7 @@ public class ItemDeathwormGauntlet extends Item {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(Component.translatable("item.iceandfire.legendary_weapon.desc").withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("item.iceandfire.deathworm_gauntlet.desc_0").withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("item.iceandfire.deathworm_gauntlet.desc_1").withStyle(ChatFormatting.GRAY));

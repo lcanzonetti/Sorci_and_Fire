@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityHippogryphEgg;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
@@ -29,7 +30,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ItemHippogryphEgg extends Item {
 
     public ItemHippogryphEgg() {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
+        super(new Item.Properties().stacksTo(1));
     }
 
     public static ItemStack createEggStack(EnumHippogryphTypes parent1, EnumHippogryphTypes parent2) {
@@ -37,7 +38,7 @@ public class ItemHippogryphEgg extends Item {
         ItemStack stack = new ItemStack(IafItemRegistry.HIPPOGRYPH_EGG.get());
         CompoundTag tag = new CompoundTag();
         tag.putInt("EggOrdinal", eggType.ordinal());
-        stack.setTag(tag);
+        IafNbt.setTag(stack, tag);
         return stack;
     }
 
@@ -49,7 +50,7 @@ public class ItemHippogryphEgg extends Item {
                 ItemStack stack = new ItemStack(this);
                 CompoundTag tag = new CompoundTag();
                 tag.putInt("EggOrdinal", type.ordinal());
-                stack.setTag(tag);
+                IafNbt.setTag(stack, tag);
                 items.add(stack);
 
             }
@@ -78,8 +79,8 @@ public class ItemHippogryphEgg extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-        CompoundTag tag = stack.getTag();
+    public void appendHoverText(ItemStack stack, Item.TooltipContext worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+        CompoundTag tag = IafNbt.getTag(stack);
         int eggOrdinal = 0;
         if (tag != null) {
             eggOrdinal = tag.getInt("EggOrdinal");

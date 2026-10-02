@@ -1,11 +1,16 @@
 package com.github.alexthe666.iceandfire.message;
 
+import org.jetbrains.annotations.NotNull;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.network.codec.StreamCodec;
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.MNode;
 import com.github.alexthe666.iceandfire.pathfinding.raycoms.Pathfinding;
 import net.minecraft.network.FriendlyByteBuf;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.network.NetworkDirection;
-import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,8 +19,16 @@ import java.util.function.Supplier;
 /**
  * Message to sync some path over to the client.
  */
-public class MessageSyncPath
-{
+public class MessageSyncPath implements CustomPacketPayload {
+
+    public static final CustomPacketPayload.Type<MessageSyncPath> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "sync_path"));
+    public static final StreamCodec<FriendlyByteBuf, MessageSyncPath> CODEC = StreamCodec.of((buf, msg) -> msg.write(buf), MessageSyncPath::read);
+
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+
     /**
      * Set of visited nodes.
      */
@@ -81,11 +94,10 @@ public class MessageSyncPath
         return new MessageSyncPath(lastDebugNodesVisited, lastDebugNodesNotVisited, lastDebugNodesPath);
     }
 
-    public boolean handle(Supplier<NetworkEvent.Context> contextSupplier) {
-        contextSupplier.get().enqueueWork(() -> {
-            contextSupplier.get().setPacketHandled(true);
+    public boolean handle(IPayloadContext context) {
+        context.enqueueWork(() -> {
 
-            if (contextSupplier.get().getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
+            if (context.flow() == PacketFlow.CLIENTBOUND) {
                 Pathfinding.lastDebugNodesVisited = lastDebugNodesVisited;
                 Pathfinding.lastDebugNodesNotVisited = lastDebugNodesNotVisited;
                 Pathfinding.lastDebugNodesPath = lastDebugNodesPath;

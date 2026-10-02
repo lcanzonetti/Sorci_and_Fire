@@ -33,7 +33,7 @@ public class PathNavigateAmphibious extends PathNavigation {
 
     @Override
     protected boolean canUpdatePath() {
-        return this.mob.isOnGround() || this.canFloat() && this.isInLiquid() || this.mob.isPassenger();
+        return this.mob.onGround() || this.canFloat() && this.isInLiquid() || this.mob.isPassenger();
     }
 
     @Override
@@ -43,29 +43,29 @@ public class PathNavigateAmphibious extends PathNavigation {
 
     @Override
     public Path createPath(@NotNull BlockPos pos, int i) {
-        if (this.level.getBlockState(pos).getMaterial() == Material.AIR) {
+        if (this.level.getBlockState(pos).isAir()) {
             BlockPos blockpos;
 
-            for (blockpos = pos.below(); blockpos.getY() > 0 && this.level.getBlockState(blockpos).getMaterial() == Material.AIR; blockpos = blockpos.below()) {
+            for (blockpos = pos.below(); blockpos.getY() > 0 && this.level.getBlockState(blockpos).isAir(); blockpos = blockpos.below()) {
             }
 
             if (blockpos.getY() > 0) {
                 return super.createPath(blockpos.above(), i);
             }
 
-            while (blockpos.getY() < this.level.getMaxBuildHeight() && this.level.getBlockState(blockpos).getMaterial() == Material.AIR) {
+            while (blockpos.getY() < this.level.getMaxBuildHeight() && this.level.getBlockState(blockpos).isAir()) {
                 blockpos = blockpos.above();
             }
 
             pos = blockpos;
         }
 
-        if (!this.level.getBlockState(pos).getMaterial().isSolid()) {
+        if (!this.level.getBlockState(pos).isSolid()) {
             return super.createPath(pos, i);
         } else {
             BlockPos blockpos1;
 
-            for (blockpos1 = pos.above(); blockpos1.getY() < this.level.getMaxBuildHeight() && this.level.getBlockState(blockpos1).getMaterial().isSolid(); blockpos1 = blockpos1.above()) {
+            for (blockpos1 = pos.above(); blockpos1.getY() < this.level.getMaxBuildHeight() && this.level.getBlockState(blockpos1).isSolid(); blockpos1 = blockpos1.above()) {
             }
 
             return super.createPath(blockpos1, i);
@@ -231,7 +231,7 @@ public class PathNavigateAmphibious extends PathNavigation {
             if (d0 * p_179692_8_ + d1 * p_179692_10_ >= 0.0D) {
                 Block block = this.level.getBlockState(blockpos).getBlock();
 
-                if (this.level.getBlockState(blockpos).getMaterial().blocksMotion()) {
+                if (this.level.getBlockState(blockpos).blocksMotion()) {
                     return false;
                 }
             }

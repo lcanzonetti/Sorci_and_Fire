@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
 import com.github.alexthe666.iceandfire.message.MessageGetMyrmexHive;
@@ -22,19 +23,19 @@ import java.util.UUID;
 public class ItemMyrmexStaff extends Item {
 
     public ItemMyrmexStaff(boolean jungle) {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
+        super(new Item.Properties().stacksTo(1));
     }
 
     @Override
     public void onCraftedBy(ItemStack itemStack, @NotNull Level world, @NotNull Player player) {
-        itemStack.setTag(new CompoundTag());
+        IafNbt.setTag(itemStack, new CompoundTag());
     }
 
     @Override
     public void inventoryTick(ItemStack stack, @NotNull Level world, @NotNull Entity entity, int itemSlot, boolean isSelected) {
-        if (stack.getTag() == null) {
-            stack.setTag(new CompoundTag());
-            stack.getTag().putUUID("HiveUUID", new UUID(0, 0));
+        if (IafNbt.getTag(stack) == null) {
+            IafNbt.setTag(stack, new CompoundTag());
+            IafNbt.update(stack, tag -> tag.putUUID("HiveUUID", new UUID(0, 0)));
         }
     }
 
@@ -44,8 +45,8 @@ public class ItemMyrmexStaff extends Item {
         if (playerIn.isShiftKeyDown()) {
             return super.use(worldIn, playerIn, hand);
         }
-        if (itemStackIn.getTag() != null && itemStackIn.getTag().hasUUID("HiveUUID")) {
-            UUID id = itemStackIn.getTag().getUUID("HiveUUID");
+        if (IafNbt.getTag(itemStackIn) != null && IafNbt.getTag(itemStackIn).hasUUID("HiveUUID")) {
+            UUID id = IafNbt.getTag(itemStackIn).getUUID("HiveUUID");
             if (!worldIn.isClientSide) {
                 MyrmexHive hive = MyrmexWorldData.get(worldIn).getHiveFromUUID(id);
                 MyrmexWorldData.addHive(worldIn, new MyrmexHive());

@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 public class ItemRottenEgg extends Item {
 
     public ItemRottenEgg() {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+        super(new Item.Properties());
     }
 
     @Override

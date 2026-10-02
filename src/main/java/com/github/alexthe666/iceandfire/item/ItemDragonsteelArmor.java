@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.item;
 
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ArmorMaterial;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.armor.ModelDragonsteelFireArmor;
 import com.github.alexthe666.iceandfire.client.model.armor.ModelDragonsteelIceArmor;
@@ -25,24 +28,24 @@ import java.util.UUID;
 
 import static com.github.alexthe666.iceandfire.item.IafItemRegistry.*;
 
-public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDragonItem {
+public class ItemDragonsteelArmor extends IafArmorItem implements IProtectAgainstDragonItem {
 
     private static final UUID[] ARMOR_MODIFIERS = new UUID[]{UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150")};
     private final ArmorMaterial material;
     private Multimap<Attribute, AttributeModifier> attributeModifierMultimap;
 
-    public ItemDragonsteelArmor(ArmorMaterial material, int renderIndex, EquipmentSlot slot) {
-        super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+    public ItemDragonsteelArmor(IafArmorMaterial material, int renderIndex, EquipmentSlot slot) {
+        super(material, slot, new Item.Properties());
         this.material = material;
         this.attributeModifierMultimap = createAttributeMap();
     }
 
     @Override
-    public void initializeClient(java.util.function.Consumer<net.neoforged.neoforge.client.IItemRenderProperties> consumer) {
-        consumer.accept(new net.neoforged.neoforge.client.IItemRenderProperties() {
+    public void initializeClient(java.util.function.Consumer<net.neoforged.neoforge.client.extensions.common.IClientItemExtensions> consumer) {
+        consumer.accept(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
             @Override
             @Nullable
-            public HumanoidModel<?> getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
+            public HumanoidModel<?> getHumanoidArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
                 boolean inner = armorSlot == EquipmentSlot.LEGS || armorSlot == EquipmentSlot.HEAD;
                 if (itemStack.getItem() instanceof ArmorItem) {
                     ArmorMaterial armorMaterial = ((ArmorItem) itemStack.getItem()).getMaterial();
@@ -94,7 +97,7 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(Component.translatable("item.dragonscales_armor.desc").withStyle(ChatFormatting.GRAY));
     }
 
@@ -111,13 +114,13 @@ public class ItemDragonsteelArmor extends ArmorItem implements IProtectAgainstDr
     }
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
+    public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
         if (material == DRAGONSTEEL_FIRE_ARMOR_MATERIAL) {
-            return "iceandfire:textures/models/armor/armor_dragonsteel_fire" + (slot == EquipmentSlot.LEGS ? "_legs.png" : ".png");
+            return ResourceLocation.parse("iceandfire:textures/models/armor/armor_dragonsteel_fire" + (slot == EquipmentSlot.LEGS ? "_legs.png" : ".png"));
         } else if (material == IafItemRegistry.DRAGONSTEEL_ICE_ARMOR_MATERIAL) {
-            return "iceandfire:textures/models/armor/armor_dragonsteel_ice" + (slot == EquipmentSlot.LEGS ? "_legs.png" : ".png");
+            return ResourceLocation.parse("iceandfire:textures/models/armor/armor_dragonsteel_ice" + (slot == EquipmentSlot.LEGS ? "_legs.png" : ".png"));
         } else {
-            return "iceandfire:textures/models/armor/armor_dragonsteel_lightning" + (slot == EquipmentSlot.LEGS ? "_legs.png" : ".png");
+            return ResourceLocation.parse("iceandfire:textures/models/armor/armor_dragonsteel_lightning" + (slot == EquipmentSlot.LEGS ? "_legs.png" : ".png"));
         }
     }
 }

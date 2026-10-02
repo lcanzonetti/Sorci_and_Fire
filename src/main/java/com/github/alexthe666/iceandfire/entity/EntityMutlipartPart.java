@@ -59,7 +59,7 @@ public abstract class EntityMutlipartPart extends Entity {
 
     public EntityMutlipartPart(EntityType<?> t, Entity parent, float radius, float angleYaw, float offsetY, float sizeX,
         float sizeY, float damageMultiplier) {
-        super(t, parent.level);
+        super(t, parent.level());
         this.setParent(parent);
         this.setScaleX(sizeX);
         this.setScaleY(sizeY);
@@ -85,11 +85,11 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        this.entityData.define(PARENT_UUID, Optional.empty());
-        this.entityData.define(SCALE_WIDTH, 0.5F);
-        this.entityData.define(SCALE_HEIGHT, 0.5F);
-        this.entityData.define(PART_YAW, 0F);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(PARENT_UUID, Optional.empty());
+        builder.define(SCALE_WIDTH, 0.5F);
+        builder.define(SCALE_HEIGHT, 0.5F);
+        builder.define(PART_YAW, 0F);
     }
 
     @Nullable
@@ -131,7 +131,7 @@ public abstract class EntityMutlipartPart extends Entity {
         if (this.tickCount > 10) {
             Entity parent = getParent();
             refreshDimensions();
-            if (parent != null && !level.isClientSide) {
+            if (parent != null && !level().isClientSide) {
                 float renderYawOffset = parent.getYRot();
                 if (parent instanceof LivingEntity) {
                     renderYawOffset = ((LivingEntity) parent).yBodyRot;
@@ -146,20 +146,20 @@ public abstract class EntityMutlipartPart extends Entity {
                     this.markHurt();
                     this.setYRot(renderYawOffset);
                     this.setPartYaw(getYRot());
-                    if (!this.level.isClientSide) {
+                    if (!this.level().isClientSide) {
                         this.collideWithNearbyEntities();
                     }
                 } else {
                     this.setPos(parent.getX() + this.radius * Mth.cos((float) (renderYawOffset * (Math.PI / 180.0F) + this.angleYaw)), parent.getY() + this.offsetY, parent.getZ() + this.radius * Mth.sin((float) (renderYawOffset * (Math.PI / 180.0F) + this.angleYaw)));
                     this.markHurt();
                 }
-                if (!this.level.isClientSide) {
+                if (!this.level().isClientSide) {
                     this.collideWithNearbyEntities();
                 }
-                if (parent.isRemoved() && !level.isClientSide) {
+                if (parent.isRemoved() && !level().isClientSide) {
                     this.remove(RemovalReason.DISCARDED);
                 }
-            } else if (tickCount > 20 && !level.isClientSide) {
+            } else if (tickCount > 20 && !level().isClientSide) {
                 remove(RemovalReason.DISCARDED);
             }
         }
@@ -198,8 +198,8 @@ public abstract class EntityMutlipartPart extends Entity {
 
     public Entity getParent() {
         UUID id = getParentId();
-        if (id != null && !level.isClientSide) {
-            return ((ServerLevel) level).getEntity(id);
+        if (id != null && !level().isClientSide) {
+            return ((ServerLevel) level()).getEntity(id);
         }
         return null;
     }
@@ -228,7 +228,7 @@ public abstract class EntityMutlipartPart extends Entity {
     }
 
     public void collideWithNearbyEntities() {
-        List<Entity> entities = this.level.getEntities(this, this.getBoundingBox().expandTowards(0.20000000298023224D, 0.0D, 0.20000000298023224D));
+        List<Entity> entities = this.level().getEntities(this, this.getBoundingBox().expandTowards(0.20000000298023224D, 0.0D, 0.20000000298023224D));
         Entity parent = this.getParent();
         if (parent != null) {
             entities.stream().filter(entity -> entity != parent && !sharesRider(parent, entity) && !(entity instanceof EntityMutlipartPart) && entity.isPushable()).forEach(entity -> entity.push(parent));
@@ -253,8 +253,8 @@ public abstract class EntityMutlipartPart extends Entity {
     @Override
     public @NotNull InteractionResult interact(@NotNull Player player, @NotNull InteractionHand hand) {
         Entity parent = getParent();
-        if (level.isClientSide && parent != null) {
-            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(parent.getId(), 0));
+        if (level().isClientSide && parent != null) {
+            IceAndFire.sendMSGToServer(new MessageMultipartInteract(parent.getId(), 0));
         }
         return parent != null ? parent.interact(player, hand) : InteractionResult.PASS;
     }
@@ -262,8 +262,8 @@ public abstract class EntityMutlipartPart extends Entity {
     @Override
     public boolean hurt(@NotNull DamageSource source, float damage) {
         Entity parent = getParent();
-        if (level.isClientSide && source.getEntity() instanceof Player && parent != null) {
-            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(parent.getId(), damage * damageMultiplier));
+        if (level().isClientSide && source.getEntity() instanceof Player && parent != null) {
+            IceAndFire.sendMSGToServer(new MessageMultipartInteract(parent.getId(), damage * damageMultiplier));
         }
         return parent != null && parent.hurt(source, damage * this.damageMultiplier);
     }

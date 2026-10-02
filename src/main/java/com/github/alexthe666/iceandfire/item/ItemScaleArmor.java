@@ -1,6 +1,8 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.citadel.server.item.CustomArmorMaterial;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ArmorMaterial;
+
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.model.armor.ModelFireDragonScaleArmor;
 import com.github.alexthe666.iceandfire.client.model.armor.ModelIceDragonScaleArmor;
@@ -24,13 +26,13 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemScaleArmor extends ArmorItem implements IProtectAgainstDragonItem {
+public class ItemScaleArmor extends IafArmorItem implements IProtectAgainstDragonItem {
 
     public EnumDragonArmor armor_type;
     public EnumDragonEgg eggType;
 
-    public ItemScaleArmor(EnumDragonEgg eggType, EnumDragonArmor armorType, CustomArmorMaterial material, EquipmentSlot slot) {
-        super(material, slot, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+    public ItemScaleArmor(EnumDragonEgg eggType, EnumDragonArmor armorType, IafArmorMaterial material, EquipmentSlot slot) {
+        super(material, slot, new Item.Properties());
         this.armor_type = armorType;
         this.eggType = eggType;
     }
@@ -51,11 +53,11 @@ public class ItemScaleArmor extends ArmorItem implements IProtectAgainstDragonIt
     }
 
     @Override
-    public void initializeClient(java.util.function.Consumer<net.neoforged.neoforge.client.IItemRenderProperties> consumer) {
-        consumer.accept(new net.neoforged.neoforge.client.IItemRenderProperties() {
+    public void initializeClient(java.util.function.Consumer<net.neoforged.neoforge.client.extensions.common.IClientItemExtensions> consumer) {
+        consumer.accept(new net.neoforged.neoforge.client.extensions.common.IClientItemExtensions() {
             @Override
             @Nullable
-            public HumanoidModel<?> getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
+            public HumanoidModel<?> getHumanoidArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {
                 boolean inner = armorSlot == EquipmentSlot.LEGS || armorSlot == EquipmentSlot.HEAD;
                 if (itemStack.getItem() instanceof ItemScaleArmor) {
                     DragonType dragonType = ((ItemScaleArmor) itemStack.getItem()).armor_type.eggType.dragonType;
@@ -74,13 +76,13 @@ public class ItemScaleArmor extends ArmorItem implements IProtectAgainstDragonIt
     }
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return "iceandfire:textures/models/armor/" + armor_type.name() + (slot == EquipmentSlot.LEGS ? "_legs.png" : ".png");
+    public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
+        return ResourceLocation.parse("iceandfire:textures/models/armor/" + armor_type.name() + (slot == EquipmentSlot.LEGS ? "_legs.png" : ".png"));
     }
 
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(Component.translatable("dragon." + eggType.toString().toLowerCase()).withStyle(eggType.color));
         tooltip.add(Component.translatable("item.dragonscales_armor.desc").withStyle(ChatFormatting.GRAY));
     }

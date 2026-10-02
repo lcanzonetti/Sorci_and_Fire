@@ -2,12 +2,11 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.*;
@@ -19,10 +18,11 @@ import java.util.List;
 
 public class ItemModSword extends SwordItem implements DragonSteelOverrides<ItemModSword> {
 
-    private Multimap<Attribute, AttributeModifier> dragonsteelModifiers;
+    private ItemAttributeModifiers dragonsteelModifiers;
+    private double bakedDamage;
 
     public ItemModSword(Tier toolmaterial) {
-        super(toolmaterial, 3, -2.4F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+        super(toolmaterial, new Item.Properties().attributes(SwordItem.createAttributes(toolmaterial, 3, -2.4F)));
     }
 
     @Override
@@ -31,23 +31,20 @@ public class ItemModSword extends SwordItem implements DragonSteelOverrides<Item
     }
 
     @Override
-    @Deprecated
-    public @NotNull Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(@NotNull EquipmentSlot equipmentSlot) {
-        return equipmentSlot == EquipmentSlot.MAINHAND && isDragonsteel(getTier()) ? this.bakeDragonsteel() : super.getDefaultAttributeModifiers(equipmentSlot);
+    public @NotNull ItemAttributeModifiers getDefaultAttributeModifiers(@NotNull ItemStack stack) {
+        return isDragonsteel(getTier()) ? this.bakeDragonsteel() : super.getDefaultAttributeModifiers(stack);
     }
 
     @Override
-    @Deprecated
-    public Multimap<Attribute, AttributeModifier> bakeDragonsteel() {
-        if (getTier().getAttackDamageBonus() != IafConfig.dragonsteelBaseDamage || dragonsteelModifiers == null) {
-            ImmutableMultimap.Builder<Attribute, AttributeModifier> lvt_5_1_ = ImmutableMultimap.builder();
-            lvt_5_1_.put(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", IafConfig.dragonsteelBaseDamage - 1F, AttributeModifier.Operation.ADDITION));
-            lvt_5_1_.put(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", -2.4, AttributeModifier.Operation.ADDITION));
-            this.dragonsteelModifiers = lvt_5_1_.build();
-            return this.dragonsteelModifiers;
-        } else {
-            return dragonsteelModifiers;
+    public ItemAttributeModifiers bakeDragonsteel() {
+        if (dragonsteelModifiers == null || bakedDamage != IafConfig.dragonsteelBaseDamage) {
+            bakedDamage = IafConfig.dragonsteelBaseDamage;
+            dragonsteelModifiers = ItemAttributeModifiers.builder()
+                .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(BASE_ATTACK_DAMAGE_ID, IafConfig.dragonsteelBaseDamage - 1F, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+                .add(Attributes.ATTACK_SPEED, new AttributeModifier(BASE_ATTACK_SPEED_ID, -2.4, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+                .build();
         }
+        return dragonsteelModifiers;
     }
 
     @Override
@@ -57,7 +54,7 @@ public class ItemModSword extends SwordItem implements DragonSteelOverrides<Item
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         super.appendHoverText(stack, worldIn, tooltip, flagIn);
         appendHoverText(getTier(), stack, worldIn, tooltip, flagIn);
     }

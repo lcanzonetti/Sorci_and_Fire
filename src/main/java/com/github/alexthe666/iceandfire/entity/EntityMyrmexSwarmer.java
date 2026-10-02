@@ -35,7 +35,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     public EntityMyrmexSwarmer(EntityType type, Level worldIn) {
         super(type, worldIn);
         this.moveControl = new EntityMyrmexRoyal.FlyMoveHelper(this);
-        this.navigation = createNavigator(level, AdvancedPathNavigate.MovementType.FLYING);
+        this.navigation = createNavigator(level(), AdvancedPathNavigate.MovementType.FLYING);
         switchNavigator(false);
     }
 
@@ -94,17 +94,17 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SUMMONER_ID, Optional.empty());
-        this.entityData.define(TICKS_ALIVE, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(SUMMONER_ID, Optional.empty());
+        builder.define(TICKS_ALIVE, 0);
     }
 
     @Nullable
     public LivingEntity getSummoner() {
         try {
             UUID uuid = this.getSummonerUUID();
-            return uuid == null ? null : this.level.getPlayerByUUID(uuid);
+            return uuid == null ? null : this.level().getPlayerByUUID(uuid);
         } catch (IllegalArgumentException var2) {
             return null;
         }
@@ -178,7 +178,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
     public void aiStep() {
         super.aiStep();
         setFlying(true);
-        boolean flying = this.isFlying() && !this.onGround;
+        boolean flying = this.isFlying() && !this.onGround();
         setTicksAlive(getTicksAlive() + 1);
         if (flying) {
             this.setDeltaMovement(this.getDeltaMovement().add(0, -0.08D, 0));
@@ -186,7 +186,7 @@ public class EntityMyrmexSwarmer extends EntityMyrmexRoyal {
                 this.setDeltaMovement(this.getDeltaMovement().add(0, 0.08D, 0));
             }
         }
-        if (this.onGround) {
+        if (this.onGround()) {
             this.setDeltaMovement(this.getDeltaMovement().add(0, 0.2D, 0));
         }
         if (this.getTarget() != null) {

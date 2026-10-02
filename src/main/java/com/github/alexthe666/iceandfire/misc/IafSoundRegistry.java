@@ -1,9 +1,11 @@
 package com.github.alexthe666.iceandfire.misc;
 
+import net.neoforged.fml.common.EventBusSubscriber;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.neoforged.neoforge.event.RegistryEvent;
+import net.neoforged.neoforge.registries.RegisterEvent;
+import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 
@@ -12,7 +14,7 @@ import java.lang.reflect.Field;
 import static com.github.alexthe666.iceandfire.IceAndFire.MODID;
 
 @SuppressWarnings("WeakerAccess")
-@Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = IceAndFire.MODID, bus = EventBusSubscriber.Bus.MOD)
 public final class IafSoundRegistry {
 
     public static final SoundEvent BESTIARY_PAGE = createSoundEvent("bestiary_page");
@@ -269,19 +271,22 @@ public final class IafSoundRegistry {
 
     private static SoundEvent createSoundEvent(final String soundName) {
         final ResourceLocation soundID = ResourceLocation.fromNamespaceAndPath(MODID, soundName);
-        return new SoundEvent(soundID).setRegistryName(soundID);
+        return SoundEvent.createVariableRangeEvent(soundID);
     }
 
     @SubscribeEvent
-    public static void registerSoundEvents(final RegistryEvent.Register<SoundEvent> event) {
+    public static void registerSoundEvents(final RegisterEvent event) {
+        if (!event.getRegistryKey().equals(Registries.SOUND_EVENT)) {
+            return;
+        }
         try {
             for (Field f : IafSoundRegistry.class.getFields()) {
                 Object obj = f.get(null);
                 if (obj instanceof SoundEvent) {
-                    event.getRegistry().register((SoundEvent) obj);
+                    event.register(Registries.SOUND_EVENT, ((SoundEvent) obj).getLocation(), () -> (SoundEvent) obj);
                 } else if (obj instanceof SoundEvent[]) {
                     for (SoundEvent soundEvent : (SoundEvent[]) obj) {
-                        event.getRegistry().register(soundEvent);
+                        event.register(Registries.SOUND_EVENT, soundEvent.getLocation(), () -> soundEvent);
                     }
                 }
             }

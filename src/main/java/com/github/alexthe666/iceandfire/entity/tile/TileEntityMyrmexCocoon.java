@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -98,13 +99,13 @@ public class TileEntityMyrmexCocoon extends RandomizableContainerBlockEntity {
     @Override
     public void startOpen(Player player) {
         this.unpackLootTable(null);
-        player.level.playLocalSound(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), SoundEvents.SLIME_JUMP, SoundSource.BLOCKS, 1, 1, false);
+        player.level().playLocalSound(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), SoundEvents.SLIME_JUMP, SoundSource.BLOCKS, 1, 1, false);
     }
 
     @Override
     public void stopOpen(Player player) {
         this.unpackLootTable(null);
-        player.level.playLocalSound(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), SoundEvents.SLIME_SQUISH, SoundSource.BLOCKS, 1, 1, false);
+        player.level().playLocalSound(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), SoundEvents.SLIME_SQUISH, SoundSource.BLOCKS, 1, 1, false);
     }
 
     @Override

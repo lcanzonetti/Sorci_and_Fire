@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.mojang.math.Axis;
 import com.github.alexthe666.iceandfire.client.model.ModelTideTrident;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
@@ -31,7 +32,7 @@ public class RenderTideTridentItem extends BlockEntityWithoutLevelRenderer {
         if (type == ItemTransforms.TransformType.GUI || type == ItemTransforms.TransformType.FIXED || type == ItemTransforms.TransformType.NONE || type == ItemTransforms.TransformType.GROUND) {
             ItemStack tridentInventory = new ItemStack(IafItemRegistry.TIDE_TRIDENT_INVENTORY.get());
             if (stack.isEnchanted()) {
-                ListTag enchantments = stack.getTag().getList("Enchantments", 10);
+                ListTag enchantments = IafNbt.getTag(stack).getList("Enchantments", 10);
                 tridentInventory.addTagElement("Enchantments", enchantments);
             }
             Minecraft.getInstance().getItemRenderer().renderStatic(tridentInventory, type, type == ItemTransforms.TransformType.GROUND ? combinedLightIn : 240, combinedOverlayIn, stackIn, bufferIn, 0);

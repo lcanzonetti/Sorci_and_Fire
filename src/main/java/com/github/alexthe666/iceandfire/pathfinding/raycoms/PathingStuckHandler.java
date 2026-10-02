@@ -18,7 +18,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 import java.util.function.BiPredicate;
 
 /**
@@ -116,7 +116,7 @@ public class PathingStuckHandler implements IStuckHandler
      */
     private BlockPos moveAwayStartPos = BlockPos.ZERO;
 
-    private final Random rand = new Random();
+    private final RandomSource rand = RandomSource.create();
 
     private PathingStuckHandler()
     {
@@ -220,7 +220,7 @@ public class PathingStuckHandler implements IStuckHandler
      */
     private void completeStuckAction(final AbstractAdvancedPathNavigate navigator) {
         final BlockPos desired = navigator.getDesiredPos();
-        final Level world = navigator.getOurEntity().level;
+        final Level world = navigator.getOurEntity().level();
         final Mob entity = navigator.getOurEntity();
 
         if (canTeleportGoal) {
@@ -324,7 +324,7 @@ public class PathingStuckHandler implements IStuckHandler
     }
 
     /**
-     * Random chance to decrease to a previous level of stuck
+     * RandomSource chance to decrease to a previous level of stuck
      */
     private void chanceStuckLevel()
     {
@@ -391,7 +391,7 @@ public class PathingStuckHandler implements IStuckHandler
      * @param navigator navigator to use
      */
     private void placeLadders(final AbstractAdvancedPathNavigate navigator) {
-        final Level world = navigator.getOurEntity().level;
+        final Level world = navigator.getOurEntity().level();
         final Mob entity = navigator.getOurEntity();
 
         BlockPos entityPos = entity.blockPosition();
@@ -411,7 +411,7 @@ public class PathingStuckHandler implements IStuckHandler
      * @param navigator navigator to use
      */
     private void placeLeaves(final AbstractAdvancedPathNavigate navigator) {
-        final Level world = navigator.getOurEntity().level;
+        final Level world = navigator.getOurEntity().level();
         final Mob entity = navigator.getOurEntity();
 
         final Direction badFacing = getFacing(entity.blockPosition(), navigator.getDesiredPos()).getOpposite();
@@ -439,7 +439,7 @@ public class PathingStuckHandler implements IStuckHandler
      * @param navigator navigator to use
      */
     private void breakBlocks(final AbstractAdvancedPathNavigate navigator) {
-        final Level world = navigator.getOurEntity().level;
+        final Level world = navigator.getOurEntity().level();
         final Mob entity = navigator.getOurEntity();
 
         final Direction facing = getFacing(entity.blockPosition(), navigator.getDesiredPos());
@@ -458,7 +458,7 @@ public class PathingStuckHandler implements IStuckHandler
         if (state.getBlock() != Blocks.LADDER && !state.canOcclude() && world.getFluidState(pos).isEmpty()) {
             for (final Direction dir : directions) {
                 final BlockState toPlace = Blocks.LADDER.defaultBlockState().setValue(LadderBlock.FACING, dir.getOpposite());
-                if (world.getBlockState(pos.relative(dir)).getMaterial().isSolid() && Blocks.LADDER.canSurvive(toPlace, world, pos)) {
+                if (world.getBlockState(pos.relative(dir)).isSolid() && Blocks.LADDER.canSurvive(toPlace, world, pos)) {
                     world.setBlockAndUpdate(pos, toPlace);
                     break;
                 }

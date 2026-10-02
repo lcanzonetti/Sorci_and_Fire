@@ -80,7 +80,7 @@ public class IafDragonFlightManager {
                 }
             }
 
-        } else if (target == null || dragon.distanceToSqr(target.x, target.y, target.z) < 4 || !dragon.level.isEmptyBlock(new BlockPos(target)) && (dragon.isHovering() || dragon.isFlying()) || dragon.getCommand() == 2 && dragon.shouldTPtoOwner()) {
+        } else if (target == null || dragon.distanceToSqr(target.x, target.y, target.z) < 4 || !dragon.level().isEmptyBlock(new BlockPos(target)) && (dragon.isHovering() || dragon.isFlying()) || dragon.getCommand() == 2 && dragon.shouldTPtoOwner()) {
             BlockPos viewBlock = null;
 
             if (dragon instanceof EntityIceDragon && dragon.isInWater()) {
@@ -184,7 +184,7 @@ public class IafDragonFlightManager {
                 PathNavigation pathnavigate = this.mob.getNavigation();
                 if (pathnavigate != null) {
                     NodeEvaluator nodeprocessor = pathnavigate.getNodeEvaluator();
-                    if (nodeprocessor != null && nodeprocessor.getBlockPathType(this.mob.level, Mth.floor(this.mob.getX() + (double) f7), Mth.floor(this.mob.getY()), Mth.floor(this.mob.getZ() + (double) f8)) != BlockPathTypes.WALKABLE) {
+                    if (nodeprocessor != null && nodeprocessor.getBlockPathType(this.mob.level(), Mth.floor(this.mob.getX() + (double) f7), Mth.floor(this.mob.getY()), Mth.floor(this.mob.getZ() + (double) f8)) != BlockPathTypes.WALKABLE) {
                         this.strafeForwards = 1.0F;
                         this.strafeRight = 0.0F;
                         f1 = f;
@@ -221,7 +221,7 @@ public class IafDragonFlightManager {
             } else if (this.operation == Operation.JUMPING) {
                 this.mob.setSpeed((float) (this.speedModifier * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED)));
 
-                if (this.mob.isOnGround()) {
+                if (this.mob.onGround()) {
                     this.operation = Operation.WAIT;
                 }
             } else {

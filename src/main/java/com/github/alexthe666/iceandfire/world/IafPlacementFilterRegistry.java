@@ -4,10 +4,12 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredBlock;
 
 public class IafPlacementFilterRegistry {
     public static final DeferredRegister<PlacementModifierType<?>> PLACEMENT_MODIFIER_TYPES = DeferredRegister.create(Registry.PLACEMENT_MODIFIER_REGISTRY, IceAndFire.MODID);
 
-    public static RegistryObject<PlacementModifierType<CustomBiomeFilter>> CUSTOM_BIOME_FILTER = PLACEMENT_MODIFIER_TYPES.register("biome_extended", () -> () -> CustomBiomeFilter.CODEC);
+    public static DeferredHolder<PlacementModifierType<?>, PlacementModifierType<CustomBiomeFilter>> CUSTOM_BIOME_FILTER = PLACEMENT_MODIFIER_TYPES.register("biome_extended", () -> () -> CustomBiomeFilter.CODEC);
 }

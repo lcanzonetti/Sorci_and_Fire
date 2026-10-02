@@ -1,0 +1,31 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:flowers",
+    "#minecraft:saplings",
+    "#minecraft:crops",
+    "minecraft:sugar_cane",
+    "minecraft:bamboo",
+    "minecraft:bamboo_sapling",
+    "minecraft:cactus",
+    "minecraft:sweet_berry_bush",
+    "minecraft:cocoa",
+    "minecraft:lily_pad",
+    "minecraft:brown_mushroom",
+    "minecraft:red_mushroom",
+    "minecraft:nether_wart",
+    "minecraft:chorus_plant",
+    "minecraft:chorus_flower",
+    "minecraft:big_dripleaf",
+    "minecraft:big_dripleaf_stem",
+    "minecraft:small_dripleaf",
+    "minecraft:spore_blossom",
+    "minecraft:azalea",
+    "minecraft:flowering_azalea",
+    "minecraft:melon",
+    "minecraft:pumpkin",
+    "minecraft:carved_pumpkin",
+    "minecraft:jack_o_lantern",
+    "minecraft:pitcher_plant"
+  ]
+}

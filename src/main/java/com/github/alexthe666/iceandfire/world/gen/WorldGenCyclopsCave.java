@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
+import net.minecraft.world.level.block.Blocks;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
@@ -24,7 +25,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 import java.util.stream.Collectors;
 
 public class WorldGenCyclopsCave extends Feature<NoneFeatureConfiguration> implements TypedFeature {
@@ -82,11 +83,11 @@ public class WorldGenCyclopsCave extends Feature<NoneFeatureConfiguration> imple
 
                 if (context.random().nextInt(80) == 0 && isTouchingAir(context.level(), position.above())) {
                     context.level().setBlock(position.above(), IafBlockRegistry.GOLD_PILE.get().defaultBlockState().setValue(BlockGoldPile.LAYERS, 8), 3);
-                    context.level().setBlock(position.above().north(), IafBlockRegistry.GOLD_PILE.get().defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-                    context.level().setBlock(position.above().south(), IafBlockRegistry.GOLD_PILE.get().defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-                    context.level().setBlock(position.above().west(), IafBlockRegistry.GOLD_PILE.get().defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-                    context.level().setBlock(position.above().east(), IafBlockRegistry.GOLD_PILE.get().defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-                    context.level().setBlock(position.above(2), Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, HORIZONTALS[new Random().nextInt(3)]), 2);
+                    context.level().setBlock(position.above().north(), IafBlockRegistry.GOLD_PILE.get().defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + RandomSource.create().nextInt(7)), 3);
+                    context.level().setBlock(position.above().south(), IafBlockRegistry.GOLD_PILE.get().defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + RandomSource.create().nextInt(7)), 3);
+                    context.level().setBlock(position.above().west(), IafBlockRegistry.GOLD_PILE.get().defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + RandomSource.create().nextInt(7)), 3);
+                    context.level().setBlock(position.above().east(), IafBlockRegistry.GOLD_PILE.get().defaultBlockState().setValue(BlockGoldPile.LAYERS, 1 + RandomSource.create().nextInt(7)), 3);
+                    context.level().setBlock(position.above(2), Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, HORIZONTALS[RandomSource.create().nextInt(3)]), 2);
 
                     if (context.level().getBlockState(position.above(2)).getBlock() instanceof AbstractChestBlock) {
                         BlockEntity blockEntity = context.level().getBlockEntity(position.above(2));
@@ -144,7 +145,7 @@ public class WorldGenCyclopsCave extends Feature<NoneFeatureConfiguration> imple
         }
     }
 
-    private void generateSheepPen(final ServerLevelAccessor level, final BlockPos position, final Random random, final BlockPos origin, float radius) {
+    private void generateSheepPen(final ServerLevelAccessor level, final BlockPos position, final RandomSource random, final BlockPos origin, float radius) {
         int width = 5 + random.nextInt(3);
         int sheepAmount = 2 + random.nextInt(3);
         Direction direction = Direction.NORTH;
@@ -189,8 +190,8 @@ public class WorldGenCyclopsCave extends Feature<NoneFeatureConfiguration> imple
         }
     }
 
-    private void generateSkeleton(final LevelAccessor level, final BlockPos position, final Random random, final BlockPos origin, float radius) {
-        Direction direction = HORIZONTALS[new Random().nextInt(3)];
+    private void generateSkeleton(final LevelAccessor level, final BlockPos position, final RandomSource random, final BlockPos origin, float radius) {
+        Direction direction = HORIZONTALS[RandomSource.create().nextInt(3)];
         Direction.Axis oppositeAxis = direction.getAxis() == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
         int maxRibHeight = random.nextInt(2);
 

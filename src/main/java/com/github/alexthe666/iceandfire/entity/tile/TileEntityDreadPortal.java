@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -24,7 +25,7 @@ public class TileEntityDreadPortal extends BlockEntity {
         compound.putLong("Age", this.age);
 
         if (this.exitPortal != null) {
-            //   compound.setTag("ExitPortal", NBTUtil.createPosTag(this.exitPortal));
+            //   IafNbt.setTag(compound, "ExitPortal", NBTUtil.createPosTag(this.exitPortal));
         }
 
         if (this.exactTeleport) {

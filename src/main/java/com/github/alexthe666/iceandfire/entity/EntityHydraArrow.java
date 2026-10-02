@@ -53,7 +53,7 @@ public class EntityHydraArrow extends AbstractArrow {
     @Override
     public void tick() {
         super.tick();
-        if (level.isClientSide && !this.inGround) {
+        if (level().isClientSide && !this.inGround) {
             double d0 = this.random.nextGaussian() * 0.02D;
             double d1 = this.random.nextGaussian() * 0.02D;
             double d2 = this.random.nextGaussian() * 0.02D;
@@ -83,7 +83,7 @@ public class EntityHydraArrow extends AbstractArrow {
                     this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
                 }
                 player.stopUsingItem();
-                this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level.random.nextFloat() * 0.4F);
+                this.playSound(SoundEvents.SHIELD_BREAK, 0.8F, 0.8F + this.level().random.nextFloat() * 0.4F);
             }
         }
     }

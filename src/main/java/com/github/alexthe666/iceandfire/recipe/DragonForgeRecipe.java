@@ -1,27 +1,27 @@
 package com.github.alexthe666.iceandfire.recipe;
 
-import com.github.alexthe666.citadel.client.model.container.JsonUtils;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
-import com.github.alexthe666.iceandfire.entity.tile.TileEntityDragonforge;
-import com.google.gson.JsonObject;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 
-public class DragonForgeRecipe implements Recipe<TileEntityDragonforge> {
+public class DragonForgeRecipe implements Recipe<DragonForgeRecipe.Input> {
     private final Ingredient input;
     private final Ingredient blood;
     private final ItemStack result;
     private final String dragonType;
     private final int cookTime;
-    private final ResourceLocation recipeId;
 
-    public DragonForgeRecipe(ResourceLocation recipeId, Ingredient input, Ingredient blood, ItemStack result, String dragonType, int cookTime) {
-        this.recipeId = recipeId;
+    public DragonForgeRecipe(Ingredient input, Ingredient blood, ItemStack result, String dragonType, int cookTime) {
         this.input = input;
         this.blood = blood;
         this.result = result;
@@ -45,14 +45,18 @@ public class DragonForgeRecipe implements Recipe<TileEntityDragonforge> {
         return dragonType;
     }
 
+    public ItemStack getResult() {
+        return result;
+    }
+
     @Override
     public boolean isSpecial() {
         return true;
     }
 
     @Override
-    public boolean matches(TileEntityDragonforge inv, @NotNull Level worldIn) {
-        return this.input.test(inv.getItem(0)) && this.blood.test(inv.getItem(1)) && this.dragonType.equals(inv.getTypeID());
+    public boolean matches(Input inv, @NotNull Level worldIn) {
+        return this.input.test(inv.input()) && this.blood.test(inv.blood()) && this.dragonType.equals(inv.dragonType());
     }
 
     public boolean isValidInput(ItemStack stack) {
@@ -64,23 +68,18 @@ public class DragonForgeRecipe implements Recipe<TileEntityDragonforge> {
     }
 
     @Override
-    public @NotNull ItemStack getResultItem() {
+    public @NotNull ItemStack getResultItem(HolderLookup.@NotNull Provider registries) {
         return result;
     }
 
     @Override
-    public @NotNull ItemStack assemble(@NotNull TileEntityDragonforge dragonforge) {
-        return result;
+    public @NotNull ItemStack assemble(@NotNull Input input, HolderLookup.@NotNull Provider registries) {
+        return result.copy();
     }
 
     @Override
     public boolean canCraftInDimensions(int width, int height) {
         return false;
-    }
-
-    @Override
-    public @NotNull ResourceLocation getId() {
-        return this.recipeId;
     }
 
     @Override
@@ -98,34 +97,50 @@ public class DragonForgeRecipe implements Recipe<TileEntityDragonforge> {
         return IafRecipeRegistry.DRAGON_FORGE_TYPE.get();
     }
 
-    public static class Serializer extends net.neoforged.neoforge.registries.ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<DragonForgeRecipe> {
+    /**
+     * Recipe input of the dragon forge: the item to smelt, the dragon blood and the forge's dragon type.
+     */
+    public record Input(ItemStack input, ItemStack blood, String dragonType) implements RecipeInput {
         @Override
-        public @NotNull DragonForgeRecipe fromJson(@NotNull ResourceLocation recipeId, @NotNull JsonObject json) {
-            String dragonType = JsonUtils.getString(json, "dragon_type");
-            Ingredient input = Ingredient.fromJson(JsonUtils.getJsonObject(json, "input"));
-            Ingredient blood = Ingredient.fromJson(JsonUtils.getJsonObject(json, "blood"));
-            int cookTime = JsonUtils.getInt(json, "cook_time");
-            ItemStack result = ShapedRecipe.itemStackFromJson(JsonUtils.getJsonObject(json, "result"));
-            return new DragonForgeRecipe(recipeId, input, blood, result, dragonType, cookTime);
+        public @NotNull ItemStack getItem(int index) {
+            return switch (index) {
+                case 0 -> input;
+                case 1 -> blood;
+                default -> throw new IllegalArgumentException("No item for index " + index);
+            };
         }
 
         @Override
-        public DragonForgeRecipe fromNetwork(@NotNull ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            int cookTime = buffer.readInt();
-            String dragonType = buffer.readUtf();
-            Ingredient input = Ingredient.fromNetwork(buffer);
-            Ingredient blood = Ingredient.fromNetwork(buffer);
-            ItemStack result = buffer.readItem();
-            return new DragonForgeRecipe(recipeId, input, blood, result, dragonType, cookTime);
+        public int size() {
+            return 2;
+        }
+    }
+
+    public static class Serializer implements RecipeSerializer<DragonForgeRecipe> {
+        private static final MapCodec<DragonForgeRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Ingredient.CODEC_NONEMPTY.fieldOf("input").forGetter(DragonForgeRecipe::getInput),
+            Ingredient.CODEC_NONEMPTY.fieldOf("blood").forGetter(DragonForgeRecipe::getBlood),
+            ItemStack.STRICT_CODEC.fieldOf("result").forGetter(DragonForgeRecipe::getResult),
+            Codec.STRING.fieldOf("dragon_type").forGetter(DragonForgeRecipe::getDragonType),
+            Codec.INT.fieldOf("cook_time").forGetter(DragonForgeRecipe::getCookTime)
+        ).apply(instance, DragonForgeRecipe::new));
+
+        private static final StreamCodec<RegistryFriendlyByteBuf, DragonForgeRecipe> STREAM_CODEC = StreamCodec.composite(
+            Ingredient.CONTENTS_STREAM_CODEC, DragonForgeRecipe::getInput,
+            Ingredient.CONTENTS_STREAM_CODEC, DragonForgeRecipe::getBlood,
+            ItemStack.STREAM_CODEC, DragonForgeRecipe::getResult,
+            ByteBufCodecs.STRING_UTF8, DragonForgeRecipe::getDragonType,
+            ByteBufCodecs.VAR_INT, DragonForgeRecipe::getCookTime,
+            DragonForgeRecipe::new);
+
+        @Override
+        public @NotNull MapCodec<DragonForgeRecipe> codec() {
+            return CODEC;
         }
 
         @Override
-        public void toNetwork(FriendlyByteBuf buffer, DragonForgeRecipe recipe) {
-            buffer.writeInt(recipe.cookTime);
-            buffer.writeUtf(recipe.dragonType);
-            recipe.input.toNetwork(buffer);
-            recipe.blood.toNetwork(buffer);
-            buffer.writeItemStack(recipe.result, true);
+        public @NotNull StreamCodec<RegistryFriendlyByteBuf, DragonForgeRecipe> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 

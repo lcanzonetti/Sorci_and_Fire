@@ -15,7 +15,7 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class WorldGenIceDragonCave extends WorldGenDragonCave {
     public static ResourceLocation ICE_DRAGON_CHEST = ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "chest/ice_dragon_female_cave");
@@ -35,7 +35,7 @@ public class WorldGenIceDragonCave extends WorldGenDragonCave {
     }
 
     @Override
-    EntityDragonBase createDragon(WorldGenLevel worldIn, Random rand, BlockPos position, int dragonAge) {
+    EntityDragonBase createDragon(WorldGenLevel worldIn, RandomSource rand, BlockPos position, int dragonAge) {
         EntityIceDragon dragon = new EntityIceDragon(IafEntityRegistry.ICE_DRAGON.get(), worldIn.getLevel());
         dragon.setGender(isMale);
         dragon.growDragon(dragonAge);

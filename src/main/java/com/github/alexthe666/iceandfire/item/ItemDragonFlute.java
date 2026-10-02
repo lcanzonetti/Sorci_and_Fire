@@ -21,7 +21,7 @@ import java.util.*;
 public class ItemDragonFlute extends Item {
 
     public ItemDragonFlute() {
-        super(new Item.Properties().stacksTo(1).tab(IceAndFire.TAB_ITEMS));
+        super(new Item.Properties().stacksTo(1));
     }
 
     @Override

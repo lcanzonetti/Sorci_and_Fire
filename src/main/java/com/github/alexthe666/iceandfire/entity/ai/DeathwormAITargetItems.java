@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.misc.IafBlockTags;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import com.github.alexthe666.iceandfire.util.IAFMath;
 import net.minecraft.sounds.SoundEvents;
@@ -44,7 +45,7 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
             @Override
             public boolean test(ItemEntity item) {
                 return item != null && !item.getItem().isEmpty() && item.getItem().getItem() == Blocks.TNT.asItem() &&
-                    item.level.getBlockState(item.blockPosition().below()).getMaterial() == Material.SAND;
+                    item.level().getBlockState(item.blockPosition().below()).is(IafBlockTags.MATERIAL_SAND);
             }
         };
         this.setFlags(EnumSet.of(Flag.TARGET));
@@ -56,7 +57,7 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
         if (this.targetChance > 0 && this.mob.getRandom().nextInt(this.targetChance) != 0) {
             return false;
         }
-        List<ItemEntity> list = this.mob.level.getEntitiesOfClass(ItemEntity.class,
+        List<ItemEntity> list = this.mob.level().getEntitiesOfClass(ItemEntity.class,
             this.getTargetableArea(this.getFollowDistance()), this.targetEntitySelector);
         if (list.isEmpty()) {
             return false;
@@ -110,7 +111,7 @@ public class DeathwormAITargetItems<T extends ItemEntity> extends TargetGoal {
             deathWorm.setAnimation(EntityDeathWorm.ANIMATION_BITE);
             Player thrower = null;
             if (this.targetEntity.getThrower() != null)
-                thrower = this.targetEntity.level.getPlayerByUUID(this.targetEntity.getThrower());
+                thrower = this.targetEntity.level().getPlayerByUUID(this.targetEntity.getThrower());
             deathWorm.setExplosive(true, thrower);
             stop();
         }

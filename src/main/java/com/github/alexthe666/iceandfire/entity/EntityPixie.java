@@ -42,7 +42,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class EntityPixie extends TamableAnimal {
 
@@ -68,7 +68,7 @@ public class EntityPixie extends TamableAnimal {
         this.setDropChance(EquipmentSlot.MAINHAND, 0F);
     }
 
-    public static BlockPos getPositionRelativetoGround(Entity entity, Level world, double x, double z, Random rand) {
+    public static BlockPos getPositionRelativetoGround(Entity entity, Level world, double x, double z, RandomSource rand) {
         BlockPos pos = new BlockPos(x, entity.getY(), z);
         for (int yDown = 0; yDown < 3; yDown++) {
             if (!world.isEmptyBlock(pos.below(yDown))) {
@@ -95,7 +95,7 @@ public class EntityPixie extends TamableAnimal {
     }
 
     public boolean isPixieSitting() {
-        if (level.isClientSide) {
+        if (level().isClientSide) {
             boolean isSitting = (this.entityData.get(DATA_FLAGS_ID).byteValue() & 1) != 0;
             this.isSitting = isSitting;
             this.setOrderedToSit(isSitting);
@@ -105,7 +105,7 @@ public class EntityPixie extends TamableAnimal {
     }
 
     public void setPixieSitting(boolean sitting) {
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             this.isSitting = sitting;
             this.setInSittingPose(sitting);
         }
@@ -137,7 +137,7 @@ public class EntityPixie extends TamableAnimal {
 
     @Override
     public boolean hurt(@NotNull DamageSource source, float amount) {
-        if (!this.level.isClientSide && this.getRandom().nextInt(3) == 0 && !this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
+        if (!this.level().isClientSide && this.getRandom().nextInt(3) == 0 && !this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
             this.spawnAtLocation(this.getItemInHand(InteractionHand.MAIN_HAND), 0);
             this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
             this.stealCooldown = STEAL_COOLDOWN;
@@ -163,7 +163,7 @@ public class EntityPixie extends TamableAnimal {
 
     @Override
     public void die(@NotNull DamageSource cause) {
-        if (!this.level.isClientSide && !this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
+        if (!this.level().isClientSide && !this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
             this.spawnAtLocation(this.getItemInHand(InteractionHand.MAIN_HAND), 0);
             this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
         }
@@ -174,10 +174,10 @@ public class EntityPixie extends TamableAnimal {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(COLOR, 0);
-        this.entityData.define(COMMAND, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(COLOR, 0);
+        builder.define(COMMAND, 0);
     }
 
     @Override
@@ -233,7 +233,7 @@ public class EntityPixie extends TamableAnimal {
                     break;
             }
             ItemStack stack = new ItemStack(jar, 1);
-            if (!level.isClientSide) {
+            if (!level().isClientSide) {
                 if (!this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
                     this.spawnAtLocation(this.getItemInHand(InteractionHand.MAIN_HAND), 0.0F);
                     this.stealCooldown = STEAL_COOLDOWN;
@@ -286,10 +286,10 @@ public class EntityPixie extends TamableAnimal {
     }
 
     private boolean isBeyondHeight() {
-        if (this.getY() > this.level.getMaxBuildHeight()) {
+        if (this.getY() > this.level().getMaxBuildHeight()) {
             return true;
         }
-        BlockPos height = this.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, this.blockPosition());
+        BlockPos height = this.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, this.blockPosition());
         int maxY = 20 + height.getY();
         return this.getY() > maxY;
     }
@@ -308,7 +308,7 @@ public class EntityPixie extends TamableAnimal {
     public void aiStep() {
         super.aiStep();
 
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
 
             // NOTE: This code was taken from EntityHippogryph basically same idea
             if (this.isPixieSitting() && this.getCommand() != 1) {
@@ -335,15 +335,15 @@ public class EntityPixie extends TamableAnimal {
         if (!this.isPixieSitting() && !this.isBeyondHeight()) {
             this.setDeltaMovement(this.getDeltaMovement().add(0, 0.08, 0));
         }
-        if (level.isClientSide) {
+        if (level().isClientSide) {
             IceAndFire.PROXY.spawnParticle(EnumParticles.If_Pixie, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2F) - (double) this.getBbWidth(), this.getY() + (double) (this.random.nextFloat() * this.getBbHeight()), this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2F) - (double) this.getBbWidth(), PARTICLE_RGB[this.getColor()][0], PARTICLE_RGB[this.getColor()][1], PARTICLE_RGB[this.getColor()][2]);
         }
         if (ticksUntilHouseAI > 0) {
             ticksUntilHouseAI--;
         }
-        if (!level.isClientSide) {
-            if (housePos != null && this.distanceToSqr(Vec3.atCenterOf(housePos)) < 1.5F && level.getBlockEntity(housePos) != null && level.getBlockEntity(housePos) instanceof TileEntityPixieHouse) {
-                TileEntityPixieHouse house = (TileEntityPixieHouse) level.getBlockEntity(housePos);
+        if (!level().isClientSide) {
+            if (housePos != null && this.distanceToSqr(Vec3.atCenterOf(housePos)) < 1.5F && level().getBlockEntity(housePos) != null && level().getBlockEntity(housePos) instanceof TileEntityPixieHouse) {
+                TileEntityPixieHouse house = (TileEntityPixieHouse) level().getBlockEntity(housePos);
                 if (house.hasPixie) {
                     this.housePos = null;
                 } else {
@@ -467,7 +467,7 @@ public class EntityPixie extends TamableAnimal {
                 if (EntityPixie.this.horizontalCollision) {
                     EntityPixie.this.setYRot(this.mob.getYRot() + 180.0F);
                     speedMod = 0.1F;
-                    BlockPos target = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.level, EntityPixie.this.getX() + EntityPixie.this.random.nextInt(15) - 7, EntityPixie.this.getZ() + EntityPixie.this.random.nextInt(15) - 7, EntityPixie.this.random);
+                    BlockPos target = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.level(), EntityPixie.this.getX() + EntityPixie.this.random.nextInt(15) - 7, EntityPixie.this.getZ() + EntityPixie.this.random.nextInt(15) - 7, EntityPixie.this.random);
                     this.wantedX = target.getX();
                     this.wantedY = target.getY();
                     this.wantedZ = target.getZ();

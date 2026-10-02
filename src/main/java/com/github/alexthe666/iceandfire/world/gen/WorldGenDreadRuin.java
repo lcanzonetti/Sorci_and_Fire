@@ -13,7 +13,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class WorldGenDreadRuin extends Feature<NoneFeatureConfiguration> {
     private static final ResourceLocation STRUCTURE_0 = ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "dread_ruin_0");
@@ -49,7 +49,7 @@ public class WorldGenDreadRuin extends Feature<NoneFeatureConfiguration> {
     }
 
 
-    private ResourceLocation getRandomStructure(Random rand) {
+    private ResourceLocation getRandomStructure(RandomSource rand) {
         switch (rand.nextInt(11)) {
             case 0:
                 return STRUCTURE_0;
@@ -84,7 +84,7 @@ public class WorldGenDreadRuin extends Feature<NoneFeatureConfiguration> {
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         WorldGenLevel worldIn = context.level();
-        Random rand = context.random();
+        RandomSource rand = context.random();
         BlockPos position = context.origin();
         ResourceLocation structure = getRandomStructure(rand);
         Direction facing = HORIZONTALS[rand.nextInt(3)];

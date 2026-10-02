@@ -19,7 +19,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class WorldGenPixieVillage extends Feature<NoneFeatureConfiguration> implements TypedFeature {
     public WorldGenPixieVillage(Codec<NoneFeatureConfiguration> configFactoryIn) {
@@ -29,7 +29,7 @@ public class WorldGenPixieVillage extends Feature<NoneFeatureConfiguration> impl
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         WorldGenLevel worldIn = context.level();
-        Random rand = context.random();
+        RandomSource rand = context.random();
         BlockPos position = context.origin();
 
         if (rand.nextInt(IafConfig.spawnPixiesChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position)) {

@@ -89,10 +89,10 @@ public class EntityDreadBeast extends EntityDreadMob implements IAnimatedEntity,
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(VARIANT, 0);
-        this.entityData.define(SCALE, 1F);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(VARIANT, 0);
+        builder.define(SCALE, 1F);
     }
 
     @Override
@@ -124,10 +124,10 @@ public class EntityDreadBeast extends EntityDreadMob implements IAnimatedEntity,
             firstHeight = INITIAL_HEIGHT * getSize();
         }
         if (this.getAnimation() == ANIMATION_SPAWN && this.getAnimationTick() < 30) {
-            BlockState belowBlock = level.getBlockState(this.blockPosition().below());
+            BlockState belowBlock = level().getBlockState(this.blockPosition().below());
             if (belowBlock.getBlock() != Blocks.AIR) {
                 for (int i = 0; i < 5; i++) {
-                    this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, belowBlock), this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getBoundingBox().minY, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D);
+                    this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, belowBlock), this.getX() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.getBoundingBox().minY, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth() * 2.0F) - (double) this.getBbWidth(), this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D, this.random.nextGaussian() * 0.02D);
                 }
             }
             this.setDeltaMovement(0, this.getDeltaMovement().y, 0);

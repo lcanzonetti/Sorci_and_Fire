@@ -2,72 +2,35 @@ package com.github.alexthe666.iceandfire.recipe;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.*;
-import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
-import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
-import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
 import net.minecraft.core.Position;
-import net.minecraft.core.Registry;
-import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.entity.BannerPattern;
-import net.neoforged.neoforge.common.brewing.BrewingRecipeRegistry;
-import net.neoforged.neoforge.event.RegistryEvent;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.neoforged.neoforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = IceAndFire.MODID)
 public class IafRecipeRegistry {
 
-    public static final BannerPattern PATTERN_FIRE = addBanner("iceandfire_fire", "iceandfire_fire");
-    public static final BannerPattern PATTERN_ICE = addBanner("iceandfire_ice", "iceandfire_ice");
-    public static final BannerPattern PATTERN_LIGHTNING = addBanner("iceandfire_lightning", "iceandfire_lightning");
-    public static final BannerPattern PATTERN_FIRE_HEAD = addBanner("iceandfire_fire_head", "iceandfire_fire_head");
-    public static final BannerPattern PATTERN_ICE_HEAD = addBanner("iceandfire_ice_head", "iceandfire_ice_head");
-    public static final BannerPattern PATTERN_LIGHTNING_HEAD = addBanner("iceandfire_lightning_head", "iceandfire_lightning_head");
-    public static final BannerPattern PATTERN_AMPHITHERE = addBanner("iceandfire_amphithere", "iceandfire_amphithere");
-    public static final BannerPattern PATTERN_BIRD = addBanner("iceandfire_bird", "iceandfire_bird");
-    public static final BannerPattern PATTERN_EYE = addBanner("iceandfire_eye", "iceandfire_eye");
-    public static final BannerPattern PATTERN_FAE = addBanner("iceandfire_fae", "iceandfire_fae");
-    public static final BannerPattern PATTERN_FEATHER = addBanner("iceandfire_feather", "iceandfire_feather");
-    public static final BannerPattern PATTERN_GORGON = addBanner("iceandfire_gorgon", "iceandfire_gorgon");
-    public static final BannerPattern PATTERN_HIPPOCAMPUS = addBanner("iceandfire_hippocampus", "iceandfire_hippocampus");
-    public static final BannerPattern PATTERN_HIPPOGRYPH_HEAD = addBanner("iceandfire_hippogryph_head", "iceandfire_hippogryph_head");
-    public static final BannerPattern PATTERN_MERMAID = addBanner("iceandfire_mermaid", "iceandfire_mermaid");
-    public static final BannerPattern PATTERN_SEA_SERPENT = addBanner("iceandfire_sea_serpent", "iceandfire_sea_serpent");
-    public static final BannerPattern PATTERN_TROLL = addBanner("iceandfire_troll", "iceandfire_troll");
-    public static final BannerPattern PATTERN_WEEZER = addBanner("iceandfire_weezer", "iceandfire_weezer");
-    public static final BannerPattern PATTERN_DREAD = addBanner("iceandfire_dread", "iceandfire_dread");
+    public static final DeferredRegister<RecipeType<?>> RECIPE_TYPE = DeferredRegister.create(Registries.RECIPE_TYPE, IceAndFire.MODID);
+    public static final DeferredHolder<RecipeType<?>, RecipeType<DragonForgeRecipe>> DRAGON_FORGE_TYPE = RECIPE_TYPE.register("dragonforge", () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "dragonforge")));
 
-    public static List<ItemStack> BANNER_ITEMS = new ArrayList<>();
-    public static final DeferredRegister<RecipeType<?>> RECIPE_TYPE = DeferredRegister.create(Registry.RECIPE_TYPE_REGISTRY, IceAndFire.MODID);
-    public static final RegistryObject<RecipeType<DragonForgeRecipe>> DRAGON_FORGE_TYPE = RECIPE_TYPE.register("dragonforge", () -> RecipeType.register("iceandfire:dragonforge"));
-
-    @SubscribeEvent
-    public static void preInit(FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> {
-            DispenserBlock.registerBehavior(IafItemRegistry.STYMPHALIAN_ARROW.get(), new AbstractProjectileDispenseBehavior() {
+    public static void registerDispenserBehaviors() {
+            DispenserBlock.registerBehavior(IafItemRegistry.STYMPHALIAN_ARROW.get(), new IafProjectileDispenseBehavior() {
                 /**
                  * Return the projectile entity spawned by this dispense behavior.
                  */
@@ -80,7 +43,7 @@ public class IafRecipeRegistry {
                     return entityarrow;
                 }
             });
-            DispenserBlock.registerBehavior(IafItemRegistry.AMPHITHERE_ARROW.get(), new AbstractProjectileDispenseBehavior() {
+            DispenserBlock.registerBehavior(IafItemRegistry.AMPHITHERE_ARROW.get(), new IafProjectileDispenseBehavior() {
                 /**
                  * Return the projectile entity spawned by this dispense behavior.
                  */
@@ -92,7 +55,7 @@ public class IafRecipeRegistry {
                     return entityarrow;
                 }
             });
-            DispenserBlock.registerBehavior(IafItemRegistry.SEA_SERPENT_ARROW.get(), new AbstractProjectileDispenseBehavior() {
+            DispenserBlock.registerBehavior(IafItemRegistry.SEA_SERPENT_ARROW.get(), new IafProjectileDispenseBehavior() {
                 /**
                  * Return the projectile entity spawned by this dispense behavior.
                  */
@@ -104,7 +67,7 @@ public class IafRecipeRegistry {
                     return entityarrow;
                 }
             });
-            DispenserBlock.registerBehavior(IafItemRegistry.DRAGONBONE_ARROW.get(), new AbstractProjectileDispenseBehavior() {
+            DispenserBlock.registerBehavior(IafItemRegistry.DRAGONBONE_ARROW.get(), new IafProjectileDispenseBehavior() {
                 /**
                  * Return the projectile entity spawned by this dispense behavior.
                  */
@@ -116,7 +79,7 @@ public class IafRecipeRegistry {
                     return entityarrow;
                 }
             });
-            DispenserBlock.registerBehavior(IafItemRegistry.HYDRA_ARROW.get(), new AbstractProjectileDispenseBehavior() {
+            DispenserBlock.registerBehavior(IafItemRegistry.HYDRA_ARROW.get(), new IafProjectileDispenseBehavior() {
                 /**
                  * Return the projectile entity spawned by this dispense behavior.
                  */
@@ -128,7 +91,7 @@ public class IafRecipeRegistry {
                     return entityarrow;
                 }
             });
-            DispenserBlock.registerBehavior(IafItemRegistry.HIPPOGRYPH_EGG.get(), new AbstractProjectileDispenseBehavior() {
+            DispenserBlock.registerBehavior(IafItemRegistry.HIPPOGRYPH_EGG.get(), new IafProjectileDispenseBehavior() {
                 /**
                  * Return the projectile entity spawned by this dispense behavior.
                  */
@@ -138,7 +101,7 @@ public class IafRecipeRegistry {
                             position.y(), position.z(), stackIn);
                 }
             });
-            DispenserBlock.registerBehavior(IafItemRegistry.ROTTEN_EGG.get(), new AbstractProjectileDispenseBehavior() {
+            DispenserBlock.registerBehavior(IafItemRegistry.ROTTEN_EGG.get(), new IafProjectileDispenseBehavior() {
                 /**
                  * Return the projectile entity spawned by this dispense behavior.
                  */
@@ -148,7 +111,7 @@ public class IafRecipeRegistry {
                             position.z(), worldIn);
                 }
             });
-            DispenserBlock.registerBehavior(IafItemRegistry.DEATHWORM_EGG.get(), new AbstractProjectileDispenseBehavior() {
+            DispenserBlock.registerBehavior(IafItemRegistry.DEATHWORM_EGG.get(), new IafProjectileDispenseBehavior() {
                 /**
                  * Return the projectile entity spawned by this dispense behavior.
                  */
@@ -158,7 +121,7 @@ public class IafRecipeRegistry {
                             position.z(), worldIn, false);
                 }
             });
-            DispenserBlock.registerBehavior(IafItemRegistry.DEATHWORM_EGG_GIGANTIC.get(), new AbstractProjectileDispenseBehavior() {
+            DispenserBlock.registerBehavior(IafItemRegistry.DEATHWORM_EGG_GIGANTIC.get(), new IafProjectileDispenseBehavior() {
                 /**
                  * Return the projectile entity spawned by this dispense behavior.
                  */
@@ -169,15 +132,21 @@ public class IafRecipeRegistry {
                 }
             });
 
-            BrewingRecipeRegistry.addRecipe(Ingredient.of(createPotion(Potions.WATER).getItem()), Ingredient.of(IafItemRegistry.SHINY_SCALES.get()), createPotion(Potions.WATER_BREATHING));
-        });
     }
 
-    public static ItemStack createPotion(Potion potion) {
-        return PotionUtils.setPotion(new ItemStack(Items.POTION), potion);
+    @SubscribeEvent
+    public static void registerBrewing(RegisterBrewingRecipesEvent event) {
+        event.getBuilder().addMix(Potions.WATER, IafItemRegistry.SHINY_SCALES.get(), Potions.WATER_BREATHING);
     }
 
-    public static BannerPattern addBanner(String enumName, String fileName) {
-        return BannerPattern.create(enumName.toUpperCase(), fileName, "iceandfire." + fileName, true);
+    /**
+     * Banner patterns are a datapack registry since 1.20.5 (see data/iceandfire/banner_pattern); pattern items refer to them through tags.
+     */
+    public static TagKey<BannerPattern> patternTag(String name) {
+        return TagKey.create(Registries.BANNER_PATTERN, ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "pattern_item/" + name));
+    }
+
+    public static ResourceKey<BannerPattern> patternKey(String name) {
+        return ResourceKey.create(Registries.BANNER_PATTERN, ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, name));
     }
 }

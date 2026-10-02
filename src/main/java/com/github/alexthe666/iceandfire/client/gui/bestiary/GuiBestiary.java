@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.gui.bestiary;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
@@ -60,9 +61,9 @@ public class GuiBestiary extends Screen {
         super(Component.translatable("bestiary_gui"));
         this.book = book;
         if (!book.isEmpty() && book.getItem() != null && book.getItem() == IafItemRegistry.BESTIARY.get()) {
-            if (book.getTag() != null) {
+            if (IafNbt.getTag(book) != null) {
                 Set<EnumBestiaryPages> pages = EnumBestiaryPages
-                    .containedPages(Ints.asList(book.getTag().getIntArray("Pages")));
+                    .containedPages(Ints.asList(IafNbt.getTag(book).getIntArray("Pages")));
                 allPageTypes.addAll(pages);
                 // Make sure the pages are sorted according to the enum
                 allPageTypes.sort(Comparator.comparingInt(Enum::ordinal));

@@ -24,7 +24,7 @@ public class EntitySheepAIFollowCyclops extends Goal {
 
     @Override
     public boolean canUse() {
-        List<EntityCyclops> list = this.childAnimal.level.getEntitiesOfClass(EntityCyclops.class, this.childAnimal.getBoundingBox().inflate(16.0D, 8.0D, 16.0D));
+        List<EntityCyclops> list = this.childAnimal.level().getEntitiesOfClass(EntityCyclops.class, this.childAnimal.getBoundingBox().inflate(16.0D, 8.0D, 16.0D));
         EntityCyclops cyclops = null;
         double d0 = Double.MAX_VALUE;
 

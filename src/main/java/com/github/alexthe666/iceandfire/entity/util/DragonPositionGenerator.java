@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.util;
 
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Mob;
@@ -8,7 +9,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class DragonPositionGenerator {
 
@@ -20,7 +21,7 @@ public class DragonPositionGenerator {
     @Nullable
     public static Vec3 generateRandomPos(Mob mob, int xz, int y, @Nullable Vec3 vec, boolean skipWater) {
         PathNavigation pathnavigate = mob.getNavigation();
-        Random random = mob.getRandom();
+        RandomSource random = mob.getRandom();
         boolean flag;
 
         if (mob.hasRestriction()) {
@@ -90,12 +91,12 @@ public class DragonPositionGenerator {
     }
 
     private static BlockPos moveAboveSolid(BlockPos pos, Mob mob) {
-        if (!mob.level.getBlockState(pos).getMaterial().isSolid()) {
+        if (!mob.level().getBlockState(pos).isSolid()) {
             return pos;
         } else {
             BlockPos blockpos;
 
-            for (blockpos = pos.above(); blockpos.getY() < mob.level.getMaxBuildHeight() && mob.level.getBlockState(blockpos).getMaterial().isSolid(); blockpos = blockpos.above()) {
+            for (blockpos = pos.above(); blockpos.getY() < mob.level().getMaxBuildHeight() && mob.level().getBlockState(blockpos).isSolid(); blockpos = blockpos.above()) {
             }
 
             return blockpos;
@@ -103,6 +104,6 @@ public class DragonPositionGenerator {
     }
 
     private static boolean isWaterDestination(BlockPos pos, Mob mob) {
-        return mob.level.getBlockState(pos).getMaterial() == Material.WATER;
+        return mob.level().getBlockState(pos).is(Blocks.WATER);
     }
 }

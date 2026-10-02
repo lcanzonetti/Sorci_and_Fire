@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.world.gen;
 
+import net.minecraft.world.level.block.Blocks;
 import com.github.alexthe666.iceandfire.block.BlockGoldPile;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
@@ -13,7 +14,7 @@ import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 import java.util.stream.Collectors;
 
 public class WorldGenMyrmexDecoration {
@@ -24,7 +25,7 @@ public class WorldGenMyrmexDecoration {
     public static final ResourceLocation MYRMEX_TRASH_CHEST = ResourceLocation.fromNamespaceAndPath("iceandfire", "chest/myrmex_trash_chest");
     private static final Direction[] HORIZONTALS = new Direction[]{Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
 
-    public static void generateSkeleton(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
+    public static void generateSkeleton(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, RandomSource rand) {
         if (worldIn.getBlockState(blockpos.below()).isFaceSturdy(worldIn, blockpos.below(), Direction.UP)) {
             Direction direction = Direction.from2DDataValue(rand.nextInt(3));
             Direction.Axis oppositeAxis = direction.getAxis() == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
@@ -62,7 +63,7 @@ public class WorldGenMyrmexDecoration {
         }
     }
 
-    public static void generateLeaves(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand, boolean jungle) {
+    public static void generateLeaves(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, RandomSource rand, boolean jungle) {
         if (worldIn.getBlockState(blockpos.below()).isFaceSturdy(worldIn, blockpos.below(), Direction.UP)) {
             BlockState leaf = Blocks.OAK_LEAVES.defaultBlockState().setValue(LeavesBlock.PERSISTENT, Boolean.TRUE);
             if (jungle) {
@@ -84,13 +85,13 @@ public class WorldGenMyrmexDecoration {
         }
     }
 
-    public static void generatePumpkins(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand, boolean jungle) {
+    public static void generatePumpkins(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, RandomSource rand, boolean jungle) {
         if (worldIn.getBlockState(blockpos.below()).isFaceSturdy(worldIn, blockpos.below(), Direction.UP)) {
             worldIn.setBlock(blockpos, jungle ? Blocks.MELON.defaultBlockState() : Blocks.PUMPKIN.defaultBlockState(), 2);
         }
     }
 
-    public static void generateCocoon(LevelAccessor worldIn, BlockPos blockpos, Random rand, boolean jungle, ResourceLocation lootTable) {
+    public static void generateCocoon(LevelAccessor worldIn, BlockPos blockpos, RandomSource rand, boolean jungle, ResourceLocation lootTable) {
         if (worldIn.getBlockState(blockpos.below()).isFaceSturdy(worldIn, blockpos.below(), Direction.UP)) {
             worldIn.setBlock(blockpos, jungle ? IafBlockRegistry.JUNGLE_MYRMEX_COCOON.get().defaultBlockState() : IafBlockRegistry.DESERT_MYRMEX_COCOON.get().defaultBlockState(), 3);
 
@@ -102,13 +103,13 @@ public class WorldGenMyrmexDecoration {
         }
     }
 
-    public static void generateMushrooms(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
+    public static void generateMushrooms(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, RandomSource rand) {
         if (worldIn.getBlockState(blockpos.below()).isFaceSturdy(worldIn, blockpos.below(), Direction.UP)) {
             worldIn.setBlock(blockpos, rand.nextBoolean() ? Blocks.BROWN_MUSHROOM.defaultBlockState() : Blocks.RED_MUSHROOM.defaultBlockState(), 2);
         }
     }
 
-    public static void generateGold(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
+    public static void generateGold(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, RandomSource rand) {
         BlockState gold = IafBlockRegistry.GOLD_PILE.get().defaultBlockState();
         int choice = rand.nextInt(2);
         if (choice == 1) {
@@ -118,12 +119,12 @@ public class WorldGenMyrmexDecoration {
         }
         if (worldIn.getBlockState(blockpos.below()).isFaceSturdy(worldIn, blockpos.below(), Direction.UP)) {
             worldIn.setBlock(blockpos, gold.setValue(BlockGoldPile.LAYERS, 8), 3);
-            worldIn.setBlock(MyrmexHive.getGroundedPos(worldIn, blockpos.north()), gold.setValue(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-            worldIn.setBlock(MyrmexHive.getGroundedPos(worldIn, blockpos.south()), gold.setValue(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-            worldIn.setBlock(MyrmexHive.getGroundedPos(worldIn, blockpos.west()), gold.setValue(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-            worldIn.setBlock(MyrmexHive.getGroundedPos(worldIn, blockpos.east()), gold.setValue(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
+            worldIn.setBlock(MyrmexHive.getGroundedPos(worldIn, blockpos.north()), gold.setValue(BlockGoldPile.LAYERS, 1 + RandomSource.create().nextInt(7)), 3);
+            worldIn.setBlock(MyrmexHive.getGroundedPos(worldIn, blockpos.south()), gold.setValue(BlockGoldPile.LAYERS, 1 + RandomSource.create().nextInt(7)), 3);
+            worldIn.setBlock(MyrmexHive.getGroundedPos(worldIn, blockpos.west()), gold.setValue(BlockGoldPile.LAYERS, 1 + RandomSource.create().nextInt(7)), 3);
+            worldIn.setBlock(MyrmexHive.getGroundedPos(worldIn, blockpos.east()), gold.setValue(BlockGoldPile.LAYERS, 1 + RandomSource.create().nextInt(7)), 3);
             if (rand.nextInt(3) == 0) {
-                worldIn.setBlock(blockpos.above(), Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, HORIZONTALS[new Random().nextInt(3)]), 2);
+                worldIn.setBlock(blockpos.above(), Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, HORIZONTALS[RandomSource.create().nextInt(3)]), 2);
                 if (worldIn.getBlockState(blockpos.above()).getBlock() instanceof ChestBlock) {
                     BlockEntity tileentity1 = worldIn.getBlockEntity(blockpos.above());
                     if (tileentity1 instanceof ChestBlockEntity) {
@@ -134,7 +135,7 @@ public class WorldGenMyrmexDecoration {
         }
     }
 
-    public static void generateTrashHeap(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
+    public static void generateTrashHeap(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, RandomSource rand) {
         if (worldIn.getBlockState(blockpos.below()).isFaceSturdy(worldIn, blockpos.below(), Direction.UP)) {
             Block blob = Blocks.DIRT;
             switch (rand.nextInt(3)) {
@@ -168,7 +169,7 @@ public class WorldGenMyrmexDecoration {
         }
     }
 
-    public static void generateTrashOre(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, Random rand) {
+    public static void generateTrashOre(LevelAccessor worldIn, BlockPos blockpos, BlockPos origin, int radius, RandomSource rand) {
         Block current = worldIn.getBlockState(blockpos).getBlock();
         if (origin.distSqr(blockpos) <= (double) (radius * radius)) {
             if (current == Blocks.DIRT || current == Blocks.SAND || current == Blocks.COBBLESTONE || current == Blocks.GRAVEL) {

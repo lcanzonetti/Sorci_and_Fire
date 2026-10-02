@@ -9,7 +9,7 @@ import net.minecraft.world.level.levelgen.placement.PlacementFilter;
 import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 /**
     Some worldgen mods / datapacks split biomes between cave and surface<br>
@@ -26,7 +26,7 @@ public class CustomBiomeFilter extends PlacementFilter {
         return INSTANCE;
     }
 
-    protected boolean shouldPlace(final PlacementContext context, @NotNull final Random random, @NotNull final BlockPos position) {
+    protected boolean shouldPlace(final PlacementContext context, @NotNull final RandomSource random, @NotNull final BlockPos position) {
         PlacedFeature placedfeature = context.topFeature().orElseThrow(() -> new IllegalStateException("Tried to biome check an unregistered feature, or a feature that should not restrict the biome"));
         boolean hasFeature = context.getLevel().getBiome(position).value().getGenerationSettings().hasFeature(placedfeature);
 

@@ -1,0 +1,9 @@
+{
+  "type": "iceandfire:graveyard",
+  "biomes": "#minecraft:is_overworld",
+  "step": "surface_structures",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_thin",
+  "start_pool": "iceandfire:graveyard/top_pool",
+  "max_depth": 2
+}

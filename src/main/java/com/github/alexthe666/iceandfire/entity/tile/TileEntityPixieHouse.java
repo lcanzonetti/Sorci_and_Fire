@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.block.IafBlockRegistry;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
@@ -21,7 +22,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -29,7 +30,7 @@ public class TileEntityPixieHouse extends BlockEntity {
 
     private static final float PARTICLE_WIDTH = 0.3F;
     private static final float PARTICLE_HEIGHT = 0.6F;
-    private final Random rand;
+    private final RandomSource rand;
     public int houseType;
     public boolean hasPixie;
     public boolean tamedPixie;
@@ -40,7 +41,7 @@ public class TileEntityPixieHouse extends BlockEntity {
 
     public TileEntityPixieHouse(BlockPos pos, BlockState state) {
         super(IafTileEntityRegistry.PIXIE_HOUSE.get(), pos, state);
-        this.rand = new Random();
+        this.rand = RandomSource.create();
     }
 
     public static int getHouseTypeFromBlock(Block block) {

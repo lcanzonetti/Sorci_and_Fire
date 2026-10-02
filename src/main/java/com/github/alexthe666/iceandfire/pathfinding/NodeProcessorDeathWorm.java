@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.pathfinding;
 
+import com.github.alexthe666.iceandfire.misc.IafBlockTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -83,10 +84,10 @@ public class NodeProcessorDeathWorm extends NodeEvaluator {
 
 
     private boolean isPassable(BlockGetter world, BlockPos pos) {
-        return world.getBlockState(pos).getMaterial() == Material.SAND || world.getBlockState(pos).getMaterial() == Material.AIR;
+        return world.getBlockState(pos).is(IafBlockTags.MATERIAL_SAND) || world.getBlockState(pos).isAir();
     }
 
     private boolean isPassable(BlockState state) {
-        return state.getMaterial() == Material.SAND || state.getMaterial() == Material.AIR;
+        return state.is(IafBlockTags.MATERIAL_SAND) || state.isAir();
     }
 }

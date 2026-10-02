@@ -183,7 +183,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
             } else {
                 this.playBiteSound();
             }
-            if (!this.level.isClientSide && this.getRandom().nextInt(3) == 0 && this.getItemInHand(InteractionHand.MAIN_HAND) != ItemStack.EMPTY) {
+            if (!this.level().isClientSide && this.getRandom().nextInt(3) == 0 && this.getItemInHand(InteractionHand.MAIN_HAND) != ItemStack.EMPTY) {
                 this.spawnAtLocation(this.getItemInHand(InteractionHand.MAIN_HAND), 0);
                 this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
             }

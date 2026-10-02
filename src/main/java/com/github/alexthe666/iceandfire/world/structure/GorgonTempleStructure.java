@@ -1,86 +1,42 @@
 package com.github.alexthe666.iceandfire.world.structure;
 
 import com.github.alexthe666.iceandfire.IafConfig;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.LevelHeightAccessor;
-import net.minecraft.world.level.StructureFeatureManager;
-import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
-import net.minecraft.world.level.levelgen.structure.PostPlacementProcessor;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
-import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
-import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
-import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
+import com.github.alexthe666.iceandfire.config.BiomeConfig;
+import com.github.alexthe666.iceandfire.config.biome.IafSpawnBiomeData;
+import com.github.alexthe666.iceandfire.world.IafWorldRegistry;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Optional;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
+public class GorgonTempleStructure extends IafJigsawStructure {
 
-public class GorgonTempleStructure extends StructureFeature<JigsawConfiguration> {
+    public static final MapCodec<GorgonTempleStructure> CODEC = RecordCodecBuilder.mapCodec(instance -> jigsawCodec(instance).apply(instance, GorgonTempleStructure::new));
 
-    public GorgonTempleStructure() {
-        super(JigsawConfiguration.CODEC, GorgonTempleStructure::createPiecesGenerator, new PostPlacement());
-    }
-
-    public static @NotNull Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context) {
-        if (!IafConfig.spawnGorgons) {
-            return Optional.empty();
-        }
-        ChunkGenerator chunkGenerator = context.chunkGenerator();
-        ChunkPos pos = context.chunkPos();
-        LevelHeightAccessor height = context.heightAccessor();
-        Rotation rotation = Rotation.getRandom(ThreadLocalRandom.current());
-        int xOffset = 5;
-        int yOffset = 5;
-        if (rotation == Rotation.CLOCKWISE_90) {
-            xOffset = -5;
-        } else if (rotation == Rotation.CLOCKWISE_180) {
-            xOffset = -5;
-            yOffset = -5;
-        } else if (rotation == Rotation.COUNTERCLOCKWISE_90) {
-            yOffset = -5;
-        }
-
-
-        int x = pos.getMiddleBlockX();
-        int z = pos.getMiddleBlockZ();
-        int y1 = chunkGenerator.getFirstOccupiedHeight(x, z, Heightmap.Types.WORLD_SURFACE_WG, height);
-        int y2 = chunkGenerator.getFirstOccupiedHeight(x, z + yOffset, Heightmap.Types.WORLD_SURFACE_WG, height);
-        int y3 = chunkGenerator.getFirstOccupiedHeight(x + xOffset, z, Heightmap.Types.WORLD_SURFACE_WG, height);
-        int y4 = chunkGenerator.getFirstOccupiedHeight(x + xOffset, z + yOffset, Heightmap.Types.WORLD_SURFACE_WG, height);
-        int yMin = Math.min(Math.min(y1, y2), Math.min(y3, y4));
-        BlockPos blockpos = pos.getMiddleBlockPosition(yMin + 2);
-
-        context = Pool.replaceContext(context, new JigsawConfiguration(
-                context.registryAccess().ownedRegistryOrThrow(Registry.TEMPLATE_POOL_REGISTRY).getOrCreateHolder(Pool.gorgon_pool),
-                3 // Depth of jigsaw branches. Gorgon temple has a depth of 3. (start top -> bottom -> gorgon)
-            )
-        );
-
-        // All a structure has to do is call this method to turn it into a jigsaw based structure!
-        // No manual pieces class needed.
-        return JigsawPlacement.addPieces(context, PoolElementStructurePiece::new, blockpos, false, false);
+    public GorgonTempleStructure(StructureSettings settings, Holder<StructureTemplatePool> startPool, int maxDepth) {
+        super(settings, startPool, maxDepth);
     }
 
     @Override
-    public GenerationStep.@NotNull Decoration step() {
-        return GenerationStep.Decoration.SURFACE_STRUCTURES;
+    protected boolean isEnabled() {
+        return IafConfig.spawnGorgons;
     }
 
-    static class PostPlacement implements PostPlacementProcessor {
-        @Override
-        public void afterPlace(@NotNull WorldGenLevel pLevel, @NotNull StructureFeatureManager pManager, @NotNull ChunkGenerator pGenerator, @NotNull Random pRandom, @NotNull BoundingBox pBoundingBox, @NotNull ChunkPos pChunkPos, PiecesContainer pContainer) {
-            pContainer.calculateBoundingBox();
-        }
+    @Override
+    protected Pair<String, IafSpawnBiomeData> biomeConfig() {
+        return BiomeConfig.gorgonTempleBiomes;
+    }
+
+    @Override
+    protected int heightOffset() {
+        return 2;
+    }
+
+    @Override
+    public @NotNull StructureType<?> type() {
+        return IafWorldRegistry.GORGON_TEMPLE.get();
     }
 }

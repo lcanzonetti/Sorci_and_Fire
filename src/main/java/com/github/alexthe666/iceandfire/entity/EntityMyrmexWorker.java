@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
@@ -72,7 +73,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     @Override
     public void die(DamageSource cause) {
-        if (!this.level.isClientSide && !this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
+        if (!this.level().isClientSide && !this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
             this.spawnAtLocation(this.getItemInHand(InteractionHand.MAIN_HAND), 0);
             this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
         }
@@ -110,17 +111,17 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         if (!this.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
             if (this.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof ItemMyrmexEgg) {
                 boolean isJungle = this.getItemInHand(InteractionHand.MAIN_HAND).getItem() == IafItemRegistry.MYRMEX_JUNGLE_EGG.get();
-                CompoundTag tag = this.getItemInHand(InteractionHand.MAIN_HAND).getTag();
+                CompoundTag tag = IafNbt.getTag(this.getItemInHand(InteractionHand.MAIN_HAND));
                 int metadata = 0;
                 if (tag != null) {
                     metadata = tag.getInt("EggOrdinal");
                 }
-                EntityMyrmexEgg egg = new EntityMyrmexEgg(IafEntityRegistry.MYRMEX_EGG.get(), level);
+                EntityMyrmexEgg egg = new EntityMyrmexEgg(IafEntityRegistry.MYRMEX_EGG.get(), level());
                 egg.copyPosition(this);
                 egg.setJungle(isJungle);
                 egg.setMyrmexCaste(metadata);
-                if (!level.isClientSide) {
-                    level.addFreshEntity(egg);
+                if (!level().isClientSide) {
+                    level().addFreshEntity(egg);
                 }
                 egg.startRiding(this);
                 this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
@@ -202,7 +203,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     @Override
     public boolean shouldEnterHive() {
-        return holdingSomething() || (!level.isDay() && !IafConfig.myrmexHiveIgnoreDaytime);
+        return holdingSomething() || (!level().isDay() && !IafConfig.myrmexHiveIgnoreDaytime);
     }
 
     @Override
@@ -230,7 +231,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
             } else {
                 this.playBiteSound();
             }
-            if (!this.level.isClientSide && this.getRandom().nextInt(3) == 0 && this.getItemInHand(InteractionHand.MAIN_HAND) != ItemStack.EMPTY) {
+            if (!this.level().isClientSide && this.getRandom().nextInt(3) == 0 && this.getItemInHand(InteractionHand.MAIN_HAND) != ItemStack.EMPTY) {
                 this.spawnAtLocation(this.getItemInHand(InteractionHand.MAIN_HAND), 0);
                 this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
             }
@@ -278,7 +279,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (amount >= 1.0D && !this.level.isClientSide && this.getRandom().nextInt(3) == 0 && this.getItemInHand(InteractionHand.MAIN_HAND) != ItemStack.EMPTY) {
+        if (amount >= 1.0D && !this.level().isClientSide && this.getRandom().nextInt(3) == 0 && this.getItemInHand(InteractionHand.MAIN_HAND) != ItemStack.EMPTY) {
             this.spawnAtLocation(this.getItemInHand(InteractionHand.MAIN_HAND), 0);
             this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
         }
@@ -301,7 +302,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
             Player owner = null;
             try {
                 if (itemEntity.getThrower() != null) {
-                    owner = this.level.getPlayerByUUID(itemEntity.getThrower());
+                    owner = this.level().getPlayerByUUID(itemEntity.getThrower());
                 }
             } catch (Exception e) {
                 IceAndFire.LOGGER.warn("Myrmex picked up resin that wasn't thrown!");
@@ -309,8 +310,8 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
             if (owner != null && this.getHive() != null) {
                 this.getHive().modifyPlayerReputation(owner.getUUID(), 5);
                 this.playSound(SoundEvents.SLIME_SQUISH, 1, 1);
-                if (!level.isClientSide) {
-                    level.addFreshEntity(new ExperienceOrb(level, owner.getX(), owner.getY(), owner.getZ(), 1 + random.nextInt(3)));
+                if (!level().isClientSide) {
+                    level().addFreshEntity(new ExperienceOrb(level(), owner.getX(), owner.getY(), owner.getZ(), 1 + random.nextInt(3)));
                 }
             }
         }

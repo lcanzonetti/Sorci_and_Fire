@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.google.common.primitives.Ints;
@@ -26,13 +27,13 @@ import java.util.Set;
 public class ItemBestiary extends Item {
 
     public ItemBestiary() {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
+        super(new Item.Properties().stacksTo(1));
     }
 
     @Override
     public void onCraftedBy(ItemStack stack, @NotNull Level worldIn, @NotNull Player playerIn) {
-        stack.setTag(new CompoundTag());
-        stack.getTag().putIntArray("Pages", new int[]{0});
+        IafNbt.setTag(stack, new CompoundTag());
+        IafNbt.update(stack, tag -> tag.putIntArray("Pages", new int[]{0}));
 
     }
 
@@ -41,12 +42,12 @@ public class ItemBestiary extends Item {
         if (this.allowdedIn(group)) {
             items.add(new ItemStack(this));
             ItemStack stack = new ItemStack(IafItemRegistry.BESTIARY.get());
-            stack.setTag(new CompoundTag());
+            IafNbt.setTag(stack, new CompoundTag());
             int[] pages = new int[EnumBestiaryPages.values().length];
             for (int i = 0; i < EnumBestiaryPages.values().length; i++) {
                 pages[i] = i;
             }
-            stack.getTag().putIntArray("Pages", pages);
+            IafNbt.update(stack, tag -> tag.putIntArray("Pages", pages));
             items.add(stack);
         }
     }
@@ -62,20 +63,20 @@ public class ItemBestiary extends Item {
 
     @Override
     public void inventoryTick(ItemStack stack, @NotNull Level worldIn, @NotNull Entity entityIn, int itemSlot, boolean isSelected) {
-        if (stack.getTag() == null) {
-            stack.setTag(new CompoundTag());
-            stack.getTag().putIntArray("Pages", new int[]{EnumBestiaryPages.INTRODUCTION.ordinal()});
+        if (IafNbt.getTag(stack) == null) {
+            IafNbt.setTag(stack, new CompoundTag());
+            IafNbt.update(stack, tag -> tag.putIntArray("Pages", new int[]{EnumBestiaryPages.INTRODUCTION.ordinal()}));
 
         }
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-        if (stack.getTag() != null) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+        if (IafNbt.getTag(stack) != null) {
             if (IceAndFire.PROXY.shouldSeeBestiaryContents()) {
                 tooltip.add(Component.translatable("bestiary.contains").withStyle(ChatFormatting.GRAY));
                 final Set<EnumBestiaryPages> pages = EnumBestiaryPages
-                    .containedPages(Ints.asList(stack.getTag().getIntArray("Pages")));
+                    .containedPages(Ints.asList(IafNbt.getTag(stack).getIntArray("Pages")));
                 for (EnumBestiaryPages page : pages) {
                     tooltip.add(Component.literal(ChatFormatting.WHITE + "-").append(Component.translatable("bestiary." + EnumBestiaryPages.values()[page.ordinal()].toString().toLowerCase())).withStyle(ChatFormatting.GRAY));
                 }

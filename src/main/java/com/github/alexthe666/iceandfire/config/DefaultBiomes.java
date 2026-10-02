@@ -3,7 +3,6 @@ package com.github.alexthe666.iceandfire.config;
 import com.github.alexthe666.iceandfire.config.biome.BiomeEntryType;
 import com.github.alexthe666.iceandfire.config.biome.IafSpawnBiomeData;
 
-import static net.minecraft.tags.BiomeTags.*;
 import static net.neoforged.neoforge.common.Tags.Biomes.*;
 
 // TODO: 1.19 remove BIOME_DICT entries

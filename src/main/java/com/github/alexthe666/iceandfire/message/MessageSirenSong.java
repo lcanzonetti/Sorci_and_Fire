@@ -1,16 +1,30 @@
 package com.github.alexthe666.iceandfire.message;
 
+import org.jetbrains.annotations.NotNull;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.network.codec.StreamCodec;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.fml.LogicalSide;
-import net.neoforged.neoforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.function.Supplier;
 
-public class MessageSirenSong {
+public class MessageSirenSong implements CustomPacketPayload {
+
+    public static final CustomPacketPayload.Type<MessageSirenSong> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, "siren_song"));
+    public static final StreamCodec<FriendlyByteBuf, MessageSirenSong> CODEC = StreamCodec.of((buf, msg) -> MessageSirenSong.write(msg, buf), MessageSirenSong::read);
+
+    @Override
+    public @NotNull Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+
 
     public int sirenId;
     public boolean isSinging;
@@ -37,14 +51,13 @@ public class MessageSirenSong {
         public Handler() {
         }
 
-        public static void handle(MessageSirenSong message, Supplier<NetworkEvent.Context> context) {
-            context.get().setPacketHandled(true);
-            Player player = context.get().getSender();
-            if (context.get().getDirection().getReceptionSide() == LogicalSide.CLIENT) {
+        public static void handle(MessageSirenSong message, IPayloadContext context) {
+            Player player = context.player();
+            if (context.flow() == PacketFlow.CLIENTBOUND) {
                 player = IceAndFire.PROXY.getClientSidePlayer();
             }
-            if (player != null && player.level != null) {
-                Entity entity = player.level.getEntity(message.sirenId);
+            if (player != null && player.level() != null) {
+                Entity entity = player.level().getEntity(message.sirenId);
                 if (entity != null && entity instanceof EntitySiren) {
                     EntitySiren siren = (EntitySiren) entity;
                     siren.setSinging(message.isSinging);

@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire;
 
+import net.neoforged.fml.common.EventBusSubscriber;
 import com.github.alexthe666.iceandfire.config.BiomeConfig;
 import com.github.alexthe666.iceandfire.config.ConfigHolder;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
@@ -20,7 +21,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
 
 
-@Mod.EventBusSubscriber(modid = IceAndFire.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = IceAndFire.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class CommonProxy {
 
     @SubscribeEvent

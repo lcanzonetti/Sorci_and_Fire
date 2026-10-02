@@ -31,7 +31,7 @@ import java.util.function.Predicate;
 public class ItemSirenFlute extends Item {
 
     public ItemSirenFlute() {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).durability(200));
+        super(new Item.Properties().durability(200));
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ItemSirenFlute extends Item {
 
         double d1 = dist;
         Entity pointedEntity = null;
-        List<Entity> list = player.level.getEntities(player, player.getBoundingBox().expandTowards(Vector3d1.x * dist, Vector3d1.y * dist, Vector3d1.z * dist).inflate(1.0D, 1.0D, 1.0D), new Predicate<Entity>() {
+        List<Entity> list = player.level().getEntities(player, player.getBoundingBox().expandTowards(Vector3d1.x * dist, Vector3d1.y * dist, Vector3d1.z * dist).inflate(1.0D, 1.0D, 1.0D), new Predicate<Entity>() {
             @Override
             public boolean test(Entity entity) {
                 boolean blindness = entity instanceof LivingEntity && ((LivingEntity) entity).hasEffect(MobEffects.BLINDNESS) || (entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entity).canBeTurnedToStone());
@@ -94,7 +94,7 @@ public class ItemSirenFlute extends Item {
 
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(Component.translatable("item.iceandfire.legendary_weapon.desc").withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("item.iceandfire.siren_flute.desc_0").withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("item.iceandfire.siren_flute.desc_1").withStyle(ChatFormatting.GRAY));

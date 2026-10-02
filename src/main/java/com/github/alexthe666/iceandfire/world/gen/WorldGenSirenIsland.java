@@ -18,7 +18,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> implements TypedFeature {
 
@@ -30,7 +30,7 @@ public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> imple
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         WorldGenLevel worldIn = context.level();
-        Random rand = context.random();
+        RandomSource rand = context.random();
         BlockPos position = context.origin();
 
         if (rand.nextInt(IafConfig.generateSirenChance) != 0 || !IafWorldRegistry.isFarEnoughFromSpawn(worldIn, position) || !IafWorldRegistry.isFarEnoughFromDangerousGen(worldIn, position, "siren_island", IafWorldData.FeatureType.OCEAN)) {
@@ -74,7 +74,7 @@ public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> imple
         return layer > up ? (int) (layer * 0.25) + up : Math.min(layer, MAX_ISLAND_RADIUS);
     }
 
-    private BlockState getStone(Random random) {
+    private BlockState getStone(RandomSource random) {
         int chance = random.nextInt(100);
         if (chance > 90) {
             return Blocks.MOSSY_COBBLESTONE.defaultBlockState();
@@ -87,7 +87,7 @@ public class WorldGenSirenIsland extends Feature<NoneFeatureConfiguration> imple
         }
     }
 
-    private void spawnSiren(ServerLevelAccessor worldIn, Random rand, BlockPos position) {
+    private void spawnSiren(ServerLevelAccessor worldIn, RandomSource rand, BlockPos position) {
         EntitySiren siren = new EntitySiren(IafEntityRegistry.SIREN.get(), worldIn.getLevel());
         siren.setSinging(true);
         siren.setHairColor(rand.nextInt(2));

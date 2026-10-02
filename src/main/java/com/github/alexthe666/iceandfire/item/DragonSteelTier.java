@@ -1,34 +1,29 @@
 package com.github.alexthe666.iceandfire.item;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.block.Block;
-import net.neoforged.neoforge.common.ForgeTier;
-import net.neoforged.neoforge.common.TierSortingRegistry;
+import net.neoforged.neoforge.common.SimpleTier;
 
-import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class DragonSteelTier {
 
-    public static final TagKey<Block> DRAGONSTEEL_TIER_TAG = BlockTags.create(ResourceLocation.parse("iceandfire:needs_dragonsteel"));
-    public static final Tier DRAGONSTEEL_TIER_FIRE = createTierWithRepairItem(() -> Ingredient.of(IafItemRegistry.DRAGONSTEEL_FIRE_INGOT.get()), "dragonsteel_tier_fire");
-    public static final Tier DRAGONSTEEL_TIER_ICE = createTierWithRepairItem(() -> Ingredient.of(IafItemRegistry.DRAGONSTEEL_ICE_INGOT.get()), "dragonsteel_tier_ice");
-    public static final Tier DRAGONSTEEL_TIER_LIGHTNING = createTierWithRepairItem(() -> Ingredient.of(IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT.get()), "dragonsteel_tier_lightning");
+    public static final Tier DRAGONSTEEL_TIER_FIRE = createTierWithRepairItem(() -> Ingredient.of(IafItemRegistry.DRAGONSTEEL_FIRE_INGOT.get()));
+    public static final Tier DRAGONSTEEL_TIER_ICE = createTierWithRepairItem(() -> Ingredient.of(IafItemRegistry.DRAGONSTEEL_ICE_INGOT.get()));
+    public static final Tier DRAGONSTEEL_TIER_LIGHTNING = createTierWithRepairItem(() -> Ingredient.of(IafItemRegistry.DRAGONSTEEL_LIGHTNING_INGOT.get()));
     //FIXME: Probably shouldn't be called dragonsteel
-    public static final Tier DRAGONSTEEL_TIER_DREAD_QUEEN = createTierWithRepairItem(() -> Ingredient.of(), "dragonsteel_tier_dread_queen");
+    public static final Tier DRAGONSTEEL_TIER_DREAD_QUEEN = createTierWithRepairItem(() -> Ingredient.EMPTY);
 
-    private static Tier createTierWithRepairItem(Supplier<Ingredient> ingredient, String name) {
-        return TierSortingRegistry.registerTier(
-            new ForgeTier(5, 8000, 10, 21, 10, DRAGONSTEEL_TIER_TAG, ingredient),
-            ResourceLocation.fromNamespaceAndPath(IceAndFire.MODID, name),
-            List.of(Tiers.DIAMOND), List.of());
+    private static final Set<Tier> DRAGONSTEEL_TIERS = Set.of(DRAGONSTEEL_TIER_FIRE, DRAGONSTEEL_TIER_ICE, DRAGONSTEEL_TIER_LIGHTNING, DRAGONSTEEL_TIER_DREAD_QUEEN);
+
+    private static Tier createTierWithRepairItem(Supplier<Ingredient> ingredient) {
+        // Tier sorting was replaced by "incorrect for tool" tags in 1.20.5; dragonsteel mines everything netherite can.
+        return new SimpleTier(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 8000, 10, 21, 10, ingredient);
     }
 
-
+    public static boolean isDragonsteel(Tier tier) {
+        return DRAGONSTEEL_TIERS.contains(tier);
+    }
 }

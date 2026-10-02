@@ -12,10 +12,9 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class BlockMyrmexBiolight extends BushBlock {
 
@@ -23,8 +22,8 @@ public class BlockMyrmexBiolight extends BushBlock {
 
     public BlockMyrmexBiolight() {
         super(
-            Properties
-                .of(Material.PLANT)
+            IafMaterial.PLANT.properties()
+                
                 .noOcclusion()
                 .noCollission()
                 .dynamicShape()
@@ -52,7 +51,7 @@ public class BlockMyrmexBiolight extends BushBlock {
     }
 
     @Override
-    public void tick(@NotNull BlockState state, ServerLevel worldIn, @NotNull BlockPos pos, @NotNull Random rand) {
+    public void tick(@NotNull BlockState state, ServerLevel worldIn, @NotNull BlockPos pos, @NotNull RandomSource rand) {
         if (!worldIn.isClientSide) {
             this.updateState(state, worldIn, pos, state.getBlock());
         }

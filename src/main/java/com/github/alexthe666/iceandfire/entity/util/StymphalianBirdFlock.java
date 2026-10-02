@@ -12,14 +12,14 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class StymphalianBirdFlock {
     private EntityStymphalianBird leader;
     private ArrayList<EntityStymphalianBird> members = new ArrayList<>();
     private BlockPos leaderTarget;
     private BlockPos prevLeaderTarget;
-    private Random random;
+    private RandomSource random;
     private final int distance = 15;
 
     private StymphalianBirdFlock() {
@@ -38,7 +38,7 @@ public class StymphalianBirdFlock {
     @Nullable
     public static StymphalianBirdFlock getNearbyFlock(EntityStymphalianBird bird) {
         float d0 = IafConfig.stymphalianBirdFlockLength;
-        List<Entity> list = bird.level.getEntities(bird, (new AABB(bird.getX(), bird.getY(), bird.getZ(), bird.getX() + 1.0D, bird.getY() + 1.0D, bird.getZ() + 1.0D)).inflate(d0, 10.0D, d0), EntityStymphalianBird.STYMPHALIAN_PREDICATE);
+        List<Entity> list = bird.level().getEntities(bird, (new AABB(bird.getX(), bird.getY(), bird.getZ(), bird.getX() + 1.0D, bird.getY() + 1.0D, bird.getZ() + 1.0D)).inflate(d0, 10.0D, d0), EntityStymphalianBird.STYMPHALIAN_PREDICATE);
         if (!list.isEmpty()) {
             Iterator<Entity> itr = list.iterator();
             while (itr.hasNext()) {

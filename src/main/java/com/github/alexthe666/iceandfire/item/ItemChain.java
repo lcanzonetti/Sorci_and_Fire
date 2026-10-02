@@ -28,7 +28,7 @@ public class ItemChain extends Item {
     private final boolean sticky;
 
     public ItemChain(boolean sticky) {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+        super(new Item.Properties());
         this.sticky = sticky;
     }
 
@@ -55,7 +55,7 @@ public class ItemChain extends Item {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(Component.translatable("item.iceandfire.chain.desc_0").withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("item.iceandfire.chain.desc_1").withStyle(ChatFormatting.GRAY));
         if (sticky) {
@@ -76,7 +76,7 @@ public class ItemChain extends Item {
                 double j = playerIn.getY();
                 double k = playerIn.getZ();
                 boolean flag = false;
-                List<LivingEntity> nearbyEntities = playerIn.level.getEntitiesOfClass(LivingEntity.class, new AABB(i - d0, j - d0, k - d0, i + d0, j + d0, k + d0));
+                List<LivingEntity> nearbyEntities = playerIn.level().getEntitiesOfClass(LivingEntity.class, new AABB(i - d0, j - d0, k - d0, i + d0, j + d0, k + d0));
                 if (playerIn.isCrouching()) {
                     ChainProperties.clearChainData(target);
                     for (LivingEntity livingEntity : nearbyEntities) {

@@ -18,7 +18,7 @@ import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class DreadRuinProcessor extends StructureProcessor {
 
@@ -29,7 +29,7 @@ public class DreadRuinProcessor extends StructureProcessor {
     public DreadRuinProcessor() {
     }
 
-    public static BlockState getRandomCrackedBlock(@Nullable BlockState prev, Random random) {
+    public static BlockState getRandomCrackedBlock(@Nullable BlockState prev, RandomSource random) {
         float rand = random.nextFloat();
         if (rand < 0.5) {
             return IafBlockRegistry.DREAD_STONE_BRICKS.get().defaultBlockState();
@@ -42,7 +42,7 @@ public class DreadRuinProcessor extends StructureProcessor {
 
     @Override
     public StructureTemplate.StructureBlockInfo process(@NotNull LevelReader worldReader, @NotNull BlockPos pos, @NotNull BlockPos pos2, StructureTemplate.@NotNull StructureBlockInfo infoIn1, StructureTemplate.StructureBlockInfo infoIn2, StructurePlaceSettings settings, @Nullable StructureTemplate template) {
-        Random random = settings.getRandom(infoIn2.pos);
+        RandomSource random = settings.getRandom(infoIn2.pos);
         if (random.nextFloat() <= integrity) {
             if (infoIn2.state.getBlock() == IafBlockRegistry.DREAD_STONE_BRICKS.get()) {
                 BlockState state = getRandomCrackedBlock(null, random);
@@ -73,7 +73,7 @@ public class DreadRuinProcessor extends StructureProcessor {
         return IafProcessors.DREADRUINPROCESSOR.get();
     }
 
-    private EntityType getRandomMobForMobSpawner(Random random) {
+    private EntityType getRandomMobForMobSpawner(RandomSource random) {
         float rand = random.nextFloat();
         if (rand < 0.3D) {
             return IafEntityRegistry.DREAD_THRALL.get();

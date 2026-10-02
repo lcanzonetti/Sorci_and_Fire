@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.entity.util.IDeadMob;
 import com.github.alexthe666.iceandfire.item.IafItemRegistry;
@@ -72,7 +73,7 @@ public class EntityDragonSkull extends Animal implements IBlacklistedFromStatues
     }
 
     public boolean isOnWall() {
-        return this.level.isEmptyBlock(this.blockPosition().below());
+        return this.level().isEmptyBlock(this.blockPosition().below());
     }
 
     public void onUpdate() {
@@ -83,8 +84,8 @@ public class EntityDragonSkull extends Animal implements IBlacklistedFromStatues
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
         this.getEntityData().define(DRAGON_TYPE, 0);
         this.getEntityData().define(DRAGON_AGE, 0);
         this.getEntityData().define(DRAGON_STAGE, 0);
@@ -139,10 +140,10 @@ public class EntityDragonSkull extends Animal implements IBlacklistedFromStatues
             return;
         this.remove(RemovalReason.DISCARDED);
         ItemStack stack = new ItemStack(getDragonSkullItem());
-        stack.setTag(new CompoundTag());
-        stack.getTag().putInt("Stage", this.getStage());
-        stack.getTag().putInt("DragonAge", this.getDragonAge());
-        if (!this.level.isClientSide)
+        IafNbt.setTag(stack, new CompoundTag());
+        IafNbt.update(stack, tag -> tag.putInt("Stage", this.getStage()));
+        IafNbt.update(stack, tag -> tag.putInt("DragonAge", this.getDragonAge()));
+        if (!this.level().isClientSide)
             this.spawnAtLocation(stack, 0.0F);
 
     }

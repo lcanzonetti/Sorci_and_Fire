@@ -9,17 +9,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class BlockDreadTorchWall extends WallTorchBlock implements IDreadBlock {
 
     public BlockDreadTorchWall() {
         super(
-            Properties
-                .of(Material.WOOD)
+            IafMaterial.WOOD.properties()
+                
                 .lightLevel((state) -> {
                     return 5;
                 })
@@ -33,7 +32,7 @@ public class BlockDreadTorchWall extends WallTorchBlock implements IDreadBlock {
     }
 
     @Override
-    public void animateTick(BlockState stateIn, @NotNull Level worldIn, BlockPos pos, @NotNull Random rand) {
+    public void animateTick(BlockState stateIn, @NotNull Level worldIn, BlockPos pos, @NotNull RandomSource rand) {
         Direction direction = stateIn.getValue(FACING);
         double d0 = (double) pos.getX() + 0.5D;
         double d1 = (double) pos.getY() + 0.7D;

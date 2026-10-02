@@ -28,7 +28,7 @@ public class CockatriceBeamRender {
         if (entityIn instanceof EntityCockatrice)
             f = (((EntityCockatrice) entityIn).getAttackAnimationScale(partialTicks));
 
-        float f1 = (float) entityIn.level.getGameTime() + partialTicks;
+        float f1 = (float) entityIn.level().getGameTime() + partialTicks;
         float f2 = f1 * 0.5F % 1.0F;
         float f3 = entityIn.getEyeHeight();
         matrixStackIn.pushPose();

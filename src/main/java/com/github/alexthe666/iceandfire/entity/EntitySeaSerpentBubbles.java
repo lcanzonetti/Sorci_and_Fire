@@ -72,7 +72,7 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
         this.zPower *= 0.95F;
         this.push(this.xPower, this.yPower, this.zPower);
 
-        if (this.level.isClientSide || (shootingEntity == null || !shootingEntity.isAlive()) && this.level.hasChunkAt(this.blockPosition())) {
+        if (this.level().isClientSide || (shootingEntity == null || !shootingEntity.isAlive()) && this.level().hasChunkAt(this.blockPosition())) {
             this.baseTick();
             HitResult raytraceresult = ProjectileUtil.getHitResult(this, this::canHitEntity);
             if (raytraceresult.getType() != HitResult.Type.MISS && !net.neoforged.neoforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
@@ -85,7 +85,7 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
             double d2 = this.getZ() + Vector3d.z;
             ProjectileUtil.rotateTowardsMovement(this, 0.2F);
             float f = this.getInertia();
-            if (this.level.isClientSide) {
+            if (this.level().isClientSide) {
                 for (int i = 0; i < 3; ++i) {
                     IceAndFire.PROXY.spawnParticle(EnumParticles.Serpent_Bubble, this.getX() + (double) (this.random.nextFloat() * this.getBbWidth()) - (double) this.getBbWidth() * 0.5F, this.getY() - 0.5D, this.getZ() + (double) (this.random.nextFloat() * this.getBbWidth()) - (double) this.getBbWidth() * 0.5F, 0, 0, 0);
                 }
@@ -108,7 +108,7 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
 
 
     public void autoTarget() {
-        if (!level.isClientSide) {
+        if (!level().isClientSide) {
             Entity shootingEntity = this.getOwner();
             if (shootingEntity instanceof EntitySeaSerpent && ((EntitySeaSerpent) shootingEntity).getTarget() != null) {
                 Entity target = ((EntitySeaSerpent) shootingEntity).getTarget();
@@ -146,8 +146,8 @@ public class EntitySeaSerpentBubbles extends Fireball implements IDragonProjecti
 
     @Override
     protected void onHit(@NotNull HitResult movingObject) {
-        boolean flag = this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
-        if (!this.level.isClientSide) {
+        boolean flag = this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING);
+        if (!this.level().isClientSide) {
             if (movingObject.getType() == HitResult.Type.ENTITY) {
                 Entity entity = ((EntityHitResult) movingObject).getEntity();
 

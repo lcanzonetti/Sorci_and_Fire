@@ -5,9 +5,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 
 public class BlockIafOre extends Block {
@@ -15,8 +14,8 @@ public class BlockIafOre extends Block {
 
     public BlockIafOre(int toollevel, float hardness, float resistance) {
         super(
-            Properties
-                .of(Material.STONE)
+            IafMaterial.STONE.properties()
+                
                 .strength(hardness, resistance)
                 .requiresCorrectToolForDrops()
 		);
@@ -27,7 +26,7 @@ public class BlockIafOre extends Block {
         return silktouch == 0 ? this.getExperience(RANDOM) : 0;
     }
 
-    protected int getExperience(Random rand) {
+    protected int getExperience(RandomSource rand) {
         if (this == IafBlockRegistry.SAPPHIRE_ORE.get() || this == IafBlockRegistry.AMYTHEST_ORE.get()) {
             return Mth.nextInt(rand, 3, 7);
         }

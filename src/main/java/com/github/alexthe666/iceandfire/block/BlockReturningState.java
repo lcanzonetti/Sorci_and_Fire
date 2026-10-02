@@ -9,20 +9,18 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.Material;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class BlockReturningState extends Block {
     public static final BooleanProperty REVERTS = BooleanProperty.create("revert");
     public Item itemBlock;
     private final BlockState returnState;
 
-    public BlockReturningState(Material materialIn, float hardness, float resistance, SoundType sound, BlockState returnToState) {
+    public BlockReturningState(IafMaterial materialIn, float hardness, float resistance, SoundType sound, BlockState returnToState) {
         super(
-            BlockBehaviour.Properties
-                .of(materialIn)
+            materialIn.properties()
                 .sound(sound)
                 .strength(hardness, resistance)
                 .randomTicks()
@@ -33,14 +31,14 @@ public class BlockReturningState extends Block {
     }
 
     @SuppressWarnings("deprecation")
-    public BlockReturningState(Material materialIn, float hardness, float resistance, SoundType sound, boolean slippery, BlockState returnToState) {
-        super(BlockBehaviour.Properties.of(materialIn).sound(sound).strength(hardness, resistance).friction(0.98F).randomTicks());
+    public BlockReturningState(IafMaterial materialIn, float hardness, float resistance, SoundType sound, boolean slippery, BlockState returnToState) {
+        super(materialIn.properties().sound(sound).strength(hardness, resistance).friction(0.98F).randomTicks());
         this.returnState = returnToState;
         this.registerDefaultState(this.stateDefinition.any().setValue(REVERTS, Boolean.FALSE));
     }
 
     @Override
-    public void tick(@NotNull BlockState state, ServerLevel worldIn, @NotNull BlockPos pos, @NotNull Random rand) {
+    public void tick(@NotNull BlockState state, ServerLevel worldIn, @NotNull BlockPos pos, @NotNull RandomSource rand) {
         if (!worldIn.isClientSide) {
             if (!worldIn.isAreaLoaded(pos, 3))
                 return;

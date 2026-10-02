@@ -78,8 +78,8 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
         this.getEntityData().define(DRAGON_TYPE, 0);
         this.getEntityData().define(DRAGON_AGE, 0);
         this.getEntityData().define(OWNER_UNIQUE_ID, Optional.empty());
@@ -118,7 +118,7 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
     @Override
     public void tick() {
         super.tick();
-        if (!level.isClientSide()) {
+        if (!level().isClientSide()) {
             this.setAirSupply(200);
             getEggType().dragonType.updateEggCondition(this);
         }
@@ -146,7 +146,7 @@ public class EntityDragonEgg extends LivingEntity implements IBlacklistedFromSta
 
     @Override
     public boolean hurt(@NotNull DamageSource var1, float var2) {
-        if (!level.isClientSide && !var1.isBypassInvul() && !isRemoved()) {
+        if (!level().isClientSide && !var1.isBypassInvul() && !isRemoved()) {
             this.spawnAtLocation(this.getItem().getItem(), 1);
         }
         this.remove(RemovalReason.KILLED);

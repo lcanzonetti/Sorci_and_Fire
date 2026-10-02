@@ -32,13 +32,13 @@ import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class GuiLectern extends AbstractContainerScreen<ContainerLectern> {
     private static final ResourceLocation ENCHANTMENT_TABLE_GUI_TEXTURE = ResourceLocation.parse("iceandfire:textures/gui/lectern.png");
     private static final ResourceLocation ENCHANTMENT_TABLE_BOOK_TEXTURE = ResourceLocation.parse("iceandfire:textures/models/lectern_book.png");
     private static BookModel bookModel;
-    private final Random random = new Random();
+    private final RandomSource random = RandomSource.create();
     private final Component nameable;
     public int ticks;
     public float flip;

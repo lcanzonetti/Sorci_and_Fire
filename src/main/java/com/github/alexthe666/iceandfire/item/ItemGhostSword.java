@@ -27,7 +27,7 @@ import java.util.List;
 public class ItemGhostSword extends SwordItem {
 
     public ItemGhostSword() {
-        super(IafItemRegistry.GHOST_SWORD_TOOL_MATERIAL, 5, -1.0F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+        super(IafItemRegistry.GHOST_SWORD_TOOL_MATERIAL, new Item.Properties().attributes(SwordItem.createAttributes(IafItemRegistry.GHOST_SWORD_TOOL_MATERIAL, 5, -1.0F)));
     }
 
     public static void spawnGhostSwordEntity(ItemStack stack, Player playerEntity) {
@@ -41,9 +41,9 @@ public class ItemGhostSword extends SwordItem {
             totalDmg += modifier.getAmount();
         }
         playerEntity.playSound(SoundEvents.ZOMBIE_INFECT, 1, 1);
-        EntityGhostSword shot = new EntityGhostSword(IafEntityRegistry.GHOST_SWORD.get(), playerEntity.level, playerEntity, totalDmg * 0.5F);
+        EntityGhostSword shot = new EntityGhostSword(IafEntityRegistry.GHOST_SWORD.get(), playerEntity.level(), playerEntity, totalDmg * 0.5F);
         shot.shootFromRotation(playerEntity, playerEntity.getXRot(), playerEntity.getYRot(), 0.0F, 1, 0.5f);
-        playerEntity.level.addFreshEntity(shot);
+        playerEntity.level().addFreshEntity(shot);
         stack.hurtAndBreak(1, playerEntity, entity -> entity.broadcastBreakEvent(EquipmentSlot.MAINHAND));
         playerEntity.getCooldowns().addCooldown(stack.getItem(), 10);
     }
@@ -54,7 +54,7 @@ public class ItemGhostSword extends SwordItem {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(Component.translatable("item.iceandfire.legendary_weapon.desc").withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("item.iceandfire.ghost_sword.desc_0").withStyle(ChatFormatting.GRAY));
     }

@@ -7,7 +7,9 @@ import com.github.alexthe666.iceandfire.item.ItemScaleArmor;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
-import net.neoforged.neoforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredBlock;
 
 public enum EnumDragonArmor {
 
@@ -27,10 +29,10 @@ public enum EnumDragonArmor {
     public CustomArmorMaterial material;
     public int armorId;
     public EnumDragonEgg eggType;
-    public RegistryObject<Item> helmet;
-    public RegistryObject<Item> chestplate;
-    public RegistryObject<Item> leggings;
-    public RegistryObject<Item> boots;
+    public DeferredItem<Item> helmet;
+    public DeferredItem<Item> chestplate;
+    public DeferredItem<Item> leggings;
+    public DeferredItem<Item> boots;
     public CustomArmorMaterial armorMaterial;
 
     EnumDragonArmor(int armorId, EnumDragonEgg eggType) {

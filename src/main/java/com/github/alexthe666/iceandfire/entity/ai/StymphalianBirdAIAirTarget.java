@@ -17,7 +17,7 @@ public class StymphalianBirdAIAirTarget extends Goal {
     public static BlockPos getNearbyAirTarget(EntityStymphalianBird bird) {
         if (bird.getTarget() == null) {
             BlockPos pos = DragonUtils.getBlockInViewStymphalian(bird);
-            if (pos != null && bird.level.getBlockState(pos).getMaterial() == Material.AIR) {
+            if (pos != null && bird.level().getBlockState(pos).isAir()) {
                 return pos;
             }
             if (bird.flock != null && bird.flock.isLeader(bird)) {

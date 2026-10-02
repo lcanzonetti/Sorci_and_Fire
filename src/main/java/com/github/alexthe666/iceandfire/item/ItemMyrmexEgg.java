@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexEgg;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
@@ -25,7 +26,7 @@ public class ItemMyrmexEgg extends Item {
     boolean isJungle;
 
     public ItemMyrmexEgg(boolean isJungle) {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS).stacksTo(1));
+        super(new Item.Properties().stacksTo(1));
         this.isJungle = isJungle;
     }
 
@@ -36,7 +37,7 @@ public class ItemMyrmexEgg extends Item {
                 ItemStack stack = new ItemStack(this);
                 CompoundTag tag = new CompoundTag();
                 tag.putInt("EggOrdinal", i);
-                stack.setTag(tag);
+                IafNbt.setTag(stack, tag);
                 items.add(stack);
             }
         }
@@ -44,9 +45,9 @@ public class ItemMyrmexEgg extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         String caste;
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = IafNbt.getTag(stack);
         int eggOrdinal = 0;
         if (tag != null) {
             eggOrdinal = tag.getInt("EggOrdinal");
@@ -79,7 +80,7 @@ public class ItemMyrmexEgg extends Item {
         ItemStack itemstack = context.getPlayer().getItemInHand(context.getHand());
         BlockPos offset = context.getClickedPos().relative(context.getClickedFace());
         EntityMyrmexEgg egg = new EntityMyrmexEgg(IafEntityRegistry.MYRMEX_EGG.get(), context.getLevel());
-        CompoundTag tag = itemstack.getTag();
+        CompoundTag tag = IafNbt.getTag(itemstack);
         int eggOrdinal = 0;
         if (tag != null) {
             eggOrdinal = tag.getInt("EggOrdinal");
@@ -100,7 +101,7 @@ public class ItemMyrmexEgg extends Item {
 
     @Override
     public boolean isFoil(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
+        CompoundTag tag = IafNbt.getTag(stack);
         int eggOrdinal = 0;
         if (tag != null) {
             eggOrdinal = tag.getInt("EggOrdinal");

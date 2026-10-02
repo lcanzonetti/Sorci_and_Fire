@@ -15,12 +15,11 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.Material;
 import net.neoforged.neoforge.client.IBlockRenderProperties;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 import java.util.function.Consumer;
 
 import static com.github.alexthe666.iceandfire.entity.tile.IafTileEntityRegistry.PIXIE_HOUSE;
@@ -30,8 +29,8 @@ public class BlockPixieHouse extends BaseEntityBlock {
 
     public BlockPixieHouse() {
         super(
-            Properties
-                .of(Material.WOOD)
+            IafMaterial.WOOD.properties()
+                
                 .noOcclusion()
                 .dynamicShape()
                 .strength(2.0F, 5.0F)
@@ -61,7 +60,7 @@ public class BlockPixieHouse extends BaseEntityBlock {
         super.onRemove(state, worldIn, pos, newState, isMoving);
     }
 
-    public void updateTick(Level worldIn, BlockPos pos, BlockState state, Random rand) {
+    public void updateTick(Level worldIn, BlockPos pos, BlockState state, RandomSource rand) {
         this.checkFall(worldIn, pos);
     }
 

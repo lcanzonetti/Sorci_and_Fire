@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.entity.IafEntityRegistry;
@@ -24,7 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 import java.util.UUID;
 
 public class TileEntityJar extends BlockEntity {
@@ -43,17 +44,17 @@ public class TileEntityJar extends BlockEntity {
     public float prevRotationYaw;
     net.neoforged.neoforge.common.util.LazyOptional<? extends net.neoforged.neoforge.items.IItemHandler> downHandler = PixieJarInvWrapper
         .create(this);
-    private final Random rand;
+    private final RandomSource rand;
 
     public TileEntityJar(BlockPos pos, BlockState state) {
         super(IafTileEntityRegistry.PIXIE_JAR.get(), pos, state);
-        this.rand = new Random();
+        this.rand = RandomSource.create();
         this.hasPixie = true;
     }
 
     public TileEntityJar(BlockPos pos, BlockState state, boolean empty) {
         super(IafTileEntityRegistry.PIXIE_JAR.get(), pos, state);
-        this.rand = new Random();
+        this.rand = RandomSource.create();
         this.hasPixie = !empty;
     }
 
@@ -131,7 +132,7 @@ public class TileEntityJar extends BlockEntity {
 
     public void releasePixie() {
         EntityPixie pixie = new EntityPixie(IafEntityRegistry.PIXIE.get(), this.level);
-        pixie.absMoveTo(this.worldPosition.getX() + 0.5F, this.worldPosition.getY() + 1F, this.worldPosition.getZ() + 0.5F, new Random().nextInt(360), 0);
+        pixie.absMoveTo(this.worldPosition.getX() + 0.5F, this.worldPosition.getY() + 1F, this.worldPosition.getZ() + 0.5F, RandomSource.create().nextInt(360), 0);
         pixie.setItemInHand(InteractionHand.MAIN_HAND, pixieItems.get(0));
         pixie.setColor(this.pixieType);
         level.addFreshEntity(pixie);

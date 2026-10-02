@@ -40,9 +40,9 @@ public class EntityDreadHorse extends SkeletonHorse implements IDreadMob {
 
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(COMMANDER_UNIQUE_ID, Optional.empty());
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(COMMANDER_UNIQUE_ID, Optional.empty());
     }
 
     @Override
@@ -99,7 +99,7 @@ public class EntityDreadHorse extends SkeletonHorse implements IDreadMob {
     public Entity getCommander() {
         try {
             UUID uuid = this.getCommanderId();
-            return uuid == null ? null : this.level.getPlayerByUUID(uuid);
+            return uuid == null ? null : this.level().getPlayerByUUID(uuid);
         } catch (IllegalArgumentException var2) {
             return null;
         }

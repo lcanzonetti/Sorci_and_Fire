@@ -16,7 +16,7 @@ public class ItemDragonScales extends Item {
     EnumDragonEgg type;
 
     public ItemDragonScales(EnumDragonEgg type) {
-        super(new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+        super(new Item.Properties());
         this.type = type;
     }
 
@@ -26,7 +26,7 @@ public class ItemDragonScales extends Item {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(Component.translatable("dragon." + type.toString().toLowerCase()).withStyle(type.color));
     }
 

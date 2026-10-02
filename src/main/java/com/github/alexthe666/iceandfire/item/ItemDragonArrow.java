@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ItemDragonArrow extends ArrowItem {
     public ItemDragonArrow() {
-        super(new Properties().tab(IceAndFire.TAB_ITEMS));
+        super(new Properties());
     }
 
     @Override

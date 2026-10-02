@@ -17,7 +17,7 @@ import java.util.List;
 public class ItemStymphalianDagger extends SwordItem {
 
     public ItemStymphalianDagger() {
-        super(IafItemRegistry.STYMHALIAN_SWORD_TOOL_MATERIAL, 3, -1.0F, new Item.Properties().tab(IceAndFire.TAB_ITEMS));
+        super(IafItemRegistry.STYMHALIAN_SWORD_TOOL_MATERIAL, new Item.Properties().attributes(SwordItem.createAttributes(IafItemRegistry.STYMHALIAN_SWORD_TOOL_MATERIAL, 3, -1.0F)));
     }
 
 
@@ -27,7 +27,7 @@ public class ItemStymphalianDagger extends SwordItem {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+    public void appendHoverText(@NotNull ItemStack stack, Item.TooltipContext worldIn, List<Component> tooltip, @NotNull TooltipFlag flagIn) {
         tooltip.add(Component.translatable("item.iceandfire.legendary_weapon.desc").withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("item.iceandfire.stymphalian_bird_dagger.desc_0").withStyle(ChatFormatting.GRAY));
     }

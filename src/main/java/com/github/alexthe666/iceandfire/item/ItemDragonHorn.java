@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.item;
 
+import com.github.alexthe666.iceandfire.util.IafNbt;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
@@ -31,12 +32,12 @@ import java.util.List;
 public class ItemDragonHorn extends Item {
 
     public ItemDragonHorn() {
-        super((new Item.Properties()).tab(IceAndFire.TAB_ITEMS).stacksTo(1));
+        super(new Item.Properties().stacksTo(1));
     }
 
     public static int getDragonType(ItemStack stack) {
-        if (stack.getTag() != null) {
-            String id = stack.getTag().getString("DragonHornEntityID");
+        if (IafNbt.getTag(stack) != null) {
+            String id = IafNbt.getTag(stack).getString("DragonHornEntityID");
             if (EntityType.byString(id).isPresent()) {
                 EntityType entityType = EntityType.byString(id).get();
                 if (entityType == IafEntityRegistry.FIRE_DRAGON.get())
@@ -56,14 +57,14 @@ public class ItemDragonHorn extends Item {
 
     @Override
     public void onCraftedBy(ItemStack itemStack, @NotNull Level world, @NotNull Player player) {
-        itemStack.setTag(new CompoundTag());
+        IafNbt.setTag(itemStack, new CompoundTag());
     }
 
 
     @Override
     public @NotNull InteractionResult interactLivingEntity(@NotNull ItemStack stack, Player playerIn, @NotNull LivingEntity target, @NotNull InteractionHand hand) {
         ItemStack trueStack = playerIn.getItemInHand(hand);
-        if (!playerIn.level.isClientSide && hand == InteractionHand.MAIN_HAND && target instanceof EntityDragonBase && ((EntityDragonBase) target).isOwnedBy(playerIn) && (trueStack.getTag() == null || (trueStack.getTag() != null && trueStack.getTag().getCompound("EntityTag").isEmpty()))) {
+        if (!playerIn.level().isClientSide && hand == InteractionHand.MAIN_HAND && target instanceof EntityDragonBase && ((EntityDragonBase) target).isOwnedBy(playerIn) && (IafNbt.getTag(trueStack) == null || (IafNbt.getTag(trueStack) != null && IafNbt.getTag(trueStack).getCompound("EntityTag").isEmpty()))) {
             CompoundTag newTag = new CompoundTag();
 
             CompoundTag entityTag = new CompoundTag();
@@ -71,10 +72,10 @@ public class ItemDragonHorn extends Item {
             newTag.put("EntityTag", entityTag);
 
             newTag.putString("DragonHornEntityID", Registry.ENTITY_TYPE.getKey(target.getType()).toString());
-            trueStack.setTag(newTag);
+            IafNbt.setTag(trueStack, newTag);
 
             playerIn.swing(hand);
-            playerIn.level.playSound(playerIn, playerIn.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundSource.NEUTRAL, 3.0F, 0.75F);
+            playerIn.level().playSound(playerIn, playerIn.blockPosition(), SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundSource.NEUTRAL, 3.0F, 0.75F);
             target.remove(Entity.RemovalReason.DISCARDED);
             return InteractionResult.SUCCESS;
         }
@@ -88,27 +89,27 @@ public class ItemDragonHorn extends Item {
         if (context.getClickedFace() != Direction.UP)
             return InteractionResult.FAIL;
         ItemStack stack = context.getItemInHand();
-        if (stack.getTag() != null && !stack.getTag().getString("DragonHornEntityID").isEmpty()) {
+        if (IafNbt.getTag(stack) != null && !IafNbt.getTag(stack).getString("DragonHornEntityID").isEmpty()) {
             Level world = context.getLevel();
-            String id = stack.getTag().getString("DragonHornEntityID");
+            String id = IafNbt.getTag(stack).getString("DragonHornEntityID");
             EntityType type = EntityType.byString(id).orElse(null);
             if (type != null) {
                 Entity entity = type.create(world);
                 if (entity instanceof EntityDragonBase) {
                     EntityDragonBase dragon = (EntityDragonBase) entity;
-                    dragon.load(stack.getTag().getCompound("EntityTag"));
+                    dragon.load(IafNbt.getTag(stack).getCompound("EntityTag"));
                 }
                 //Still needed to allow for intercompatibility
-                if (stack.getTag().contains("EntityUUID"))
-                    entity.setUUID(stack.getTag().getUUID("EntityUUID"));
+                if (IafNbt.getTag(stack).contains("EntityUUID"))
+                    entity.setUUID(IafNbt.getTag(stack).getUUID("EntityUUID"));
 
                 entity.absMoveTo(context.getClickedPos().getX() + 0.5D, (context.getClickedPos().getY() + 1), context.getClickedPos().getZ() + 0.5D, 180 + (context.getHorizontalDirection()).toYRot(), 0.0F);
                 if (world.addFreshEntity(entity)) {
-                    CompoundTag tag = stack.getTag();
+                    CompoundTag tag = IafNbt.getTag(stack);
                     tag.remove("DragonHornEntityID");
                     tag.remove("EntityTag");
                     tag.remove("EntityUUID");
-                    stack.setTag(tag);
+                    IafNbt.setTag(stack, tag);
                 }
             }
         }
@@ -116,11 +117,11 @@ public class ItemDragonHorn extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
-        if (stack.getTag() != null) {
-            CompoundTag entityTag = stack.getTag().getCompound("EntityTag");
+    public void appendHoverText(ItemStack stack, Item.TooltipContext worldIn, @NotNull List<Component> tooltip, @NotNull TooltipFlag flagIn) {
+        if (IafNbt.getTag(stack) != null) {
+            CompoundTag entityTag = IafNbt.getTag(stack).getCompound("EntityTag");
             if (!entityTag.isEmpty()) {
-                String id = stack.getTag().getString("DragonHornEntityID");
+                String id = IafNbt.getTag(stack).getString("DragonHornEntityID");
                 if (EntityType.byString(id).isPresent()) {
                     EntityType type = EntityType.byString(id).get();
                     tooltip.add((Component.translatable(type.getDescriptionId())).withStyle(getTextColorForEntityType(type)));

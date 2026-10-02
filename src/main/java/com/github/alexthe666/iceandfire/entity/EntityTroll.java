@@ -51,7 +51,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFear, IHumanoid, IHasCustomizableAttributes {
 
@@ -74,7 +74,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
         IHasCustomizableAttributes.applyAttributesForEntity(t, this);
     }
 
-    public static boolean canTrollSpawnOn(EntityType<? extends Mob> typeIn, ServerLevelAccessor worldIn, MobSpawnType reason, BlockPos pos, Random randomIn) {
+    public static boolean canTrollSpawnOn(EntityType<? extends Mob> typeIn, ServerLevelAccessor worldIn, MobSpawnType reason, BlockPos pos, RandomSource randomIn) {
         return worldIn.getDifficulty() != Difficulty.PEACEFUL && isDarkEnoughToSpawn(worldIn, pos, randomIn)
             && checkMobSpawnRules(IafEntityRegistry.TROLL.get(), worldIn, reason, pos, randomIn);
     }
@@ -151,10 +151,10 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(VARIANT, 0);
-        this.entityData.define(WEAPON, 0);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(VARIANT, 0);
+        builder.define(WEAPON, 0);
     }
 
     private int getVariant() {
@@ -209,7 +209,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
     @Nullable
     public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor worldIn, @NotNull DifficultyInstance difficultyIn, @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnDataIn, @Nullable CompoundTag dataTag) {
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        this.setTrollType(EnumTroll.getBiomeType(level.getBiome(this.blockPosition())));
+        this.setTrollType(EnumTroll.getBiomeType(level().getBiome(this.blockPosition())));
         this.setWeaponType(EnumTroll.getWeaponForType(this.getTrollType()));
         return spawnDataIn;
     }
@@ -244,7 +244,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
     @Override
     protected void tickDeath() {
         super.tickDeath();
-        if (this.deathTime == 20 && !this.level.isClientSide) {
+        if (this.deathTime == 20 && !this.level().isClientSide) {
             if (IafConfig.trollsDropWeapon) {
                 if (this.getRandom().nextInt(3) == 0) {
                     ItemStack weaponStack = new ItemStack(this.getWeaponType().item.get(), 1);
@@ -292,9 +292,9 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
     @Nullable
     private ItemEntity dropItemAt(ItemStack stack, double x, double y, double z) {
         if (stack.getCount() > 0) {
-            ItemEntity entityitem = new ItemEntity(this.level, x, y, z, stack);
+            ItemEntity entityitem = new ItemEntity(this.level(), x, y, z, stack);
             entityitem.setDefaultPickUpDelay();
-            this.level.addFreshEntity(entityitem);
+            this.level().addFreshEntity(entityitem);
             return entityitem;
         }
         return null;
@@ -304,7 +304,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
     @Override
     public void aiStep() {
         super.aiStep();
-        if (level.getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof Player) {
+        if (level().getDifficulty() == Difficulty.PEACEFUL && this.getTarget() instanceof Player) {
             this.setTarget(null);
         }
         boolean stone = EntityGorgon.isStoneMob(this);
@@ -322,11 +322,11 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
         if (!stone && this.getHealth() < this.getMaxHealth() && this.tickCount % 30 == 0) {
             this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 30, 1, false, false));
         }
-        setAvoidSun(this.level.isDay());
-        if (this.level.isDay() && !this.level.isClientSide) {
+        setAvoidSun(this.level().isDay());
+        if (this.level().isDay() && !this.level().isClientSide) {
             float f = this.getBrightness();
             BlockPos blockpos = this.getVehicle() instanceof Boat ? (new BlockPos(this.getX(), Math.round(this.getY()), this.getZ())).above() : new BlockPos(this.getX(), Math.round(this.getY()), this.getZ());
-            if (f > 0.5F && this.level.canSeeSky(blockpos)) {
+            if (f > 0.5F && this.level().canSeeSky(blockpos)) {
                 this.setDeltaMovement(0, 0, 0);
                 this.setAnimation(NO_ANIMATION);
                 this.playSound(IafSoundRegistry.TURN_STONE, 1, 1);
@@ -334,8 +334,8 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
                 EntityStoneStatue statue = EntityStoneStatue.buildStatueEntity(this);
                 statue.getTrappedTag().putFloat("StoneProgress", 20);
                 statue.absMoveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), this.getXRot());
-                if (!level.isClientSide) {
-                    level.addFreshEntity(statue);
+                if (!level().isClientSide) {
+                    level().addFreshEntity(statue);
                 }
                 statue.yRotO = this.getYRot();
                 statue.setYRot(this.getYRot());
@@ -349,13 +349,13 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
             float weaponX = (float) (getX() + 1.9F * Mth.cos((float) ((yBodyRot + 90) * Math.PI / 180)));
             float weaponZ = (float) (getZ() + 1.9F * Mth.sin((float) ((yBodyRot + 90) * Math.PI / 180)));
             float weaponY = (float) (getY() + (0.2F));
-            BlockState state = level.getBlockState(new BlockPos(weaponX, weaponY - 1, weaponZ));
+            BlockState state = level().getBlockState(new BlockPos(weaponX, weaponY - 1, weaponZ));
             for (int i = 0; i < 20; i++) {
                 double motionX = getRandom().nextGaussian() * 0.07D;
                 double motionY = getRandom().nextGaussian() * 0.07D;
                 double motionZ = getRandom().nextGaussian() * 0.07D;
-                if (state.getMaterial().isSolid() && level.isClientSide) {
-                    this.level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, state), weaponX + (this.getRandom().nextFloat() - 0.5F), weaponY + (this.getRandom().nextFloat() - 0.5F), weaponZ + (this.getRandom().nextFloat() - 0.5F), motionX, motionY, motionZ);
+                if (state.isSolid() && level().isClientSide) {
+                    this.level().addParticle(new BlockParticleOption(ParticleTypes.BLOCK, state), weaponX + (this.getRandom().nextFloat() - 0.5F), weaponY + (this.getRandom().nextFloat() - 0.5F), weaponZ + (this.getRandom().nextFloat() - 0.5F), motionX, motionY, motionZ);
                 }
             }
         }
@@ -383,7 +383,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
             // float f8 = f3 * f6 + f2 * f5;
             target.setDeltaMovement(f5, f6, 0.4F);
         }
-        if (this.getNavigation().isDone() && this.getTarget() != null && this.distanceToSqr(this.getTarget()) > 3 && this.distanceToSqr(this.getTarget()) < 30 && this.level.getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+        if (this.getNavigation().isDone() && this.getTarget() != null && this.distanceToSqr(this.getTarget()) > 3 && this.distanceToSqr(this.getTarget()) < 30 && this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
             this.lookAt(this.getTarget(), 30, 30);
             if (this.getAnimation() == NO_ANIMATION && this.random.nextInt(15) == 0) {
                 this.setAnimation(ANIMATION_STRIKE_VERTICAL);
@@ -392,7 +392,7 @@ public class EntityTroll extends Monster implements IAnimatedEntity, IVillagerFe
                 float weaponX = (float) (getX() + 1.9F * Mth.cos((float) ((yBodyRot + 90) * Math.PI / 180)));
                 float weaponZ = (float) (getZ() + 1.9F * Mth.sin((float) ((yBodyRot + 90) * Math.PI / 180)));
                 float weaponY = (float) (getY() + (this.getEyeHeight() / 2));
-                BlockBreakExplosion explosion = new BlockBreakExplosion(level, this, weaponX, weaponY, weaponZ, 1F + this.getRandom().nextFloat());
+                BlockBreakExplosion explosion = new BlockBreakExplosion(level(), this, weaponX, weaponY, weaponZ, 1F + this.getRandom().nextFloat());
                 if (!NeoForge.EVENT_BUS.post(new GenericGriefEvent(this, weaponX, weaponY, weaponZ))) {
                     explosion.explode();
                     explosion.finalizeExplosion(true);

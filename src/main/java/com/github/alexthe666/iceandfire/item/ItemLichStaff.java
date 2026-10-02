@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 public class ItemLichStaff extends Item {
 
     public ItemLichStaff() {
-        super(new Item.Properties().durability(100).tab(IceAndFire.TAB_ITEMS));
+        super(new Item.Properties().durability(100));
     }
 
     @Override

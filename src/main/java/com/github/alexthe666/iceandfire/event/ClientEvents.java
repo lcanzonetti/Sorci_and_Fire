@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.event;
 
+import net.neoforged.fml.common.EventBusSubscriber;
 import com.github.alexthe666.iceandfire.IafConfig;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.ClientProxy;
@@ -44,15 +45,15 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 
 import java.util.List;
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
 @OnlyIn(Dist.CLIENT)
-@Mod.EventBusSubscriber(modid = IceAndFire.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = IceAndFire.MODID, value = Dist.CLIENT)
 public class ClientEvents {
 
     private static final ResourceLocation SIREN_SHADER = ResourceLocation.parse("iceandfire:shaders/post/siren.json");
 
-    private final Random rand = new Random();
+    private final RandomSource rand = RandomSource.create();
 
     private static boolean shouldCancelRender(LivingEntity living) {
         if (living.getVehicle() != null && living.getVehicle() instanceof EntityDragonBase) {
@@ -92,21 +93,21 @@ public class ClientEvents {
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
         Minecraft mc = Minecraft.getInstance();
-        if (event.getEntityLiving() instanceof ICustomMoveController) {
-            Entity entity = event.getEntityLiving();
-            ICustomMoveController moveController = ((Entity & ICustomMoveController) event.getEntityLiving());
+        if (event.getEntity() instanceof ICustomMoveController) {
+            Entity entity = event.getEntity();
+            ICustomMoveController moveController = ((Entity & ICustomMoveController) event.getEntity());
             if (entity.getVehicle() != null && entity.getVehicle() == mc.player) {
                 byte previousState = moveController.getControlState();
                 moveController.dismount(mc.options.keyShift.isDown());
                 byte controlState = moveController.getControlState();
                 if (controlState != previousState) {
-                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(entity.getId(), controlState, entity.getX(), entity.getY(), entity.getZ()));
+                    IceAndFire.sendMSGToServer(new MessageDragonControl(entity.getId(), controlState, entity.getX(), entity.getY(), entity.getZ()));
                 }
             }
         }
-        if (event.getEntityLiving() instanceof Player) {
-            Player player = (Player) event.getEntityLiving();
-            if (player.level.isClientSide) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            if (player.level().isClientSide) {
 
                 if (player.getVehicle() instanceof ICustomMoveController) {
                     Entity entity = player.getVehicle();
@@ -119,11 +120,11 @@ public class ClientEvents {
                     moveController.strike(IafKeybindRegistry.dragon_fireAttack.isDown());
                     byte controlState = moveController.getControlState();
                     if (controlState != previousState) {
-                        IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageDragonControl(entity.getId(), controlState, entity.getX(), entity.getY(), entity.getZ()));
+                        IceAndFire.sendMSGToServer(new MessageDragonControl(entity.getId(), controlState, entity.getX(), entity.getY(), entity.getZ()));
                     }
                 }
             }
-            if (player.level.isClientSide && IafKeybindRegistry.dragon_change_view.isDown()) {
+            if (player.level().isClientSide && IafKeybindRegistry.dragon_change_view.isDown()) {
                 int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
                 if (currentView + 1 > 3) {
                     currentView = 0;
@@ -133,7 +134,7 @@ public class ClientEvents {
                 IceAndFire.PROXY.setDragon3rdPersonView(currentView);
             }
 
-            if (player.level.isClientSide) {
+            if (player.level().isClientSide) {
                 GameRenderer renderer = Minecraft.getInstance().gameRenderer;
                 EntitySiren siren = SirenProperties.getSiren(player);
 
@@ -152,7 +153,7 @@ public class ClientEvents {
                 }
 
                 if (isCharmed) {
-                    if (player.level.isClientSide && rand.nextInt(40) == 0) {
+                    if (player.level().isClientSide && rand.nextInt(40) == 0) {
                         IceAndFire.PROXY.spawnParticle(EnumParticles.Siren_Appearance, player.getX(), player.getY(), player.getZ(), siren.getHairColor(), 0, 0);
                     }
 

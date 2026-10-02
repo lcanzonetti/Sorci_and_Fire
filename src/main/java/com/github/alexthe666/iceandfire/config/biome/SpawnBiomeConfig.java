@@ -45,9 +45,12 @@ public class SpawnBiomeConfig {
         try {
             return GSON.fromJson(FileUtils.readFileToString(configFile), type);
         } catch (IafSpawnBiomeData.InvalidCitadelFormatException ex) {
-            Citadel.LOGGER.error("Spawn Biome Config: %s didn't contain the correct citadel_format version, proceeding with defaults".formatted(configFile), ex.getMessage());
-            if (defaults instanceof IafSpawnBiomeData iafSpawnBiomeData) {
-                iafSpawnBiomeData.setCitadelFormat(-1);
+            Citadel.LOGGER.warn("Spawn Biome Config: %s uses an outdated citadel_format version, replacing it with the defaults (old file kept as .old)".formatted(configFile));
+            try {
+                FileUtils.copyFile(configFile, new File(configDir, configName + ".old"));
+                FileUtils.write(configFile, GSON.toJson(defaults));
+            } catch (IOException e) {
+                Citadel.LOGGER.error("Spawn Biome Config: Could not write " + configFile, e);
             }
         } catch (Exception e) {
             Citadel.LOGGER.error("Spawn Biome Config: Could not load " + configFile, e);
