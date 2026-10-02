@@ -52,6 +52,10 @@ neoForge {
     runs {
         client {
             client()
+            // Optional: -PquickPlay=<world> boots straight into a singleplayer world (used for smoke tests)
+            if (project.hasProperty('quickPlay')) {
+                programArguments.addAll '--quickPlaySingleplayer', project.property('quickPlay').toString()
+            }
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
