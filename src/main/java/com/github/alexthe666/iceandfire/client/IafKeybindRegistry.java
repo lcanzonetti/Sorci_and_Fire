@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.client;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.ClientRegistry;
+import net.neoforged.neoforge.client.ClientRegistry;
 
 public class IafKeybindRegistry {
     public static KeyMapping dragon_fireAttack;

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": [],
+  "base": {
+    "item": "iceandfire:dragonbone_sword"
+  },
+  "addition": {
+    "item": "iceandfire:ghost_ingot"
+  },
+  "result": {
+    "id": "iceandfire:ghost_sword"
+  }
+}

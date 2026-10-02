@@ -52,8 +52,8 @@ public class ItemScaleArmor extends ArmorItem implements IProtectAgainstDragonIt
     }
 
     @Override
-    public void initializeClient(java.util.function.Consumer<net.minecraftforge.client.IItemRenderProperties> consumer) {
-        consumer.accept(new net.minecraftforge.client.IItemRenderProperties() {
+    public void initializeClient(java.util.function.Consumer<net.neoforged.neoforge.client.IItemRenderProperties> consumer) {
+        consumer.accept(new net.neoforged.neoforge.client.IItemRenderProperties() {
             @Override
             @Nullable
             public HumanoidModel<?> getArmorModel(LivingEntity LivingEntity, ItemStack itemStack, EquipmentSlot armorSlot, HumanoidModel<?> _default) {

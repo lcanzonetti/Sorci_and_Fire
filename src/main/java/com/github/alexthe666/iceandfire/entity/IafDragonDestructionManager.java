@@ -18,15 +18,15 @@ import net.minecraft.world.level.block.SpreadingSnowyDirtBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeEventFactory;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.ForgeEventFactory;
 
 // TODO: This can be refactored/simplified a lot more
 
 public class IafDragonDestructionManager {
 
     public static void destroyAreaFire(Level world, BlockPos center, EntityDragonBase destroyer) {
-        if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
+        if (NeoForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
             return;
         DamageSource source = destroyer.getRidingPlayer() != null ?
             IafDamageRegistry.causeIndirectDragonFireDamage(destroyer, destroyer.getRidingPlayer()) :
@@ -88,7 +88,7 @@ public class IafDragonDestructionManager {
     }
 
     public static void destroyAreaIce(Level world, BlockPos center, EntityDragonBase destroyer) {
-        if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
+        if (NeoForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
             return;
         DamageSource source = destroyer.getRidingPlayer() != null ?
             IafDamageRegistry.causeIndirectDragonIceDamage(destroyer, destroyer.getRidingPlayer()) :
@@ -150,7 +150,7 @@ public class IafDragonDestructionManager {
     }
 
     public static void destroyAreaLightning(Level world, BlockPos center, EntityDragonBase destroyer) {
-        if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
+        if (NeoForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
             return;
         DamageSource source = destroyer.getRidingPlayer() != null ?
             IafDamageRegistry.causeIndirectDragonLightningDamage(destroyer, destroyer.getRidingPlayer()) :
@@ -214,7 +214,7 @@ public class IafDragonDestructionManager {
 
     public static void destroyAreaFireCharge(Level world, BlockPos center, EntityDragonBase destroyer) {
         if (destroyer != null) {
-            if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
+            if (NeoForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
                 return;
             DamageSource source = destroyer.getRidingPlayer() != null ?
                 IafDamageRegistry.causeIndirectDragonFireDamage(destroyer, destroyer.getRidingPlayer()) :
@@ -280,7 +280,7 @@ public class IafDragonDestructionManager {
 
     public static void destroyAreaIceCharge(Level world, BlockPos center, EntityDragonBase destroyer) {
         if (destroyer != null) {
-            if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
+            if (NeoForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
                 return;
             DamageSource source = destroyer.getRidingPlayer() != null ?
                 IafDamageRegistry.causeIndirectDragonIceDamage(destroyer, destroyer.getRidingPlayer()) :
@@ -346,7 +346,7 @@ public class IafDragonDestructionManager {
 
     public static void destroyAreaLightningCharge(Level world, BlockPos center, EntityDragonBase destroyer) {
         if (destroyer != null) {
-            if (MinecraftForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
+            if (NeoForge.EVENT_BUS.post(new DragonFireDamageWorldEvent(destroyer, center.getX(), center.getY(), center.getZ())))
                 return;
             DamageSource source = destroyer.getRidingPlayer() != null ?
                 IafDamageRegistry.causeIndirectDragonLightningDamage(destroyer, destroyer.getRidingPlayer()) :

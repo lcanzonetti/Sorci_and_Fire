@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "c:slime_balls"
+    },
+    {
+      "item": "iceandfire:chain"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "iceandfire:chain_sticky"
+  }
+}

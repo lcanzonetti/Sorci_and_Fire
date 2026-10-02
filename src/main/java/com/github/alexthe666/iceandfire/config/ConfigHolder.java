@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.config;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ForgeConfigSpec;
 
 public final class ConfigHolder {
 

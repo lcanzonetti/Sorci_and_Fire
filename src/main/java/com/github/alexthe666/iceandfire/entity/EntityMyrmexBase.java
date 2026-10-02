@@ -794,7 +794,7 @@ public abstract class EntityMyrmexBase extends Animal implements IAnimatedEntity
 
     @Override
     @Nullable
-    public Entity changeDimension(@NotNull ServerLevel server, net.minecraftforge.common.util.@NotNull ITeleporter teleporter) {
+    public Entity changeDimension(@NotNull ServerLevel server, net.neoforged.neoforge.common.util.@NotNull ITeleporter teleporter) {
         this.resetCustomer();
         return super.changeDimension(server, teleporter);
     }
