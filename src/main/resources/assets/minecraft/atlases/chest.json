@@ -1,0 +1,7 @@
+{
+  "sources": [
+    {"type": "single", "resource": "iceandfire:models/ghost/ghost_chest"},
+    {"type": "single", "resource": "iceandfire:models/ghost/ghost_chest_left"},
+    {"type": "single", "resource": "iceandfire:models/ghost/ghost_chest_right"}
+  ]
+}
